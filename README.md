@@ -1,6 +1,8 @@
 kbsecret
 ========
 
+*Note*: This is still a work in process. Use it with caution.
+
 kbsecret is a combined library/utility that provides a secret management
 interface for [KBFS](https://keybase.io/docs/kbfs) and
 [Keybase](https://keybase.io/).
