@@ -1,10 +1,20 @@
 module KBSecret
+  # Represents a session of N keybase users with collective read/write
+  # access to a collection of records.
   class Session
+    # @return [Symbol] the session's label
     attr_reader :label
+
+    # @return [Hash] the session-specific configuration, from
+    #  {Config::CONFIG_FILE}
     attr_reader :config
     attr_reader :directory
     attr_reader :records
 
+    # @param label [Symbol] the label of the session to initialize
+    # @note This does not *create* a new session, but loads one already
+    #  specified in {Config::CONFIG_FILE}. To *create* a new session,
+    #  see {Config.add_session}.
     def initialize(label: :default)
       @label = label
       @config = Config.session(label.to_sym)
@@ -13,10 +23,20 @@ module KBSecret
       @records = load_records!
     end
 
+    # @return [Array<Symbol>] the labels of all records known to the session
+    # @example
+    #  session.record_labels # => [:website1, :apikey1, :website2]
     def record_labels
       records.map(&:label)
     end
 
+    # Add a record to the session.
+    # @param type [String] the type of record (see {Record.record_types})
+    # @param label [Symbol] the new record's label
+    # @param args [Array<String>] the record-type specific arguments
+    # @return [void]
+    # @raise RecordCreationArityError if the number of specified record
+    #  arguments does not match the record type's constructor
     def add_record(type, label, *args)
       klass = Record.record_classes.find { |k| k.type == type }
       arity = klass.instance_method(:initialize).arity - 2
@@ -30,6 +50,10 @@ module KBSecret
       record.sync!
     end
 
+    # Delete a record from the session, if it exists. Does nothing if
+    # no such record can be found.
+    # @param rec_label [Symbol] the label of the record to delete
+    # @return [void]
     def delete_record(rec_label)
       record = records.find { |r| r.label == rec_label }
       return unless record
@@ -38,6 +62,8 @@ module KBSecret
       records.delete(record)
     end
 
+    # @return [Boolean] whether or not the session contains a record with the
+    #  given label
     def record?(label)
       record_labels.include?(label)
     end
