@@ -16,7 +16,7 @@ interface for [KBFS](https://keybase.io/docs/kbfs) and
 
 ### Installation
 
-kbsecret is available via RubyGems:
+kbsecret is available via [RubyGems](https://rubygems.org/gems/kbsecret):
 
 ```bash
 $ gem install kbsecret
@@ -26,7 +26,7 @@ For hacking:
 
 ```bash
 $ git clone git@github.com:woodruffw/kbsecret.git && cd kbsecret
-$ RUBYLIB=./lib PATH=${PATH}:./bin ./bin/kbsecret help
+$ RUBYLIB=./lib PATH=./bin:${PATH} ./bin/kbsecret help
 ```
 
 ### Usage
