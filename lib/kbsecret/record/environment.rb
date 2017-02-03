@@ -31,7 +31,7 @@ module KBSecret
       end
 
       def to_assignment
-        "#{variable}=#{value}"
+        "#{variable}='#{value}'"
       end
 
       def to_export
