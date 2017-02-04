@@ -40,22 +40,20 @@ module KBSecret
     end
 
     # @return [Array<Symbol>] all configured session labels
-    # @todo This should be session_labels.
-    def self.session_names
+    def self.session_labels
       @@config[:sessions].keys
     end
 
     # @param sess [Symbol] the session label
     # @return [Boolean] whether or not the given session is configured
     def self.session?(sess)
-      session_names.include?(sess.to_sym)
+      session_labels.include?(sess.to_sym)
     end
 
     # Configure a session.
     # @param label [Symbol] the session label
     # @param hsh [Hash] the session configuration
-    # @todo This should be configure_session.
-    def self.add_session(label, hsh)
+    def self.configure_session(label, hsh)
       @@config[:sessions][label.to_sym] = hsh
       File.open(CONFIG_FILE, "w") { |io| io.write @@config.to_yaml }
     end

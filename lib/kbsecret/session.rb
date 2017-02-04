@@ -14,7 +14,7 @@ module KBSecret
     # @param label [Symbol] the label of the session to initialize
     # @note This does not *create* a new session, but loads one already
     #  specified in {Config::CONFIG_FILE}. To *create* a new session,
-    #  see {Config.add_session}.
+    #  see {Config.configure_session}.
     def initialize(label: :default)
       @label = label
       @config = Config.session(label.to_sym)
