@@ -31,6 +31,8 @@ $ git clone git@github.com:woodruffw/kbsecret.git && cd kbsecret
 $ RUBYLIB=./lib PATH=./bin:${PATH} ./bin/kbsecret help
 ```
 
+Documentation is available on [RubyDoc](http://www.rubydoc.info/gems/kbsecret/).
+
 ### Usage
 
 ```bash
