@@ -12,24 +12,46 @@ module KBSecret
       attr_reader :type
       attr_reader :data
 
-      # @return [String] the record's type
-      # @example
-      #  KBSecret::Record::Abstract.type # => "abstract"
-      def self.type
-        name.split("::").last.downcase
-      end
+      class << self
+        def data_field(field)
+          @fields ||= []
+          @fields << field
 
-      # Load the given hash-representation into a record.
-      # @param session [Session] the session to associate with
-      # @param hsh [Hash] the record's hash-representation
-      # @return [Record::AbstractRecord] the created record
-      # @api private
-      def self.load!(session, hsh)
-        instance = allocate
-        instance.session = session
-        instance.initialize_from_hash(hsh)
+          class_eval %[
+            def #{field}
+              @data[self.class.type.to_sym]["#{field}".to_sym]
+            end
 
-        instance
+            def #{field}=(val)
+              @data[self.class.type.to_sym]["#{field}".to_sym] = val
+              sync!
+            end
+          ]
+        end
+
+        def data_fields
+          @fields
+        end
+
+        # @return [String] the record's type
+        # @example
+        #  KBSecret::Record::Abstract.type # => "abstract"
+        def type
+          name.split("::").last.downcase
+        end
+
+        # Load the given hash-representation into a record.
+        # @param session [Session] the session to associate with
+        # @param hsh [Hash] the record's hash-representation
+        # @return [Record::AbstractRecord] the created record
+        # @api private
+        def load!(session, hsh)
+          instance = allocate
+          instance.session = session
+          instance.initialize_from_hash(hsh)
+
+          instance
+        end
       end
 
       # Create a brand new record, associated with a session.
