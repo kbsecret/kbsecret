@@ -1,6 +1,8 @@
 kbsecret
 ========
 
+[![Gem Version](https://badge.fury.io/rb/kbsecret.svg)](https://badge.fury.io/rb/kbsecret)
+
 *Note*: This is still a work in process. Use it with caution.
 
 kbsecret is a combined library/utility that provides a secret management
