@@ -13,6 +13,9 @@ module KBSecret
       attr_reader :data
 
       class << self
+        # Add a field to the record's data.
+        # @param field [Symbol] the new field's name
+        # @return [void]
         def data_field(field)
           @fields ||= []
           @fields << field
@@ -29,6 +32,7 @@ module KBSecret
           ]
         end
 
+        # @return [Array<Symbol>] all data fields for the record class
         def data_fields
           @fields
         end
