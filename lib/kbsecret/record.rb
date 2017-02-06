@@ -20,6 +20,13 @@ module KBSecret
       record_classes.map(&:type)
     end
 
+    # @param type [String] the record type
+    # @return [Class, nil] the record class corresponding to the given type
+    def self.class_for(type)
+      record_classes.find { |c| c.type == type }
+    end
+
+    # @param type [String] the record type
     # @return [Boolean] whether a record class exists of the given type
     def self.type?(type)
       record_types.include?(type)
