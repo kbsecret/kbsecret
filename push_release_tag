@@ -12,6 +12,6 @@ end
 system "git tag #{KBSecret::VERSION}"
 system "git push origin #{KBSecret::VERSION}"
 system "gem build kbsecret"
-system "gem push KBSecret-#{KBSecret::VERSION}.gem"
+system "gem push kbsecret-#{KBSecret::VERSION}.gem"
 
 File.delete("kbsecret-#{KBSecret::VERSION}.gem")
