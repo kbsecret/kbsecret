@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require_relative "./lib/kbsecret"
+
+git_tags = `git tag`.split("\n")
+
+if git_tags.include?(KBSecret::VERSION)
+  puts "Did you forget to update KBSecret::VERSION?"
+  exit
+end
+
+system "git tag #{KBSecret::VERSION}"
+system "git push origin #{KBSecret::VERSION}"
+system "gem build kbsecret"
+system "gem push KBSecret-#{KBSecret::VERSION}.gem"
+
+File.delete("kbsecret-#{KBSecret::VERSION}.gem")
