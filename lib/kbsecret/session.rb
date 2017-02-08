@@ -80,12 +80,9 @@ module KBSecret
       end
     end
 
-    def stringified_users
-      config[:users].join(",")
-    end
-
     def rel_path(rel, mkdir: false)
-      path = File.join(Config[:mount], "private", stringified_users, rel)
+      path = File.join(Config[:mount], "private",
+                       Keybase::U[config[:users]], rel)
 
       FileUtils.mkdir_p path if mkdir
 
