@@ -14,13 +14,10 @@ module KBSecret
       def initialize(session, label, variable, value)
         super(session, label)
 
-        value = value.shellescape
-        variable = variable.shellescape
-
         @data = {
           environment: {
-            variable: variable,
-            value: value,
+            variable: variable.shellescape,
+            value: value.shellescape,
           },
         }
       end
