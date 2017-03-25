@@ -12,7 +12,7 @@ interface for [KBFS](https://keybase.io/docs/kbfs) and
 ### Benefits over current offerings
 
 * Easy password and environment sharing across multiple users.
-  - `kbsecret -s dev-team login github` prints the dev team's GitHub login.
+  - `kbsecret login -s dev-team github` prints the dev team's GitHub login.
 * No PGP/SSH key setup necessary - you only need a Keybase account.
   - No more worrying about losing your key.
 * Transparent access - KBFS provides a VFS layer over all reads/writes.
