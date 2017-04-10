@@ -1,10 +1,9 @@
 require "json"
 
+# we have to require abstract first because ruby's module resolution is bad
 require_relative "record/abstract"
-require_relative "record/login"
-require_relative "record/environment"
-require_relative "record/unstructured"
-require_relative "record/snippet"
+
+Dir[File.join(__dir__, "record/*.rb")].each { |file| require_relative file }
 
 module KBSecret
   # The namespace for kbsecret records types.
