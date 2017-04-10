@@ -70,3 +70,7 @@ API_KEY
 $ kbsecret env -s dev-team --all
 export API_KEY='0xBADBEEF'
 ```
+
+### TODO
+
+* bash/zsh/fish completions
