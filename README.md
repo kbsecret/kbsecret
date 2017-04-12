@@ -71,6 +71,21 @@ $ kbsecret env -s dev-team --all
 export API_KEY='0xBADBEEF'
 ```
 
+### Shell Completion
+
+kbsecret provides shell completion functions for bash.
+
+To generate them:
+
+```bash
+$ make bash
+$ # or, if you have additional commands that support --introspect-flags:
+$ CMDS='foo bar baz' make bash
+$ cp completions/kbsecret.bash ${YOUR_COMPLETION_DIR}
+```
+
+Please feel free to contribute completion scripts for other shells!
+
 ### TODO
 
-* bash/zsh/fish completions
+* zsh/fish completions
