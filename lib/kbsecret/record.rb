@@ -40,7 +40,7 @@ module KBSecret
     def self.load_record!(session, path)
       hsh = JSON.parse(File.read(path), symbolize_names: true)
       klass = record_classes.find { |c| c.type == hsh[:type] }
-      klass.load!(session, hsh)
+      klass.load!(session, hsh) if klass
     end
   end
 end
