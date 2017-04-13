@@ -14,7 +14,7 @@ _kbsecret_complete() {
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
 
-    if [[ "${prev}" = "kbsecret" ]]; then
+    if [[ "${prev}" = "kbsecret" ]] || [[ "${prev}" = "help" ]]; then
         opts=$(kbsecret commands)
     elif _kbsecret_completable_subcommand "${prev}"; then
         opts=$(_kbsecret_complete_subcommand "${prev}")
@@ -39,11 +39,7 @@ _kbsecret_completable_subcommand() {
 _kbsecret_complete_subcommand() {
     cmd="${1}"
 
-    if [[ "${cmd}" = "help" ]]; then
-        opts=$(kbsecret commands)
-    else
-        opts=$(kbsecret ${cmd} --introspect-flags)
-    fi
+    opts=$(kbsecret ${cmd} --introspect-flags)
 
     echo "${opts}"
 }
