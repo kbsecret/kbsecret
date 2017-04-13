@@ -45,6 +45,7 @@ _kbsecret_complete_subcommand() {
         new) opts=$(printf "%s\n%s" "${opts}" "$(kbsecret types)") ;;
         login|pass) opts=$(printf "%s\n%s" "${opts}" "$(kbsecret list -t login)") ;;
         env) opts=$(printf "%s\n%s" "${opts}" "$(kbsecret list -t env)") ;;
+        todo) opts=$(printf "%s\n%s" "${opts}" "$(kbsecret list -t todo)") ;;
         *) opts=$(printf "%s\n%s" "${opts}" "$(kbsecret list)") ;;
     esac
 
