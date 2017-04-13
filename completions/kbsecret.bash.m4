@@ -41,6 +41,11 @@ _kbsecret_complete_subcommand() {
 
     opts=$(kbsecret ${cmd} --introspect-flags)
 
+    case "${cmd}" in
+        new) opts=$(printf "%s\n%s" "${opts}" "$(kbsecret types)") ;;
+        *) opts=$(printf "%s\n%s" "${opts}" "$(kbsecret list)") ;;
+    esac
+
     echo "${opts}"
 }
 
