@@ -89,3 +89,4 @@ Please feel free to contribute completion scripts for other shells!
 ### TODO
 
 * zsh/fish completions
+* a TODO record type?
