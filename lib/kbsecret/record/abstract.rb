@@ -27,6 +27,7 @@ module KBSecret
 
             def #{field}=(val)
               @data[self.class.type.to_sym]["#{field}".to_sym] = val
+              @timestamp = Time.now.to_i
               sync!
             end
           ]
