@@ -11,7 +11,9 @@ module KBSecret
         super(session, label)
 
         @data = {
-          text: text
+          unstructured: {
+            text: text,
+          }
         }
       end
     end
