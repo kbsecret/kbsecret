@@ -8,8 +8,9 @@ module KBSecret
     # @return [Hash] the session-specific configuration, from
     #  {Config::CONFIG_FILE}
     attr_reader :config
+
+    # @return [String] the fully-qualified path of the session
     attr_reader :directory
-    attr_reader :records
 
     # @param label [Symbol] the label of the session to initialize
     # @note This does not *create* a new session, but loads one already
@@ -21,6 +22,16 @@ module KBSecret
 
       @directory = rel_path config[:root], mkdir: true
       @records = load_records!
+    end
+
+    # @param type [String, Symbol] the type of the records to return (or `nil` for all)
+    # @return [Array<Record::Abstract>] records associated with the session
+    def records(type = nil)
+      if type
+        @records.select { |r| r.type == type.to_s }
+      else
+        @records
+      end
     end
 
     # @return [Array<Symbol>] the labels of all records known to the session
