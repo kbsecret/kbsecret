@@ -28,7 +28,7 @@ module KBSecret
     # @return [Array<Record::Abstract>] records associated with the session
     def records(type = nil)
       if type
-        @records.select { |r| r.type == type.to_s }
+        @records.select { |r| r.type == type.to_sym }
       else
         @records
       end
@@ -42,14 +42,14 @@ module KBSecret
     end
 
     # Add a record to the session.
-    # @param type [String] the type of record (see {Record.record_types})
+    # @param type [String, Symbol] the type of record (see {Record.record_types})
     # @param label [Symbol] the new record's label
     # @param args [Array<String>] the record-type specific arguments
     # @return [void]
     # @raise RecordCreationArityError if the number of specified record
     #  arguments does not match the record type's constructor
     def add_record(type, label, *args)
-      klass = Record.record_classes.find { |k| k.type == type }
+      klass = Record.record_classes.find { |k| k.type == type.to_sym }
       arity = klass.instance_method(:initialize).arity - 2
 
       unless arity == args.size

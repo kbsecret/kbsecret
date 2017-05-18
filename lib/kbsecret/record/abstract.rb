@@ -38,11 +38,11 @@ module KBSecret
           @fields
         end
 
-        # @return [String] the record's type
+        # @return [Symbol] the record's type
         # @example
-        #  KBSecret::Record::Abstract.type # => "abstract"
+        #  KBSecret::Record::Abstract.type # => :abstract
         def type
-          name.split("::").last.downcase
+          name.split("::").last.downcase.to_sym
         end
 
         # Load the given hash-representation into a record.
@@ -78,7 +78,7 @@ module KBSecret
       def initialize_from_hash(hsh)
         @timestamp = hsh[:timestamp]
         @label = hsh[:label]
-        @type = hsh[:type]
+        @type = hsh[:type].to_sym
         @data = hsh[:data]
       end
 

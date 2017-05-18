@@ -15,21 +15,21 @@ module KBSecret
       klasses
     end
 
-    # @return [Array<String>] the types of all records
+    # @return [Array<Symbol>] the types of all records
     def self.record_types
       record_classes.map(&:type)
     end
 
-    # @param type [String] the record type
+    # @param type [String, Symbol] the record type
     # @return [Class, nil] the record class corresponding to the given type
     def self.class_for(type)
-      record_classes.find { |c| c.type == type }
+      record_classes.find { |c| c.type == type.to_sym }
     end
 
-    # @param type [String] the record type
+    # @param type [String, Symbol] the record type
     # @return [Boolean] whether a record class exists of the given type
     def self.type?(type)
-      record_types.include?(type)
+      record_types.include?(type.to_sym)
     end
 
     # Load a record by path into the given session.
@@ -39,7 +39,7 @@ module KBSecret
     # @api private
     def self.load_record!(session, path)
       hsh = JSON.parse(File.read(path), symbolize_names: true)
-      klass = record_classes.find { |c| c.type == hsh[:type] }
+      klass = record_classes.find { |c| c.type == hsh[:type].to_sym }
       klass.load!(session, hsh) if klass
     end
   end
