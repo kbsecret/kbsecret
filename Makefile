@@ -10,6 +10,8 @@ override CMDS+=$(shell echo bin/kbsecret* | xargs basename -a | \
 
 M4FLAGS:=-D__KBSECRET_INTROSPECTABLE_COMMANDS="$(CMDS)"
 
+.PHONY: doc clean
+
 all: completions
 
 completions: bash zsh fish
