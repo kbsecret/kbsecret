@@ -1,3 +1,5 @@
+require "fileutils"
+
 module KBSecret
   # Represents a session of N keybase users with collective read/write
   # access to a collection of records.
@@ -12,13 +14,13 @@ module KBSecret
     # @return [String] the fully-qualified path of the session
     attr_reader :directory
 
-    # @param label [Symbol] the label of the session to initialize
+    # @param label [String, Symbol] the label of the session to initialize
     # @note This does not *create* a new session, but loads one already
     #  specified in {Config::CONFIG_FILE}. To *create* a new session,
     #  see {Config.configure_session}.
     def initialize(label: :default)
-      @label = label
-      @config = Config.session(label.to_sym)
+      @label = label.to_sym
+      @config = Config.session(@label)
 
       @directory = rel_path config[:root], mkdir: true
       @records = load_records!
@@ -77,6 +79,15 @@ module KBSecret
     #  given label
     def record?(label)
       record_labels.include?(label)
+    end
+
+    # Delete the entire session.
+    # @return [void]
+    # @note Use this with caution, as *all* files under the session directory
+    #   will be deleted. Furthermore, the session directory itself will
+    #   be deleted, and this object will become garbage.
+    def unlink!
+      FileUtils.rm_rf(directory)
     end
 
     private

@@ -51,10 +51,22 @@ module KBSecret
     end
 
     # Configure a session.
-    # @param label [Symbol] the session label
+    # @param label [String, Symbol] the session label
     # @param hsh [Hash] the session configuration
+    # @return [void]
     def self.configure_session(label, hsh)
       @@config[:sessions][label.to_sym] = hsh
+      File.open(CONFIG_FILE, "w") { |io| io.write @@config.to_yaml }
+    end
+
+    # Deconfigure a session.
+    # @param label [String, Symbol] the session label
+    # @return [void]
+    # @note This only removes the given session from the configuration, making
+    #  it "invisible" to `kbsecret`. To actually remove all files associated
+    #  with a session, see {KBSecret::Session#unlink!}.
+    def self.deconfigure_session(label)
+      @@config[:sessions].delete(label.to_sym)
       File.open(CONFIG_FILE, "w") { |io| io.write @@config.to_yaml }
     end
 
