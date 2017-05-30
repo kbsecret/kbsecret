@@ -11,9 +11,9 @@ module KBSecret
     # The start time is the date and time at which the item was started via
     # {#start!}.
     #
-    # The stop top is the date and time at which the item was *either*
+    # The stop time is the date and time at which the item was *either*
     # last suspended via {#suspend!} *or* finished via {#complete!}.
-    class ToDo < Abstract
+    class Todo < Abstract
       data_field :todo
       data_field :status
       data_field :start
@@ -57,7 +57,7 @@ module KBSecret
         return if started?
 
         self.status = "started"
-        self.start = Time.now.to_s
+        self.start  = Time.now.to_s
       end
 
       # Suspend the to do item.
@@ -66,7 +66,7 @@ module KBSecret
       def suspend!
         return if suspended?
         self.status = "suspended"
-        self.stop = Time.now.to_s
+        self.stop   = Time.now.to_s
       end
 
       # Complete the to do item.
@@ -75,7 +75,7 @@ module KBSecret
       def complete!
         return if completed?
         self.status = "complete"
-        self.stop = Time.now.to_s
+        self.stop   = Time.now.to_s
       end
     end
   end

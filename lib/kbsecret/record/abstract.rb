@@ -42,7 +42,11 @@ module KBSecret
         # @example
         #  KBSecret::Record::Abstract.type # => :abstract
         def type
-          name.split("::").last.downcase.to_sym
+          name.split("::")                       # ["Foo", "BarBaz"]
+              .last                              # "BarBaz"
+              .gsub(/([^A-Z])([A-Z]+)/, '\1_\2') # "Bar_Baz"
+              .downcase                          # "bar_baz"
+              .to_sym                            # :bar_baz
         end
 
         # Load the given hash-representation into a record.
@@ -51,7 +55,7 @@ module KBSecret
         # @return [Record::AbstractRecord] the created record
         # @api private
         def load!(session, hsh)
-          instance = allocate
+          instance         = allocate
           instance.session = session
           instance.initialize_from_hash(hsh)
 
@@ -64,11 +68,11 @@ module KBSecret
       # @param label [Symbol] the new record's label
       # @note Creation does *not* sync the new record; see {#sync!} for that.
       def initialize(session, label)
-        @session = session
+        @session   = session
         @timestamp = Time.now.to_i
-        @label = label
-        @type = self.class.type
-        @data = {}
+        @label     = label
+        @type      = self.class.type
+        @data      = {}
       end
 
       # Fill in instance fields from a record's hash-representation.
@@ -77,9 +81,9 @@ module KBSecret
       # @api private
       def initialize_from_hash(hsh)
         @timestamp = hsh[:timestamp]
-        @label = hsh[:label]
-        @type = hsh[:type].to_sym
-        @data = hsh[:data]
+        @label     = hsh[:label]
+        @type      = hsh[:type].to_sym
+        @data      = hsh[:data]
       end
 
       # The fully qualified path to the record's file.
