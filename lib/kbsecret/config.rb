@@ -28,17 +28,17 @@ module KBSecret
     }.freeze
 
     # Retrieve a configured value.
-    # @param key [String]
+    # @param key [String] the configuration key to retrieve
     # @return [Object] the corresponding configuration
     def self.[](key)
       @config[key]
     end
 
     # Retrieve a session's configuration.
-    # @param sess [Symbol] the session's label
+    # @param sess [String, Symbol] the session's label
     # @return [Hash] the session configuration
     def self.session(sess)
-      @config[:sessions][sess]
+      @config[:sessions][sess.to_sym]
     end
 
     # @return [Array<Symbol>] all configured session labels
@@ -46,7 +46,7 @@ module KBSecret
       @config[:sessions].keys
     end
 
-    # @param sess [Symbol] the session label
+    # @param sess [String, Symbol] the session label
     # @return [Boolean] whether or not the given session is configured
     def self.session?(sess)
       session_labels.include?(sess.to_sym)

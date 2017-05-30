@@ -31,6 +31,7 @@ module KBSecret
     # @param type [String, Symbol] the record type
     # @return [Boolean] whether a record class exists of the given type
     def self.type?(type)
+      return false unless type
       record_types.include?(type.to_sym)
     end
 

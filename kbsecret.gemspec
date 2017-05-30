@@ -17,5 +17,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "keybase-unofficial", "~> 0.0.6"
   s.add_runtime_dependency "slop", "~> 4.4"
   s.add_runtime_dependency "tty-prompt", "~> 0.10.0"
+  s.add_runtime_dependency "pastel", "~> 0.7"
   s.add_runtime_dependency "clipboard", "~> 1.1"
 end
