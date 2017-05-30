@@ -10,7 +10,7 @@ require_relative "kbsecret/session"
 # The primary namespace for kbsecret.
 module KBSecret
   # kbsecret's current version
-  VERSION = "0.2.2"
+  VERSION = "0.3.0"
 
   # fail very early if the user doesn't have keybase and KBFS running
   raise Keybase::KeybaseNotRunningError unless Keybase.running?
