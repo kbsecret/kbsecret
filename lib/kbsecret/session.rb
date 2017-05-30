@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "fileutils"
 
 module KBSecret
@@ -51,12 +53,10 @@ module KBSecret
     # @raise RecordCreationArityError if the number of specified record
     #  arguments does not match the record type's constructor
     def add_record(type, label, *args)
-      klass = Record.record_classes.find { |k| k.type == type.to_sym }
+      klass = Record.class_for(type.to_sym)
       arity = klass.instance_method(:initialize).arity - 2
 
-      unless arity == args.size
-        raise RecordCreationArityError.new(arity, args.size)
-      end
+      raise RecordCreationArityError.new(arity, args.size) unless arity == args.size
 
       record = klass.new(self, label, *args)
       records << record

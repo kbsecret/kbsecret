@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module KBSecret
   module Record
     # Represents a record containing unstructured text.
@@ -13,7 +15,7 @@ module KBSecret
         @data = {
           unstructured: {
             text: text,
-          }
+          },
         }
       end
     end

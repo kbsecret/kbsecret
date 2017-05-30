@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "yaml"
 require "fileutils"
 
@@ -21,27 +23,27 @@ module KBSecret
         default: {
           users: [Keybase.current_user],
           root: "kbsecret",
-        }
-      }
+        },
+      },
     }.freeze
 
     # Retrieve a configured value.
     # @param key [String]
     # @return [Object] the corresponding configuration
     def self.[](key)
-      @@config[key]
+      @config[key]
     end
 
     # Retrieve a session's configuration.
     # @param sess [Symbol] the session's label
     # @return [Hash] the session configuration
     def self.session(sess)
-      @@config[:sessions][sess]
+      @config[:sessions][sess]
     end
 
     # @return [Array<Symbol>] all configured session labels
     def self.session_labels
-      @@config[:sessions].keys
+      @config[:sessions].keys
     end
 
     # @param sess [Symbol] the session label
@@ -55,8 +57,8 @@ module KBSecret
     # @param hsh [Hash] the session configuration
     # @return [void]
     def self.configure_session(label, hsh)
-      @@config[:sessions][label.to_sym] = hsh
-      File.open(CONFIG_FILE, "w") { |io| io.write @@config.to_yaml }
+      @config[:sessions][label.to_sym] = hsh
+      File.open(CONFIG_FILE, "w") { |io| io.write @config.to_yaml }
     end
 
     # Deconfigure a session.
@@ -66,8 +68,8 @@ module KBSecret
     #  it "invisible" to `kbsecret`. To actually remove all files associated
     #  with a session, see {KBSecret::Session#unlink!}.
     def self.deconfigure_session(label)
-      @@config[:sessions].delete(label.to_sym)
-      File.open(CONFIG_FILE, "w") { |io| io.write @@config.to_yaml }
+      @config[:sessions].delete(label.to_sym)
+      File.open(CONFIG_FILE, "w") { |io| io.write @config.to_yaml }
     end
 
     if File.exist?(CONFIG_FILE)
@@ -78,6 +80,6 @@ module KBSecret
       File.open(CONFIG_FILE, "w") { |io| io.write DEFAULT_CONFIG.to_yaml }
     end
 
-    @@config = DEFAULT_CONFIG.merge(user_config)
+    @config = DEFAULT_CONFIG.merge(user_config)
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module KBSecret
   module Record
     # Represents a record containing a login (username, password) pair.

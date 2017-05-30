@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "json"
 
 # we have to require abstract first because ruby's module resolution is bad
@@ -40,7 +42,7 @@ module KBSecret
     def self.load_record!(session, path)
       hsh   = JSON.parse(File.read(path), symbolize_names: true)
       klass = record_classes.find { |c| c.type == hsh[:type].to_sym }
-      klass.load!(session, hsh) if klass
+      klass&.load!(session, hsh)
     end
   end
 end

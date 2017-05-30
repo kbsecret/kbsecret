@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "json"
 
 module KBSecret
@@ -20,6 +22,13 @@ module KBSecret
           @fields ||= []
           @fields << field
 
+          gen_methods field
+        end
+
+        # Generate the methods used to access a given field.
+        # @param field [Symbol] the new field's name
+        # @return [void]
+        def gen_methods(field)
           class_eval %[
             def #{field}
               @data[self.class.type.to_sym]["#{field}".to_sym]

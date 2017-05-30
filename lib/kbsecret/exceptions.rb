@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module KBSecret
   # A generic error in kbsecret.
   class KBSecretError < RuntimeError
