@@ -19,11 +19,11 @@ module KBSecret
     #  specified in {Config::CONFIG_FILE}. To *create* a new session,
     #  see {Config.configure_session}.
     def initialize(label: :default)
-      @label = label.to_sym
-      @config = Config.session(@label)
+      @label     = label.to_sym
+      @config    = Config.session(@label)
 
       @directory = rel_path config[:root], mkdir: true
-      @records = load_records!
+      @records   = load_records!
     end
 
     # @param type [String, Symbol] the type of the records to return (or `nil` for all)

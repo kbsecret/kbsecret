@@ -38,7 +38,7 @@ module KBSecret
     # @return [Record::AbstractRecord] the loaded record
     # @api private
     def self.load_record!(session, path)
-      hsh = JSON.parse(File.read(path), symbolize_names: true)
+      hsh   = JSON.parse(File.read(path), symbolize_names: true)
       klass = record_classes.find { |c| c.type == hsh[:type].to_sym }
       klass.load!(session, hsh) if klass
     end
