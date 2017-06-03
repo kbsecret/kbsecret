@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 2.3.0"
   s.homepage              = "https://github.com/woodruffw/kbsecret"
   s.license               = "MIT"
-  s.add_runtime_dependency "keybase-unofficial", "~> 0.0.6"
+  s.add_runtime_dependency "keybase-unofficial", "~> 0.0.7"
   s.add_runtime_dependency "slop", "~> 4.4"
   s.add_runtime_dependency "tty-prompt", "~> 0.10.0"
   s.add_runtime_dependency "pastel", "~> 0.7"
