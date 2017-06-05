@@ -1,0 +1,5 @@
+# external manpages referenced
+fuse(8) https://man.cx/fuse(8)
+pass(1) https://man.cx/pass(1)
+git(1) https://man.cx/git(1)
+sh(1) https://man.cx/sh(1)

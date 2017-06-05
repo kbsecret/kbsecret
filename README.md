@@ -71,6 +71,19 @@ $ kbsecret env -s dev-team --all
 export API_KEY='0xBADBEEF'
 ```
 
+### Manual Pages
+
+kbsecret's manual pages can be found online
+[here](https://yossarian.net/docs/kbsecret-man/kbsecret.1).
+
+If you'd like to generate the roff versions for `man(1)`, you'll need `ronn(1)`:
+
+```bash
+$ gem install ronn
+$ make man
+$ cp man/*.1 ${YOUR_MAN_DIR}
+```
+
 ### Shell Completion
 
 kbsecret provides shell completion functions for bash.
