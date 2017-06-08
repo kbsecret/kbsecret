@@ -102,3 +102,5 @@ Please feel free to contribute completion scripts for other shells!
 ### TODO
 
 * zsh/fish completions
+* facility for moving sessions (add users, change session label, etc)
+* glob for available sessions instead of requiring explicit configuration
