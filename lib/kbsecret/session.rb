@@ -90,21 +90,31 @@ module KBSecret
       FileUtils.rm_rf(directory)
     end
 
-    private
-
+    # @return [Array<String>] the fully qualified paths of all records in the session
+    # @api private
     def record_paths
       Dir[File.join(directory, "*.json")]
     end
 
+    # Load all records associated with the session.
+    # @return [Array<Record::Abstract>] all records in the session
+    # @api private
     def load_records!
       record_paths.map do |path|
         Record.load_record! self, path
       end
     end
 
+    # @param rel [String, Symbol] the "root" of the session
+    # @param mkdir [Boolean] whether or not to make the session directory
+    # @return [String] the fully qualified path to the session
+    # @api private
     def rel_path(rel, mkdir: false)
+      # /keybase/private/[username]/kbsecret/[session]
       path = File.join(Config[:mount], "private",
-                       Keybase::U[config[:users]], rel)
+                       Keybase::U[config[:users]],
+                       Config[:session_root],
+                       rel)
 
       FileUtils.mkdir_p path if mkdir
 

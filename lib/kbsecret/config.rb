@@ -18,11 +18,11 @@ module KBSecret
     # @api private
     DEFAULT_CONFIG = {
       mount: "/keybase",
-
+      session_root: "kbsecret",
       sessions: {
         default: {
           users: [Keybase.current_user],
-          root: "kbsecret",
+          root: "default",
         },
       },
     }.freeze
@@ -81,5 +81,6 @@ module KBSecret
     end
 
     @config = DEFAULT_CONFIG.merge(user_config)
+    FileUtils.mkdir_p @config[:session_root]
   end
 end
