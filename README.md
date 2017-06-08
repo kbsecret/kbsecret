@@ -60,11 +60,11 @@ default
 dev-team
 
 # add an environment record to the dev-team session
-$ kbsecret new environment API_KEY 0xBADBEEF -s dev-team
+$ kbsecret new environment api-key API_KEY 0xBADBEEF -s dev-team
 
 # list all records under the dev-team session
 $ kbsecret list -s dev-team
-API_KEY
+api-key
 
 # get all environment records in dev-team in an easy-to-source format
 $ kbsecret env -s dev-team --all
@@ -102,4 +102,3 @@ Please feel free to contribute completion scripts for other shells!
 ### TODO
 
 * zsh/fish completions
-* a TODO record type?
