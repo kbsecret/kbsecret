@@ -8,11 +8,23 @@ module KBSecret
     # more useful records.
     # @abstract
     class Abstract
+      # @return [Session] the session associated with the record
       attr_accessor :session
+
+      # @return [Integer] the UNIX timestamp marking the record's last modification
       attr_reader :timestamp
+
+      # @return [Symbol] the record's label
       attr_reader :label
+
+      # @return [Symbol] the record's type
       attr_reader :type
+
+      # @return [Hash] the record's data
       attr_reader :data
+
+      # @return [String] the fully qualified path to the record in KBFS
+      attr_reader :path
 
       class << self
         # Add a field to the record's data.
@@ -82,6 +94,7 @@ module KBSecret
         @label     = label
         @type      = self.class.type
         @data      = {}
+        @path      = File.join(session.directory, "#{label}.json")
       end
 
       # Fill in instance fields from a record's hash-representation.
@@ -93,14 +106,7 @@ module KBSecret
         @label     = hsh[:label]
         @type      = hsh[:type].to_sym
         @data      = hsh[:data]
-      end
-
-      # The fully qualified path to the record's file.
-      # @return [String] the path
-      # @note If the record hasn't been synced to disk, this path may not
-      #  exist yet.
-      def path
-        File.join(session.directory, "#{label}.json")
+        @path      = File.join(session.directory, "#{label}.json")
       end
 
       # Create a hash-representation of the current record.
