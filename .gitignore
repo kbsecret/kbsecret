@@ -3,3 +3,4 @@ vendor/
 *.gem
 doc/
 .yardoc/
+Gemfile.lock
