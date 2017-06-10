@@ -18,13 +18,16 @@ module KBSecret
     # @api private
     DEFAULT_CONFIG = {
       mount: "/keybase",
-      session_root: "kbsecret",
       sessions: {
         default: {
           users: [Keybase.current_user],
           root: "default",
         },
       },
+
+      session_root: File.join("/keybase/private/",
+                              Keybase.current_user,
+                              "kbsecret"),
     }.freeze
 
     # Retrieve a configured value.
