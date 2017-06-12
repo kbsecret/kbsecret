@@ -12,7 +12,7 @@ M4FLAGS:=-D__KBSECRET_INTROSPECTABLE_COMMANDS="$(CMDS)"
 
 .PHONY: doc man clean
 
-all: completions
+all: completions doc man
 
 completions: bash zsh fish
 
@@ -21,7 +21,7 @@ doc:
 	yard stats --list-undoc
 
 man: ronnpp
-	ronn --html --roff man/*.ronn
+	ronn --manual="KBSecret Manual" --html --roff man/*.ronn
 
 ronnpp:
 	for f in man/*.ronnpp; do ./man/ronnpp < $$f > man/$$(basename $$f .ronnpp).ronn; done
