@@ -50,12 +50,15 @@ module KBSecret
     # @param label [Symbol] the new record's label
     # @param args [Array<String>] the record-type specific arguments
     # @return [void]
+    # @raise UnknownRecordTypeError if the requested type does not exist
+    #  in {Record.record_types}
     # @raise RecordCreationArityError if the number of specified record
     #  arguments does not match the record type's constructor
     def add_record(type, label, *args)
       klass = Record.class_for(type.to_sym)
-      arity = klass.instance_method(:initialize).arity - 2
+      raise RecordTypeUnknownError, type unless klass
 
+      arity = klass.instance_method(:initialize).arity - 2
       raise RecordCreationArityError.new(arity, args.size) unless arity == args.size
 
       record = klass.new(self, label, *args)
@@ -91,7 +94,6 @@ module KBSecret
     end
 
     # @return [Array<String>] the fully qualified paths of all records in the session
-    # @api private
     def record_paths
       Dir[File.join(directory, "*.json")]
     end
