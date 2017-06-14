@@ -10,9 +10,9 @@ override CMDS+=$(shell echo bin/kbsecret* | xargs basename -a | \
 
 M4FLAGS:=-D__KBSECRET_INTROSPECTABLE_COMMANDS="$(CMDS)"
 
-.PHONY: doc man clean
+.PHONY: doc man clean test
 
-all: completions doc man
+all: completions doc man test
 
 completions: bash zsh fish
 
@@ -25,6 +25,9 @@ man: ronnpp
 
 ronnpp:
 	for f in man/*.ronnpp; do ./man/ronnpp < $$f > man/$$(basename $$f .ronnpp).ronn; done
+
+test:
+	rake test
 
 bash:
 	m4 $(M4FLAGS) $(BASH_M4) > $(BASH_M4_OUT)
