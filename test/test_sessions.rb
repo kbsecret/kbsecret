@@ -5,6 +5,7 @@ require "kbsecret"
 
 require_relative "helpers"
 
+# Tests for KBSecret::Session and related classes/modules
 class KBSecretSessionsTest < Minitest::Test
   include Helpers
 
