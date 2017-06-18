@@ -28,6 +28,13 @@ module KBSecret
       @records   = load_records!
     end
 
+    # @param label [String, Symbol] the label of the record to fetch
+    # @return [Record::Abstract, nil] the record with the requested label, if extant
+    def [](label)
+      @records.find { |r| r.label == label.to_s }
+    end
+
+    # All records (of a given type) in the session.
     # @param type [String, Symbol] the type of the records to return (or `nil` for all)
     # @return [Array<Record::Abstract>] records associated with the session
     def records(type = nil)
@@ -38,9 +45,9 @@ module KBSecret
       end
     end
 
-    # @return [Array<Symbol>] the labels of all records known to the session
+    # @return [Array<String>] the labels of all records known to the session
     # @example
-    #  session.record_labels # => [:website1, :apikey1, :website2]
+    #  session.record_labels # => ["website1", "apikey1", "website2"]
     def record_labels
       records.map(&:label)
     end
