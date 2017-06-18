@@ -81,6 +81,6 @@ class KBSecretRecordsTest < Minitest::Test
   end
 
   def test_record_objects
-    assert true
+    skip
   end
 end
