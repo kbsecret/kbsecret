@@ -59,7 +59,7 @@ class KBSecretSessionsTest < Minitest::Test
   def test_new_empty_session
     label, hsh = unique_label_and_session
     KBSecret::Config.configure_session(label, hsh)
-    sess = KBSecret::Session.new
+    sess = KBSecret::Session.new label: label
 
     # a brand new session has an empty array of records
     assert_instance_of Array, sess.records
