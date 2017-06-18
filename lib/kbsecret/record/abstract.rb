@@ -14,7 +14,7 @@ module KBSecret
       # @return [Integer] the UNIX timestamp marking the record's last modification
       attr_reader :timestamp
 
-      # @return [Symbol] the record's label
+      # @return [String] the record's label
       attr_reader :label
 
       # @return [Symbol] the record's type
