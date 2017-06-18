@@ -80,7 +80,29 @@ class KBSecretRecordsTest < Minitest::Test
     end
   end
 
-  def test_record_objects
-    skip
+  def test_record_object
+    temp_session do |sess|
+      sess.add_record(:login, "foo", "bar", "baz")
+      record = sess["foo"]
+
+      # retrieval by string and symbol should both work
+      assert_equal record, sess[:foo]
+
+      # the record's session should be the one retrieved from
+      assert_equal sess, record.session
+
+      # the retrieved record should have the expected class, superclass and type
+      assert_equal :login, record.type
+      assert_instance_of KBSecret::Record::Login, record
+      assert_equal KBSecret::Record::Abstract, record.class.superclass
+
+      # the internal structure should be that of an abstract record
+      assert_instance_of KBSecret::Session, record.session
+      assert_instance_of Integer, record.timestamp
+      assert_instance_of String, record.label
+      assert_instance_of Symbol, record.type
+      assert_instance_of Hash, record.data
+      assert_instance_of String, record.path
+    end
   end
 end
