@@ -54,7 +54,7 @@ module KBSecret
 
     # Add a record to the session.
     # @param type [String, Symbol] the type of record (see {Record.record_types})
-    # @param label [Symbol] the new record's label
+    # @param label [String, Symbol] the new record's label
     # @param args [Array<String>] the record-type specific arguments
     # @return [void]
     # @raise UnknownRecordTypeError if the requested type does not exist
@@ -68,27 +68,28 @@ module KBSecret
       arity = klass.instance_method(:initialize).arity - 2
       raise RecordCreationArityError.new(arity, args.size) unless arity == args.size
 
-      record = klass.new(self, label, *args)
+      record = klass.new(self, label.to_s, *args)
       records << record
       record.sync!
     end
 
     # Delete a record from the session, if it exists. Does nothing if
     # no such record can be found.
-    # @param rec_label [Symbol] the label of the record to delete
+    # @param label [String, Symbol] the label of the record to delete
     # @return [void]
-    def delete_record(rec_label)
-      record = records.find { |r| r.label == rec_label }
+    def delete_record(label)
+      record = records.find { |r| r.label == label.to_s }
       return unless record
 
       File.delete(record.path)
       records.delete(record)
     end
 
+    # @param label [String, Symbol] the label to test for
     # @return [Boolean] whether or not the session contains a record with the
     #  given label
     def record?(label)
-      record_labels.include?(label)
+      record_labels.include?(label.to_s)
     end
 
     # Delete the entire session.
