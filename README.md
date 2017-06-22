@@ -40,7 +40,9 @@ Documentation is available on [RubyDoc](http://www.rubydoc.info/gems/kbsecret/).
 
 ```bash
 # create a new login record under the default session
-$ kbsecret new login gmail "foo@example.com" "barbazquux"
+$ kbsecret new login gmail
+Username?
+Password?
 
 # list all records under the default session
 $ kbsecret list
