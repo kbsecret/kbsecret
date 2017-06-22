@@ -109,6 +109,12 @@ module KBSecret
         @path      = File.join(session.directory, "#{label}.json")
       end
 
+      # Create a string representation of the current record.
+      # @return [String] the string representation
+      def to_s
+        @label
+      end
+
       # Create a hash-representation of the current record.
       # @return [Hash] the hash-representation
       def to_h
