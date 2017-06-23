@@ -63,10 +63,12 @@ module KBSecret
     #  after options have been removed and interpreted via {slop}.
     # @param errors [Boolean] whether or not to produce (strict) Dreck errors
     # @note *If* {slop} is called, it must be called before this.
-    def dreck(errors: false, &block)
+    def dreck(errors: true, &block)
       @args = Dreck.parse @trailing, strict: errors do
         instance_eval(&block)
       end
+    rescue => e
+      KBSecret::CLI.die "#{e.to_s.capitalize}."
     end
 
     class << self
