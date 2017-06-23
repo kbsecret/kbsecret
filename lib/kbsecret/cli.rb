@@ -29,6 +29,7 @@ module KBSecret
     #  cmd.args # => Dreck::Result
     def initialize(&block)
       instance_eval(&block)
+      @trailing = ARGV
     end
 
     # Parse options for a kbsecret utility, adding some default options for
@@ -59,8 +60,7 @@ module KBSecret
     # Parse trailing arguments for a kbsecret utility, using the elements remaining
     #  after options have been removed and interpreted via {slop}.
     # @param errors [Boolean] whether or not to produce (strict) Dreck errors
-    # @note This should be called in the block passed to {initialize}, and **only**
-    #  after a successful {slop} call.
+    # @note *If* {slop} is called, it must be called before this.
     def dreck(errors: false, &block)
       @args = Dreck.parse @trailing, strict: errors do
         instance_eval(&block)
