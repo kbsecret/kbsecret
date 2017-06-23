@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.homepage              = "https://github.com/woodruffw/kbsecret"
   s.license               = "MIT"
   s.add_runtime_dependency "clipboard", "~> 1.1"
+  s.add_runtime_dependency "dreck", "~> 0.0.2"
   s.add_runtime_dependency "keybase-unofficial", "~> 0.0.8"
   s.add_runtime_dependency "pastel", "~> 0.7"
   s.add_runtime_dependency "slop", "~> 4.4"
