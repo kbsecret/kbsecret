@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "pastel"
+require "colored2"
 require "slop"
 require "dreck"
 
@@ -68,16 +68,12 @@ module KBSecret
     end
 
     class << self
-      # The pastel object used to generate colorful output.
-      # @api private
-      PASTEL = Pastel.new
-
       # Print an error message and terminate.
       # @param msg [String] the message to print
       # @return [void]
       # @note This method does not return!
       def die(msg)
-        pretty = "#{PASTEL.bright_red("Fatal")}: #{msg}"
+        pretty = "#{"Fatal".red}: #{msg}"
         abort pretty
       end
 
