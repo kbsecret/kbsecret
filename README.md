@@ -34,6 +34,15 @@ $ bundle install --path vendor/bundle
 $ RUBYLIB=./lib PATH=./bin:${PATH} bundle exec ./bin/kbsecret help
 ```
 
+You can also build installation packages:
+
+```bash
+$ make deb # for apt/dpkg based systems
+$ make rpm # for yum/rpm based systems
+$ make pacman # for pacman based systems
+$ ls pkg/{deb,rpm,pacman}/*
+```
+
 Documentation is available on [RubyDoc](http://www.rubydoc.info/gems/kbsecret/).
 
 ### Usage
