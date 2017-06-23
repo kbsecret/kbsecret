@@ -28,8 +28,10 @@ module KBSecret
     #  cmd.opts # => Slop::Result
     #  cmd.args # => Dreck::Result
     def initialize(&block)
-      instance_eval(&block)
       @trailing = ARGV
+      @opts = nil
+      @args = nil
+      instance_eval(&block)
     end
 
     # Parse options for a kbsecret utility, adding some default options for
