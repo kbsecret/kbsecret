@@ -16,9 +16,10 @@ Gem::Specification.new do |s|
   s.license               = "MIT"
 
   # these need to be installed by developers alone
+  s.add_development_dependency "fpm", "~> 1.8.1" # make pkgs
+  s.add_development_dependency "rake", "~> 12.0" # make test
   s.add_development_dependency "ronn", "~> 0.7.3" # make man
   s.add_development_dependency "yard", "~> 0.9.9" # make doc
-  s.add_development_dependency "fpm", "~> 1.8.1" # make pkgs
 
   # this need to be installed by users and developers alike
   s.add_runtime_dependency "clipboard", "~> 1.1"
