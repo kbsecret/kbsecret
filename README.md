@@ -30,7 +30,7 @@ For hacking:
 
 ```bash
 $ git clone git@github.com:woodruffw/kbsecret.git && cd kbsecret
-$ bundle install
+$ bundle install --path vendor/bundle
 $ RUBYLIB=./lib PATH=./bin:${PATH} bundle exec ./bin/kbsecret help
 ```
 
