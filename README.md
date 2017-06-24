@@ -34,7 +34,7 @@ $ bundle install --path vendor/bundle
 $ RUBYLIB=./lib PATH=./bin:${PATH} bundle exec ./bin/kbsecret help
 ```
 
-You can also build installation packages:
+You can also build (very experimental) installation packages:
 
 ```bash
 $ bundle exec make deb # for apt/dpkg based systems
