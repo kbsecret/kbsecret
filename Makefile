@@ -45,6 +45,7 @@ $(PKGS): prep-gems
 	cd $(PKG)/$@ && \
 	find ../deps/cache -name "*.gem" | \
 		xargs -rn1 fpm -d ruby -d rubygems \
+		--no-gem-fix-name --no-gem-fix-dependencies \
 		--prefix $$(gem environment gemdir) \
 		-s gem -t $@ && \
 	popd
