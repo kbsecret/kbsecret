@@ -37,9 +37,9 @@ $ RUBYLIB=./lib PATH=./bin:${PATH} bundle exec ./bin/kbsecret help
 You can also build installation packages:
 
 ```bash
-$ make deb # for apt/dpkg based systems
-$ make rpm # for yum/rpm based systems
-$ make pacman # for pacman based systems
+$ bundle exec make deb # for apt/dpkg based systems
+$ bundle exec make rpm # for yum/rpm based systems
+$ bundle exec make pacman # for pacman based systems
 $ ls pkg/{deb,rpm,pacman}/*
 ```
 
@@ -91,8 +91,7 @@ kbsecret's manual pages can be found online
 If you'd like to generate the roff versions for `man(1)`, you'll need `ronn(1)`:
 
 ```bash
-$ gem install ronn
-$ make man
+$ bundle exec make man
 $ cp man/*.1 ${YOUR_MAN_DIR}
 ```
 
@@ -103,9 +102,9 @@ kbsecret provides shell completion functions for bash.
 To generate them:
 
 ```bash
-$ make bash
+$ bundle exec make bash
 $ # or, if you have additional commands that support --introspect-flags:
-$ CMDS='foo bar baz' make bash
+$ CMDS='foo bar baz' bundle exec make bash
 $ cp completions/kbsecret.bash ${YOUR_COMPLETION_DIR}
 ```
 
