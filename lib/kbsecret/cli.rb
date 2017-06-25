@@ -91,6 +91,13 @@ module KBSecret
         Session.new label: sess_label
       end
 
+      # Finds a reasonable default field separator by checking the environment first
+      #  and then falling back to ":".
+      # @return [String] the field separator
+      def ifs
+        ENV["IFS"] || ":"
+      end
+
       # Parse arguments for a kbsecret utility, adding some default options for
       #  introspection and help output.
       # @param cmds [Array<String>] additional commands to print in `--introspect-flags`
