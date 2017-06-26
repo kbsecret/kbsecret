@@ -72,7 +72,9 @@ default
 dev-team
 
 # add an environment record to the dev-team session
-$ kbsecret new environment api-key API_KEY 0xBADBEEF -s dev-team
+$ kbsecret new environment api-key -s dev-team
+Variable?
+Value?
 
 # list all records under the dev-team session
 $ kbsecret list -s dev-team
