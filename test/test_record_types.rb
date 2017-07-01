@@ -17,6 +17,12 @@ class KBSecretRecordTypesTest < Minitest::Test
       # we put a login record in, so we expect a login record back
       assert_instance_of KBSecret::Record::Login, record
 
+      # the data fields should be present in data_fields
+      # and have the correct sensitivities
+      assert_equal [:username, :password], record.data_fields
+      refute record.sensitive?(:username)
+      assert record.sensitive?(:password)
+
       # the data fields should be correctly mapped to methods
       assert_equal "bar", record.username
       assert_equal "baz", record.password
@@ -37,6 +43,12 @@ class KBSecretRecordTypesTest < Minitest::Test
 
       # we put an environment record in, so we expect an environment record back
       assert_instance_of KBSecret::Record::Environment, record
+
+      # the data fields should be present in data_fields
+      # and have the correct sensitivities
+      assert_equal [:variable, :value], record.data_fields
+      refute record.sensitive?(:variable)
+      assert record.sensitive?(:value)
 
       # the data fields should be correctly mapped to methods
       assert_equal "FOO_API", record.variable
@@ -66,6 +78,12 @@ class KBSecretRecordTypesTest < Minitest::Test
       # we put a snippet record in, so we expect a snippet record back
       assert_instance_of KBSecret::Record::Snippet, record
 
+      # the data fields should be present in data_fields
+      # and have the correct sensitivities
+      assert_equal [:code, :description], record.data_fields
+      refute record.sensitive?(:code)
+      refute record.sensitive?(:description)
+
       # the data fields should be correctly mapped to methods
       assert_equal "echo bar", record.code
       assert_equal "echoes bar", record.description
@@ -86,6 +104,14 @@ class KBSecretRecordTypesTest < Minitest::Test
 
       # we put a todo record in, so we expect a todo record back
       assert_instance_of KBSecret::Record::Todo, record
+
+      # the data fields should be present in data_fields
+      # and have the correct sensitivities
+      assert_equal [:todo, :status, :start, :stop], record.data_fields
+      refute record.sensitive?(:todo)
+      refute record.sensitive?(:status)
+      refute record.sensitive?(:start)
+      refute record.sensitive?(:stop)
 
       # the data fields should be correctly mapped to methods
       assert_equal "clean the kitchen", record.todo
@@ -137,6 +163,11 @@ class KBSecretRecordTypesTest < Minitest::Test
 
       # we put an unstructured record in, so we expect an unstructured record back
       assert_instance_of KBSecret::Record::Unstructured, record
+
+      # the data fields should be present in data_fields
+      # and have the correct sensitivities
+      assert_equal [:text], record.data_fields
+      refute record.sensitive?(:text)
 
       # the data fields should be correctly mapped to methods
       assert_equal "this is some random text", record.text

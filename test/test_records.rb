@@ -103,6 +103,15 @@ class KBSecretRecordsTest < Minitest::Test
       assert_instance_of Symbol, record.type
       assert_instance_of Hash, record.data
       assert_instance_of String, record.path
+
+      # these should be properly delegated to the record's class
+      assert_instance_of Array, record.data_fields
+      assert_equal record.class.data_fields, record.data_fields
+
+      assert record.sensitive?(:password)
+      refute record.sensitive?(:username)
+
+      assert_equal record.class.sensitive?(:password), record.sensitive?(:password)
     end
   end
 end
