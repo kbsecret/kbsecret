@@ -76,11 +76,11 @@ module KBSecret
         # @example
         #  KBSecret::Record::Abstract.type # => :abstract
         def type
-          name.split("::")                       # ["Foo", "BarBaz"]
-              .last                              # "BarBaz"
-              .gsub(/([^A-Z])([A-Z]+)/, '\1_\2') # "Bar_Baz"
-              .downcase                          # "bar_baz"
-              .to_sym                            # :bar_baz
+          name.split("::")
+              .last
+              .gsub(/([^A-Z])([A-Z]+)/, '\1_\2')
+              .downcase
+              .to_sym
         end
 
         # Load the given hash-representation into a record.
@@ -123,9 +123,9 @@ module KBSecret
       end
 
       # @!method data_fields
-      #  @return (see Abstract.data_fields)
+      #  @return (see KBSecret::Record::Abstract.data_fields)
       # @!method sensitive?
-      #  @return (see Abstract.sensitive?)
+      #  @return (see KBSecret::Record::Abstract.sensitive?)
       def_delegators :"self.class", :data_fields, :sensitive?
 
       # Create a string representation of the current record.
