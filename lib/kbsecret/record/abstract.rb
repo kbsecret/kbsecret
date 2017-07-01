@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "forwardable"
 
 module KBSecret
   module Record
@@ -8,6 +9,8 @@ module KBSecret
     # more useful records.
     # @abstract
     class Abstract
+      extend Forwardable
+
       # @return [Session] the session associated with the record
       attr_accessor :session
 
@@ -29,10 +32,14 @@ module KBSecret
       class << self
         # Add a field to the record's data.
         # @param field [Symbol] the new field's name
+        # @param sensitive [Boolean] whether the field is sensitive (e.g., a password)
         # @return [void]
-        def data_field(field)
-          @fields ||= []
+        def data_field(field, sensitive: true)
+          @fields    ||= []
+          @sensitive ||= {}
+
           @fields << field
+          @sensitive[field] = sensitive
 
           gen_methods field
         end
@@ -52,6 +59,12 @@ module KBSecret
               sync!
             end
           ]
+        end
+
+        # @param field [Symbol] the field's name
+        # @return [Boolean] whether the field is sensitive
+        def sensitive?(field)
+          !!@sensitive[field]
         end
 
         # @return [Array<Symbol>] all data fields for the record class
@@ -108,6 +121,12 @@ module KBSecret
         @data      = hsh[:data]
         @path      = File.join(session.directory, "#{label}.json")
       end
+
+      # @!method data_fields
+      #  @return (see Abstract.data_fields)
+      # @!method sensitive?
+      #  @return (see Abstract.sensitive?)
+      def_delegators :"self.class", :data_fields, :sensitive?
 
       # Create a string representation of the current record.
       # @return [String] the string representation

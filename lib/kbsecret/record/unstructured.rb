@@ -4,7 +4,7 @@ module KBSecret
   module Record
     # Represents a record containing unstructured text.
     class Unstructured < Abstract
-      data_field :text
+      data_field :text, sensitive: false
 
       # @param session [Session] the session to associate with
       # @param label [Symbol] the new record's label

@@ -14,10 +14,10 @@ module KBSecret
     # The stop time is the date and time at which the item was *either*
     # last suspended via {#suspend!} *or* finished via {#complete!}.
     class Todo < Abstract
-      data_field :todo
-      data_field :status
-      data_field :start
-      data_field :stop
+      data_field :todo, sensitive: false
+      data_field :status, sensitive: false
+      data_field :start, sensitive: false
+      data_field :stop, sensitive: false
 
       # @param session [Session] the session to associate with
       # @param label [Symbol] the new record's label

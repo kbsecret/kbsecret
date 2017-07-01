@@ -6,7 +6,7 @@ module KBSecret
   module Record
     # Represents a record containing an environment variable and value.
     class Environment < Abstract
-      data_field :variable
+      data_field :variable, sensitive: false
       data_field :value
 
       # @param session [Session] the session to associate with

@@ -4,8 +4,8 @@ module KBSecret
   module Record
     # Represents a record containing a code snippet and its description.
     class Snippet < Abstract
-      data_field :code
-      data_field :description
+      data_field :code, sensitive: false
+      data_field :description, sensitive: false
 
       # @param session [Session] the session to associate with
       # @param label [Symbol] the new record's label

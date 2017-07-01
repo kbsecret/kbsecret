@@ -4,7 +4,7 @@ module KBSecret
   module Record
     # Represents a record containing a login (username, password) pair.
     class Login < Abstract
-      data_field :username
+      data_field :username, sensitive: false
       data_field :password
 
       # @param session [Session] the session to associate with
