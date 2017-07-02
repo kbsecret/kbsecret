@@ -47,14 +47,16 @@ module KBSecret
     # @note This should be called within the block passed to {#initialize}.
     def slop(cmds: [], errors: true)
       @opts = Slop.parse suppress_errors: !errors do |o|
+        o.separator "Options:"
+
         yield o
 
-        o.on "-h", "--help" do
+        o.on "-h", "--help", "show this help message" do
           puts o
           exit
         end
 
-        o.on "--introspect-flags" do
+        o.on "--introspect-flags", "dump recognized flags and subcommands" do
           comp = o.options.flat_map(&:flags) + cmds
           puts comp.join "\n"
           exit
