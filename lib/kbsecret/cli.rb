@@ -36,7 +36,7 @@ module KBSecret
       @args = nil
       instance_eval(&block)
     rescue => e
-      self.class.die e.to_s.capitalize
+      self.class.die "#{e.to_s.capitalize}."
     end
 
     # Parse options for a kbsecret utility, adding some default options for
@@ -45,7 +45,7 @@ module KBSecret
     # @param errors [Boolean] whether or not to produce Slop errors
     # @return [Slop::Result] the result of argument parsing
     # @note This should be called within the block passed to {#initialize}.
-    def slop(cmds: [], errors: false)
+    def slop(cmds: [], errors: true)
       @opts = Slop.parse suppress_errors: !errors do |o|
         yield o
 
@@ -86,7 +86,7 @@ module KBSecret
     #   options or arguments are being tested for a valid session.
     def ensure_session!(where = :option)
       label = where == :option ? @opts[:session] : @args[:session]
-      raise "Unknown session: '#{label}'." unless Config.session? label
+      raise "Unknown session: '#{label}'" unless Config.session? label
     end
 
     class << self
