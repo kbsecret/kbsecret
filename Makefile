@@ -39,6 +39,7 @@ ronnpp:
 .PHONY: pkg
 pkg: $(PKGS)
 
+.PHONY: $(PKGS)
 $(PKGS): prep-gems
 	pushd . && \
 	mkdir -p $(PKG)/$@ && \
@@ -52,6 +53,7 @@ $(PKGS): prep-gems
 		-s gem -t $@ kbsecret && \
 	popd
 
+.PHONY: prep-gems
 prep-gems:
 	mkdir -p pkg/deps
 	gem install --norc --no-ri --no-rdoc --install-dir $(GEM_DEPS) kbsecret
