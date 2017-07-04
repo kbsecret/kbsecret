@@ -40,7 +40,7 @@ module KBSecret
     end
 
     # Parse options for a kbsecret utility, adding some default options for
-    #  introspection and help output.
+    #  introspection, verbosity, and help output.
     # @param cmds [Array<String>] additional commands to print in `--introspect-flags`
     # @param errors [Boolean] whether or not to produce Slop errors
     # @return [Slop::Result] the result of argument parsing
@@ -50,6 +50,9 @@ module KBSecret
         o.separator "Options:"
 
         yield o
+
+        o.bool "-V", "--verbose", "produce more verbose output"
+        o.bool "-w", "--no-warn", "suppress warning messages"
 
         o.on "-h", "--help", "show this help message" do
           puts o
@@ -91,25 +94,40 @@ module KBSecret
       raise "Unknown session: '#{label}'" unless Config.session? label
     end
 
+    # Print an informational message if verbose output has been enabled.
+    # @param msg [String] the message to print
+    # @return [void]
+    def info(msg)
+      return unless @opts.verbose?
+      STDERR.puts "#{"Info".green}: #{msg}"
+    end
+
+    # Print a warning message unless warnings have been suppressed.
+    # @param msg [String] the message to print
+    # @return [void]
+    def warn(msg)
+      return if @opts.no_warn?
+      STDERR.puts "#{"Warning".yellow}: #{msg}"
+    end
+
+    # Print an error message and terminate.
+    # @param msg [String] the message to print
+    # @return [void]
+    # @note This method does not return!
+    def die(msg)
+      pretty = "#{"Fatal".red}: #{msg}"
+      abort pretty
+    end
+
     class << self
       # Print an error message and terminate.
       # @param msg [String] the message to print
       # @return [void]
       # @note This method does not return!
+      # @deprecated use {#die} instead.
       def die(msg)
         pretty = "#{"Fatal".red}: #{msg}"
         abort pretty
-      end
-
-      # Instantiate a session if it exists, and terminate otherwise.
-      # @param sess_label [String, Symbol] the session label to instantiate
-      # @return [void]
-      # @note This method does not return if the given session is not configured!
-      # @deprecated Use {#ensure_session!} instead.
-      def ensure_session(sess_label)
-        die "Unknown session: '#{sess_label}'." unless Config.session? sess_label
-
-        Session.new label: sess_label
       end
 
       # Finds a reasonable default field separator by checking the environment first
@@ -117,29 +135,6 @@ module KBSecret
       # @return [String] the field separator
       def ifs
         ENV["IFS"] || ":"
-      end
-
-      # Parse arguments for a kbsecret utility, adding some default options for
-      #  introspection and help output.
-      # @param cmds [Array<String>] additional commands to print in `--introspect-flags`
-      # @param errors [Boolean] whether or not to produce Slop errors
-      # @return [Slop::Result] the result of argument parsing
-      # @deprecated Use {#initialize} instead.
-      def slop(cmds: [], errors: false)
-        Slop.parse suppress_errors: !errors do |o|
-          yield o
-
-          o.on "-h", "--help" do
-            puts o
-            exit
-          end
-
-          o.on "--introspect-flags" do
-            comp = o.options.flat_map(&:flags) + cmds
-            puts comp.join "\n"
-            exit
-          end
-        end
       end
     end
   end
