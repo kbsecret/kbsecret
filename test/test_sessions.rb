@@ -2,6 +2,7 @@
 
 require "minitest/autorun"
 require "kbsecret"
+require "fileutils"
 
 require_relative "helpers"
 
@@ -88,5 +89,21 @@ class KBSecretSessionsTest < Minitest::Test
   ensure
     sess&.unlink!
     KBSecret::Config.deconfigure_session(label)
+  end
+
+  def test_bad_record_in_session
+    # just to make sure the session directory exists on disk
+    label, hsh = unique_label_and_session
+    KBSecret::Config.configure_session(label, hsh)
+    sess = KBSecret::Session.new label: label
+
+    # create an empty JSON file, which won't parse correctly
+    bad = File.join(sess.directory, "foo.json")
+    FileUtils.touch bad
+
+    # attempting to load the session now should fail
+    assert_raises KBSecret::RecordLoadError do
+      sess = KBSecret::Session.new label: label
+    end
   end
 end
