@@ -7,11 +7,17 @@ require "dreck"
 module KBSecret
   # An encapsulation of useful methods for kbsecret's CLI.
   class CLI
-    # @return [Slop::Result] the result of option parsing
+    # @return [Slop::Result, nil] the result of option parsing, if requested
+    #   via {#slop}
     attr_reader :opts
 
-    # @return [Dreck::Result] the result of trailing argument parsing
+    # @return [Dreck::Result, nil] the result of trailing argument parsing, if
+    #   requested via {#dreck}
     attr_reader :args
+
+    # @return [Session, nil] the session associated with the command, if requested
+    #   via {#ensure_session!}
+    attr_reader :session
 
     # Encapsulate both the options and trailing arguments passed to a `kbsecret` command.
     # @example
@@ -32,11 +38,7 @@ module KBSecret
     #  cmd.args # => Dreck::Result
     def initialize(&block)
       @trailing = ARGV
-      @opts = nil
-      @args = nil
-      instance_eval(&block)
-    rescue => e
-      self.class.die "#{e.to_s.capitalize}."
+      guard { instance_eval(&block) }
     end
 
     # Parse options for a kbsecret utility, adding some default options for
@@ -92,6 +94,18 @@ module KBSecret
     def ensure_session!(where = :option)
       label = where == :option ? @opts[:session] : @args[:session]
       raise "Unknown session: '#{label}'" unless Config.session? label
+      @session = Session.new label: label
+    end
+
+    # "Guard" a block by propagating any exceptions as fatal (unrecoverable)
+    #   errors.
+    # @return [Object] the result of the block
+    # @note This should be used to guard chunks of code that are likely to
+    #   raise exceptions. The amount of code guarded should be minimized.
+    def guard
+      yield
+    rescue => e
+      die "#{e.to_s.capitalize}."
     end
 
     # Print an informational message if verbose output has been enabled.
