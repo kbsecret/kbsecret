@@ -44,6 +44,8 @@ module KBSecret
       hsh   = JSON.parse(File.read(path), symbolize_names: true)
       klass = record_classes.find { |c| c.type == hsh[:type].to_sym }
       klass&.load!(session, hsh)
+    rescue
+      raise RecordLoadError, path
     end
   end
 end
