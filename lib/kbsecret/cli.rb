@@ -124,7 +124,6 @@ module KBSecret
       # @param msg [String] the message to print
       # @return [void]
       # @note This method does not return!
-      # @deprecated use {#die} instead.
       def die(msg)
         pretty = "#{"Fatal".red}: #{msg}"
         abort pretty
