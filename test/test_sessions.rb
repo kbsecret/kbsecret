@@ -105,5 +105,8 @@ class KBSecretSessionsTest < Minitest::Test
     assert_raises KBSecret::RecordLoadError do
       sess = KBSecret::Session.new label: label
     end
+  ensure
+    sess&.unlink!
+    KBSecret::Config.deconfigure_session(label)
   end
 end
