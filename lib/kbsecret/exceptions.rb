@@ -9,14 +9,14 @@ module KBSecret
   class RecordLoadError < KBSecretError
     def initialize(path)
       base = File.basename(path)
-      super "Failed to load record in file: #{base}"
+      super "Failed to load record in file: '#{base}'"
     end
   end
 
   # Raised during record creation if an unknown record type is requested.
   class RecordTypeUnknownError < KBSecretError
     def initialize(type)
-      super "Unknown record type: #{type}"
+      super "Unknown record type: '#{type}'"
     end
   end
 

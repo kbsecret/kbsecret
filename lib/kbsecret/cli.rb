@@ -107,6 +107,11 @@ module KBSecret
       @session = Session.new label: label
     end
 
+    def ensure_type!(where = :option)
+      type = where == :option ? @opts[:type] : @args[:type]
+      Record.class_for type
+    end
+
     # "Guard" a block by propagating any exceptions as fatal (unrecoverable)
     #   errors.
     # @return [Object] the result of the block

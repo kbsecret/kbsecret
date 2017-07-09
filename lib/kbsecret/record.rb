@@ -23,9 +23,12 @@ module KBSecret
     end
 
     # @param type [String, Symbol] the record type
-    # @return [Class, nil] the record class corresponding to the given type
+    # @return [Class] the record class corresponding to the given type
+    # @raise [RecordTypeUnknownError] if the requested type is unknown
     def self.class_for(type)
-      record_classes.find { |c| c.type == type.to_sym }
+      klass = record_classes.find { |c| c.type == type.to_sym }
+      raise RecordTypeUnknownError, type unless klass
+      klass
     end
 
     # @param type [String, Symbol] the record type
@@ -39,6 +42,7 @@ module KBSecret
     # @param session [Session] the session to load into
     # @param path [String] the fully-qualified record path
     # @return [Record::AbstractRecord] the loaded record
+    # @raise [RecordLoadError] if an error occurs during record loading
     # @api private
     def self.load_record!(session, path)
       hsh   = JSON.parse(File.read(path), symbolize_names: true)
