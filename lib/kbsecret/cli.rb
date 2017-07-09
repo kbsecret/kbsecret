@@ -20,22 +20,32 @@ module KBSecret
     attr_reader :session
 
     # Encapsulate both the options and trailing arguments passed to a `kbsecret` command.
+    # @yield [CLI] the {CLI} instance to specify
+    # @return [CLI] the command's initial state
     # @example
-    #  cmd = KBSecret::CLI.new do
-    #    slop do |o|
+    #  cmd = KBSecret::CLI.create do |c|
+    #    c.slop do |o|
     #      o.string "-s", "--session", "session label"
     #      o.bool "-f", "--foo", "whatever"
     #    end
     #
-    #    dreck do
+    #    c.dreck do
     #      string :name
     #    end
     #
-    #    ensure_session!
+    #    c.ensure_session!
     #  end
     #
     #  cmd.opts # => Slop::Result
     #  cmd.args # => Dreck::Result
+    def self.create(&block)
+      cmd = CLI.new(&block)
+      yield cmd
+      cmd
+    end
+
+    # @api private
+    # @deprecated see {create}
     def initialize(&block)
       @trailing = ARGV
       guard { instance_eval(&block) }
