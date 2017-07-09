@@ -9,6 +9,23 @@ require_relative "helpers"
 class KBSecretRecordTypesTest < Minitest::Test
   include Helpers
 
+  def test_type_discovery
+    # Record.type? should return true or false based on whether the type exists
+    assert KBSecret::Record.type?(:login)
+    refute KBSecret::Record.type?(:dfjbgdkgdf)
+
+    # finding the class for a valid type should work
+    klass = KBSecret::Record.class_for :login
+
+    assert_instance_of Class, klass
+    assert_equal KBSecret::Record::Login, klass
+
+    # attempting to find the class for an invalid type should error
+    assert_raises KBSecret::RecordTypeUnknownError do
+      KBSecret::Record.class_for :kdgndfdfg
+    end
+  end
+
   def test_login_record
     temp_session do |sess|
       sess.add_record(:login, :foo, "bar", "baz")
