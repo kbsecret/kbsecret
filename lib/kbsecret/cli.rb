@@ -107,6 +107,13 @@ module KBSecret
       @session = Session.new label: label
     end
 
+    # Ensure that a record type passed in as an option or argument is resolvable
+    #   to a record class.
+    # @param where [Symbol] Where to look for the record type to test.
+    #   If `:option` is passed, then the type is expected to be the value of the
+    #   `--type` option. If `:argument` is passed, then the type is expected to
+    #   be in the argument list labeled as `:type` by Dreck.
+    # @return [void]
     def ensure_type!(where = :option)
       type = where == :option ? @opts[:type] : @args[:type]
       Record.class_for type
