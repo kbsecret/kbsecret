@@ -5,3 +5,6 @@ doc/
 .yardoc/
 Gemfile.lock
 pkg/
+man/*.html
+man/*.ronn
+man/*.1
