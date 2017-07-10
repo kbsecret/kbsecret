@@ -50,7 +50,7 @@ Documentation is available on [RubyDoc](http://www.rubydoc.info/gems/kbsecret/).
 ```bash
 # create a new login record under the default session
 $ kbsecret new login gmail
-Username?
+Username? bob@gmail.com
 Password?
 
 # list all records under the default session
@@ -60,7 +60,7 @@ gmail
 # show the requested login record
 $ kbsecret login gmail
 Label: gmail
-	Username: foo@example.com
+	Username: bob@gmail.com
 	Password: barbazquux
 
 # create a new session between 3 keybase users (foo, bar, and baz)
@@ -73,7 +73,7 @@ dev-team
 
 # add an environment record to the dev-team session
 $ kbsecret new environment api-key -s dev-team
-Variable?
+Variable? BRAND_NEW_API
 Value?
 
 # list all records under the dev-team session
@@ -82,7 +82,7 @@ api-key
 
 # get all environment records in dev-team in an easy-to-source format
 $ kbsecret env -s dev-team --all
-export API_KEY='0xBADBEEF'
+export BRAND_NEW_API='0xBADBEEF'
 ```
 
 ### Manual Pages
