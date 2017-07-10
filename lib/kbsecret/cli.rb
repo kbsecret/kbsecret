@@ -98,12 +98,10 @@ module KBSecret
     #   the `--session` option. If `:argument` is passed, then the session is expected
     #   to be in the argument list labeled as `:argument` by Dreck.
     # @return [void]
-    # @raise [RuntimeError] if the expected session is not configured.
     # @note {#slop} and {#dreck} should be called before this, depending on whether
     #   options or arguments are being tested for a valid session.
     def ensure_session!(where = :option)
       label = where == :option ? @opts[:session] : @args[:session]
-      raise "Unknown session: '#{label}'" unless Config.session? label
       @session = Session.new label: label
     end
 
@@ -114,9 +112,25 @@ module KBSecret
     #   `--type` option. If `:argument` is passed, then the type is expected to
     #   be in the argument list labeled as `:type` by Dreck.
     # @return [void]
+    # @note {#slop} and {#dreck} should be called before this, depending on whether
+    #   options or arguments are being tested for a valid session.
     def ensure_type!(where = :option)
       type = where == :option ? @opts[:type] : @args[:type]
       Record.class_for type
+    end
+
+    # Ensure that a generator profile passed in as an option or argument already
+    #   exists (i.e., is already configured).
+    # @param where [Symbol] Where to look for the session label to test.
+    #   If `:option` is passed, then the generator is expected to be the value of
+    #   the `--generator` option. If `:argument` is passed, then the type is expected
+    #   to be in the argument list labeled as `:generator` by Dreck.
+    # @return [void]
+    # @note {#slop} and {#dreck} should be called before this, depending on whether
+    #   options or arguments are being tested for a valid session.
+    def ensure_generator!(where = :option)
+      gen = where == :option ? @opts[:generator] : @args[:generator]
+      Config.generator gen
     end
 
     # "Guard" a block by propagating any exceptions as fatal (unrecoverable)

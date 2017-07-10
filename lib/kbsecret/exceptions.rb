@@ -26,4 +26,32 @@ module KBSecret
       super "Needed #{exp} arguments for this record, got #{act}"
     end
   end
+
+  # Raised during session lookup if an unknown session is requested.
+  class SessionUnknownError < KBSecretError
+    def initialize(sess)
+      super "Unknown session: '#{sess}'"
+    end
+  end
+
+  # Raised during generator lookup if an unknown profile is requested.
+  class GeneratorUnknownError < KBSecretError
+    def initialize(gen)
+      super "Unknown generator profile: '#{gen}'"
+    end
+  end
+
+  # Raised during generator creation if an unknown generator format is requested.
+  class GeneratorFormatError < KBSecretError
+    def initialize(fmt)
+      super "Unknown generator format: '#{fmt}'"
+    end
+  end
+
+  # Raised during generator creation if a non-positive generator length is requested.
+  class GeneratorBadLengthError < KBSecretError
+    def initialize(length)
+      super "Bad secret generator length (#{length}, must be positive)"
+    end
+  end
 end
