@@ -58,6 +58,7 @@ _kbsecret_complete_argument() {
     case "${arg}" in
         -s|--session) opts=$(kbsecret sessions);;
         -t|--type) opts=$(kbsecret types);;
+        -g|--generator) opts=$(kbsecret generators);;
         # XXX: is this a reasonable fallback?
         # a lot of commands take a record label at the end, but
         # many don't/won't or require a specifically typed record
