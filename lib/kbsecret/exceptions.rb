@@ -49,7 +49,7 @@ module KBSecret
   end
 
   # Raised during generator creation if a non-positive generator length is requested.
-  class GeneratorBadLengthError < KBSecretError
+  class GeneratorLengthError < KBSecretError
     def initialize(length)
       super "Bad secret generator length (#{length}, must be positive)"
     end
