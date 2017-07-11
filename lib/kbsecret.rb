@@ -3,8 +3,8 @@
 require "keybase"
 
 require_relative "version"
-require_relative "kbsecret/config"
 require_relative "kbsecret/exceptions"
+require_relative "kbsecret/config"
 require_relative "kbsecret/record"
 require_relative "kbsecret/session"
 require_relative "kbsecret/generator"
