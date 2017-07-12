@@ -24,6 +24,10 @@ kbsecret is available via [RubyGems](https://rubygems.org/gems/kbsecret):
 
 ```bash
 $ gem install kbsecret
+
+# or, install the prerelease:
+
+$ gem install --pre kbsecret
 ```
 
 For hacking:
