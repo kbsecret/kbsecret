@@ -83,6 +83,7 @@ module KBSecret
     #   Configure a session.
     #   @param label [String, Symbol] the session label
     #   @param hsh [Hash] the session configuration
+    #   @return [void]
     # @!method deconfigure_session
     #   Deconfigure a session.
     #   @param label [String, Symbol] the session label
@@ -104,6 +105,7 @@ module KBSecret
     #   Configure a secret generator.
     #   @param label [String, Symbol] the generator label (profile name)
     #   @param hsh [Hash] the generator configuration
+    #   @return [void]
     # @!method deconfigure_generator
     #   Deconfigure a generator.
     #   @param label [String, Symbol] the generator label (profile name)
