@@ -12,6 +12,9 @@ override CMDS+=$(shell echo bin/kbsecret* | xargs basename -a | \
 					sed 's/^kbsecret-\{0,1\}//g')
 
 M4FLAGS:=-D__KBSECRET_INTROSPECTABLE_COMMANDS="$(CMDS)"
+VERSION:=$(shell git describe --tags --abbrev=0 2>/dev/null \
+			|| git rev-parse --short HEAD \
+			|| echo "unknown-version")
 
 PKG=pkg
 GEM_DEPS=$(PKG)/deps
@@ -30,7 +33,7 @@ doc:
 
 .PHONY: man
 man: ronnpp
-	ronn --manual="KBSecret Manual" --html --roff man/*.ronn
+	ronn --organization="$(VERSION)" --manual="KBSecret Manual" --html --roff man/*.ronn
 
 .PHONY: ronnpp
 ronnpp:
