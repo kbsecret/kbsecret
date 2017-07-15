@@ -33,13 +33,16 @@ module KBSecret
         # Add a field to the record's data.
         # @param field [Symbol] the new field's name
         # @param sensitive [Boolean] whether the field is sensitive (e.g., a password)
+        # @param internal [Boolean] whether the field should be populated by the user
         # @return [void]
-        def data_field(field, sensitive: true)
+        def data_field(field, sensitive: true, internal: false)
           @fields    ||= []
           @sensitive ||= {}
+          @internal  ||= {}
 
           @fields << field
           @sensitive[field] = sensitive
+          @internal[field]  = internal
 
           gen_methods field
         end
@@ -67,9 +70,25 @@ module KBSecret
           !!@sensitive[field]
         end
 
+        # @param field [Symbol] the field's name
+        # @return [Boolean] whether the field is internal
+        # @note Fields that are marked as "internal" should *not* be presented to the user
+        #  for population. Instead, it is up to the record type itself to define a reasonable
+        #  default (and subsequent values) for these fields.
+        def internal?(field)
+          !!@internal[field]
+        end
+
         # @return [Array<Symbol>] all data fields for the record class
+        # @note This includes internal fields, which are generated. See {external_fields}
+        #  for the list of exclusively external fields.
         def data_fields
           @fields
+        end
+
+        # @return [Array<Symbol>] all external data fields for the record class
+        def external_fields
+          @fields.reject { |f| internal? f }
         end
 
         # @return [Symbol] the record's type
@@ -125,9 +144,13 @@ module KBSecret
 
       # @!method data_fields
       #  @return (see KBSecret::Record::Abstract.data_fields)
+      # @!method external_fields
+      #  @return (see KBSecret::Record::Abstract.external_fields)
       # @!method sensitive?
       #  @return (see KBSecret::Record::Abstract.sensitive?)
-      def_delegators :"self.class", :data_fields, :sensitive?
+      # @!method internal?
+      #  @return (see KBSecret::Record::Abstract.internal?)
+      def_delegators :"self.class", :data_fields, :external_fields, :sensitive?, :internal?
 
       # Create a string representation of the current record.
       # @return [String] the string representation
