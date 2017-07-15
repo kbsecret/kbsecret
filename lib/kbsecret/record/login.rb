@@ -12,14 +12,7 @@ module KBSecret
       # @param user [String] the new record's username
       # @param pass [String] the new record's password
       def initialize(session, label, user, pass)
-        super(session, label)
-
-        @data = {
-          login: {
-            username: user,
-            password: pass,
-          },
-        }
+        super(session, label, username: user, password: pass)
       end
     end
   end

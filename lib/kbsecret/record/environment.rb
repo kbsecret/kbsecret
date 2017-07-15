@@ -14,14 +14,7 @@ module KBSecret
       # @param variable [String] the new record's variable
       # @param value [String] the new record's value
       def initialize(session, label, variable, value)
-        super(session, label)
-
-        @data = {
-          environment: {
-            variable: variable.shellescape,
-            value: value.shellescape,
-          },
-        }
+        super(session, label, variable: variable.shellescape, value: value.shellescape)
       end
 
       # @return [String] a sh-style environment assignment

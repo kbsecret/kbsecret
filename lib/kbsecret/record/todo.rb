@@ -25,16 +25,7 @@ module KBSecret
       # @param label [Symbol] the new record's label
       # @param todo [String] the to do item
       def initialize(session, label, todo)
-        super(session, label)
-
-        @data = {
-          todo: {
-            todo: todo,
-            status: "suspended",
-            start: nil,
-            stop: nil,
-          },
-        }
+        super(session, label, todo: todo, status: "suspended", start: nil, stop: nil)
       end
 
       # @return [Boolean] whether or not the item is marked as started

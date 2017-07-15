@@ -100,13 +100,14 @@ module KBSecret
       # Create a brand new record, associated with a session.
       # @param session [Session] the session to associate with
       # @param label [String, Symbol] the new record's label
+      # @param body [Hash<Symbol, String>] a mapping of the record's data fields
       # @note Creation does *not* sync the new record; see {#sync!} for that.
-      def initialize(session, label)
+      def initialize(session, label, **body)
         @session   = session
         @timestamp = Time.now.to_i
         @label     = label.to_s
         @type      = self.class.type
-        @data      = {}
+        @data      = { @type => body }
         @path      = File.join(session.directory, "#{label}.json")
       end
 

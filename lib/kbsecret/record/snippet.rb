@@ -12,14 +12,7 @@ module KBSecret
       # @param code [String] the code
       # @param description [String] a description of the code
       def initialize(session, label, code, description)
-        super(session, label)
-
-        @data = {
-          snippet: {
-            code: code,
-            description: description,
-          },
-        }
+        super(session, label, code: code, description: description)
       end
     end
   end

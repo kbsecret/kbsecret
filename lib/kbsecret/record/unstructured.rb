@@ -10,13 +10,7 @@ module KBSecret
       # @param label [Symbol] the new record's label
       # @param text [String] the new record's unstructured text
       def initialize(session, label, text)
-        super(session, label)
-
-        @data = {
-          unstructured: {
-            text: text,
-          },
-        }
+        super(session, label, text: text)
       end
     end
   end
