@@ -40,6 +40,11 @@ class KBSecretRecordTypesTest < Minitest::Test
       refute record.sensitive?(:username)
       assert record.sensitive?(:password)
 
+      # there are no internal fields in a login record
+      assert_equal [:username, :password], record.external_fields
+      refute record.internal?(:username)
+      refute record.internal?(:password)
+
       # the data fields should be correctly mapped to methods
       assert_equal "bar", record.username
       assert_equal "baz", record.password
@@ -66,6 +71,11 @@ class KBSecretRecordTypesTest < Minitest::Test
       assert_equal [:variable, :value], record.data_fields
       refute record.sensitive?(:variable)
       assert record.sensitive?(:value)
+
+      # there are no internal fields in an environment record
+      assert_equal [:variable, :value], record.external_fields
+      refute record.internal?(:variable)
+      refute record.internal?(:value)
 
       # the data fields should be correctly mapped to methods
       assert_equal "FOO_API", record.variable
@@ -101,6 +111,11 @@ class KBSecretRecordTypesTest < Minitest::Test
       refute record.sensitive?(:code)
       refute record.sensitive?(:description)
 
+      # there are no internal fields in a snippet record
+      assert_equal [:code, :description], record.external_fields
+      refute record.internal?(:code)
+      refute record.internal?(:description)
+
       # the data fields should be correctly mapped to methods
       assert_equal "echo bar", record.code
       assert_equal "echoes bar", record.description
@@ -129,6 +144,13 @@ class KBSecretRecordTypesTest < Minitest::Test
       refute record.sensitive?(:status)
       refute record.sensitive?(:start)
       refute record.sensitive?(:stop)
+
+      # there are three internal fields in a todo record: status, start, and stop
+      assert_equal [:todo], record.external_fields
+      refute record.internal?(:todo)
+      assert record.internal?(:status)
+      assert record.internal?(:start)
+      assert record.internal?(:stop)
 
       # the data fields should be correctly mapped to methods
       assert_equal "clean the kitchen", record.todo
@@ -185,6 +207,10 @@ class KBSecretRecordTypesTest < Minitest::Test
       # and have the correct sensitivities
       assert_equal [:text], record.data_fields
       refute record.sensitive?(:text)
+
+      # there are no internal fields in an unstructured record
+      assert_equal [:text], record.external_fields
+      refute record.internal?(:text)
 
       # the data fields should be correctly mapped to methods
       assert_equal "this is some random text", record.text
