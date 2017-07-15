@@ -6,14 +6,6 @@ module KBSecret
     class Snippet < Abstract
       data_field :code, sensitive: false
       data_field :description, sensitive: false
-
-      # @param session [Session] the session to associate with
-      # @param label [Symbol] the new record's label
-      # @param code [String] the code
-      # @param description [String] a description of the code
-      def initialize(session, label, code, description)
-        super(session, label, code: code, description: description)
-      end
     end
   end
 end

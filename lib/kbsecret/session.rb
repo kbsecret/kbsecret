@@ -63,11 +63,13 @@ module KBSecret
     #  arguments does not match the record type's constructor
     def add_record(type, label, *args)
       klass = Record.class_for(type.to_sym)
-      arity = klass.instance_method(:initialize).arity - 2
+      arity = klass.external_fields.length
 
       raise RecordCreationArityError.new(arity, args.size) unless arity == args.size
 
-      record = klass.new(self, label.to_s, *args)
+      body   = klass.external_fields.zip(args).to_h
+      record = klass.new(self, label.to_s, **body)
+
       records << record
       record.sync!
     end

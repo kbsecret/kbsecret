@@ -128,6 +128,8 @@ module KBSecret
         @type      = self.class.type
         @data      = { @type => body }
         @path      = File.join(session.directory, "#{label}.json")
+
+        populate_internal_fields
       end
 
       # Fill in instance fields from a record's hash-representation.
@@ -177,6 +179,14 @@ module KBSecret
         @timestamp = Time.now.to_i
 
         File.write(path, JSON.pretty_generate(to_h))
+      end
+
+      # Fill in any internal fields that require a default value.
+      # @return [void]
+      # @note This gets called at the end of {#initialize}, and should be overridden by children
+      #  of {Abstract} if they need to modify their internal fields during initialization.
+      def populate_internal_fields
+        nil # stub
       end
     end
   end

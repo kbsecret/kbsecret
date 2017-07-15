@@ -9,14 +9,6 @@ module KBSecret
       data_field :variable, sensitive: false
       data_field :value
 
-      # @param session [Session] the session to associate with
-      # @param label [Symbol] the new record's label
-      # @param variable [String] the new record's variable
-      # @param value [String] the new record's value
-      def initialize(session, label, variable, value)
-        super(session, label, variable: variable.shellescape, value: value.shellescape)
-      end
-
       # @return [String] a sh-style environment assignment
       def to_assignment
         "#{variable}=#{value}"

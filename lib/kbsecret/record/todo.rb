@@ -21,11 +21,10 @@ module KBSecret
       data_field :start, sensitive: false, internal: true
       data_field :stop, sensitive: false, internal: true
 
-      # @param session [Session] the session to associate with
-      # @param label [Symbol] the new record's label
-      # @param todo [String] the to do item
-      def initialize(session, label, todo)
-        super(session, label, todo: todo, status: "suspended", start: nil, stop: nil)
+      # @return [void]
+      # @see Abstract#populate_internal_fields
+      def populate_internal_fields
+        self.status = "suspended"
       end
 
       # @return [Boolean] whether or not the item is marked as started
