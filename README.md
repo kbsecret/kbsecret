@@ -25,7 +25,7 @@ kbsecret is available via [RubyGems](https://rubygems.org/gems/kbsecret):
 ```bash
 $ gem install kbsecret
 
-# or, install the prerelease:
+# or, install the latest prerelease:
 
 $ gem install --pre kbsecret
 ```
