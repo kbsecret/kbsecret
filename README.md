@@ -1,11 +1,11 @@
-kbsecret
+KBSsecret
 ========
 
 [![Gem Version](https://badge.fury.io/rb/kbsecret.svg)](https://badge.fury.io/rb/kbsecret)
 
 *Note*: This is still a work in process. Use it with caution.
 
-kbsecret is a combined library/utility that provides a secret management
+KBSecret is a combined library/utility that provides a secret management
 interface for [KBFS](https://keybase.io/docs/kbfs) and
 [Keybase](https://keybase.io/).
 
@@ -20,7 +20,7 @@ interface for [KBFS](https://keybase.io/docs/kbfs) and
 
 ### Installation
 
-kbsecret is available via [RubyGems](https://rubygems.org/gems/kbsecret):
+KBSecret is available via [RubyGems](https://rubygems.org/gems/kbsecret):
 
 ```bash
 $ gem install kbsecret
@@ -91,7 +91,7 @@ export BRAND_NEW_API='0xBADBEEF'
 
 ### Manual Pages
 
-kbsecret's manual pages can be found online
+KBSecret's manual pages can be found online
 [here](https://yossarian.net/docs/kbsecret-man/kbsecret.1).
 
 If you'd like to generate the roff versions for `man(1)`, you'll need `ronn(1)`:
@@ -103,7 +103,7 @@ $ cp man/*.1 ${YOUR_MAN_DIR}
 
 ### Shell Completion
 
-kbsecret provides shell completion functions for bash.
+KBSecret provides shell completion functions for bash.
 
 To generate them:
 
