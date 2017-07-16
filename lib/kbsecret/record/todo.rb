@@ -16,6 +16,17 @@ module KBSecret
     # The stop time is the date and time at which the item was *either*
     # last suspended via {#suspend!} *or* finished via {#complete!}.
     class Todo < Abstract
+      # @!attribute todo
+      #  @return [String] the todo message
+      # @!attribute status
+      #  @return [String] the todo record's status (one of "started", "suspended", or "complete")
+      #  @note This is an internal field.
+      # @!attribute start
+      #  @return [String] a string representation of the record's (last) start time
+      #  @note This is an internal field.
+      # @!attribute stop
+      #  @return [String] a string representation of the record's (last) stop time
+      #  @note This is an internal field.
       data_field :todo, sensitive: false
       data_field :status, sensitive: false, internal: true
       data_field :start, sensitive: false, internal: true
