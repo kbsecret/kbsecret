@@ -10,6 +10,19 @@ require_relative "helpers"
 class KBSecretGeneratorsTest < Minitest::Test
   include Helpers
 
+  def test_generators_list
+    # generator_labels should always be an Array
+    assert_instance_of Array, KBSecret::Config.generator_labels
+
+    # ...and each element of that array should be a symbol that both satisfies
+    # generator? and refers to a configured generator hash
+    KBSecret::Config.generator_labels.each do |label|
+      assert_instance_of Symbol, label
+      assert_instance_of Hash, KBSecret::Config.generator(label)
+      assert KBSecret::Config.generator?(label)
+    end
+  end
+
   def test_default_generator
     # the default generator should always exist, and generator? should take
     # both a string and a symbol
