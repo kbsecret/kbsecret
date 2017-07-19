@@ -47,10 +47,6 @@ module KBSecret
     # configuration defaults
     # @api private
     DEFAULT_CONFIG = {
-      session_root: File.join("/keybase/private/",
-                              Keybase.current_user,
-                              "kbsecret"),
-
       mount: "/keybase",
       sessions: DEFAULT_SESSION,
       generators: DEFAULT_GENERATOR,
@@ -149,7 +145,6 @@ module KBSecret
     @config[:sessions].merge!(DEFAULT_SESSION)
     @config[:generators].merge!(DEFAULT_GENERATOR)
 
-    FileUtils.mkdir_p @config[:session_root]
     sync!
   end
 end

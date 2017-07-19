@@ -24,7 +24,7 @@ module KBSecret
       @label     = label.to_sym
       @config    = Config.session(@label)
 
-      @directory = rel_path config[:root], mkdir: true
+      @directory = rel_path mkdir: true
       @records   = load_records!
     end
 
@@ -116,13 +116,14 @@ module KBSecret
       end
     end
 
-    # @param rel [String, Symbol] the "root" of the session
     # @param mkdir [Boolean] whether or not to make the session directory
     # @return [String] the fully qualified path to the session
     # @api private
-    def rel_path(rel, mkdir: false)
-      # /keybase/private/[username]/kbsecret/[session]
-      path = File.join(Config[:session_root], rel)
+    def rel_path(mkdir: false)
+      # /keybase/private/[u1,u2,...,uN]/kbsecret/[session]
+      path = File.join(Config[:mount], "private",
+                       Keybase::U[@config[:users]],
+                       "kbsecret", @config[:root])
 
       FileUtils.mkdir_p path if mkdir
 
