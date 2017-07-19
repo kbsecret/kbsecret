@@ -1,4 +1,4 @@
-KBSsecret
+KBSecret
 ========
 
 [![Gem Version](https://badge.fury.io/rb/kbsecret.svg)](https://badge.fury.io/rb/kbsecret)
