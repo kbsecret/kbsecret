@@ -17,7 +17,7 @@ module KBSecret
     attr_reader :directory
 
     # @param label [String, Symbol] the label of the session to initialize
-    # @raise [SessionLoadError] if the session has no users or any invalid Keybase users
+    # @raise [Exceptions::SessionLoadError] if the session has no users or any invalid Keybase users
     # @note This does not *create* a new session, but loads one already
     #  specified in {Config::CONFIG_FILE}. To *create* a new session,
     #  see {Config.configure_session}.
@@ -25,10 +25,10 @@ module KBSecret
       @label     = label.to_sym
       @config    = Config.session(@label)
 
-      raise SessionLoadError, "no users in session" if @config[:users].empty?
+      raise Exceptions::SessionLoadError, "no users in session" if @config[:users].empty?
 
       @config[:users].each do |user|
-        raise SessionLoadError, "unknown Keybase user: '#{user}'" unless Keybase::API.user? user
+        raise Exceptions::SessionLoadError, "unknown user: '#{user}'" unless Keybase::API.user? user
       end
 
       @directory = rel_path mkdir: true
@@ -64,15 +64,15 @@ module KBSecret
     # @param label [String, Symbol] the new record's label
     # @param args [Array<String>] the record-type specific arguments
     # @return [void]
-    # @raise [UnknownRecordTypeError] if the requested type does not exist
+    # @raise [Exceptions::UnknownRecordTypeError] if the requested type does not exist
     #  in {Record.record_types}
-    # @raise [RecordCreationArityError] if the number of specified record
+    # @raise [Exceptions::RecordCreationArityError] if the number of specified record
     #  arguments does not match the record type's constructor
     def add_record(type, label, *args)
       klass = Record.class_for(type.to_sym)
       arity = klass.external_fields.length
 
-      raise RecordCreationArityError.new(arity, args.size) unless arity == args.size
+      raise Exceptions::RecordCreationArityError.new(arity, args.size) unless arity == args.size
 
       body   = klass.external_fields.zip(args).to_h
       record = klass.new(self, label.to_s, **body)

@@ -19,12 +19,12 @@ module KBSecret
     CONFIG_FACETS = {
       session: {
         plural: :sessions,
-        except: SessionUnknownError,
+        except: Exceptions::SessionUnknownError,
       },
 
       generator: {
         plural: :generators,
-        except: GeneratorUnknownError,
+        except: Exceptions::GeneratorUnknownError,
       },
     }.freeze
 
@@ -69,7 +69,7 @@ module KBSecret
     #   Retrieve a session's configuration.
     #   @param label [String, Symbol] the session's label
     #   @return [Hash] the session configuration
-    #   @raise [SessionUnknownError] if no such session exists
+    #   @raise [Exceptions::SessionUnknownError] if no such session exists
     # @!method session_labels
     #   @return [Array<Symbol>] all configured session labels
     # @!method session?
@@ -91,7 +91,7 @@ module KBSecret
     #   Retrieve a generator's configuration.
     #   @param gen [String, Symbol] the generator's label
     #   @return [Hash] the generator configuration
-    #   @raise [GeneratorUnknownError] if no such generator exists
+    #   @raise [Exceptions::GeneratorUnknownError] if no such generator exists
     # @!method generator_labels
     #   @return [Array<Symbol>] all configured session labels
     # @!method generator?

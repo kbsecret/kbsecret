@@ -10,7 +10,7 @@ require_relative "kbsecret/session"
 require_relative "kbsecret/generator"
 require_relative "kbsecret/cli"
 
-# The primary namespace for kbsecret.
+# The primary namespace for {KBSecret}.
 module KBSecret
   # fail very early if the user doesn't have keybase and KBFS running
   raise Keybase::KeybaseNotRunningError unless Keybase.running?

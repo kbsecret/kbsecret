@@ -15,14 +15,14 @@ module KBSecret
     attr_reader :length
 
     # @param profile [Symbol, String] the label of the generator profile to use
-    # @raise [GeneratorLengthError] if the profile has a non-positive length
-    # @raise [GeneratorFormatError] if the profile has an unknown format
+    # @raise [Exceptions::GeneratorLengthError] if the profile has a non-positive length
+    # @raise [Exceptions::GeneratorFormatError] if the profile has an unknown format
     def initialize(profile = :default)
       @format = Config.generator(profile)[:format].to_sym
       @length = Config.generator(profile)[:length].to_i
 
-      raise GeneratorLengthError, @length unless @length.positive?
-      raise GeneratorFormatError, @format unless GENERATOR_TYPES.include?(@format)
+      raise Exceptions::GeneratorLengthError, @length unless @length.positive?
+      raise Exceptions::GeneratorFormatError, @format unless GENERATOR_TYPES.include?(@format)
     end
 
     # @return [String] a new secret based on the {format} and {length} of the {Generator}
