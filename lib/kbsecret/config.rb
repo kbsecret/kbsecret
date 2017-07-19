@@ -65,44 +65,44 @@ module KBSecret
       @config[key]
     end
 
-    # @!method session
+    # @!method session(label)
     #   Retrieve a session's configuration.
     #   @param label [String, Symbol] the session's label
     #   @return [Hash] the session configuration
     #   @raise [Exceptions::SessionUnknownError] if no such session exists
     # @!method session_labels
     #   @return [Array<Symbol>] all configured session labels
-    # @!method session?
+    # @!method session?(label)
     #   @param label [String, Symbol] the session label
     #   @return [Boolean] whether or not the given session is configured
-    # @!method configure_session
+    # @!method configure_session(label, hsh)
     #   Configure a session.
     #   @param label [String, Symbol] the session label
     #   @param hsh [Hash] the session configuration
     #   @return [void]
-    # @!method deconfigure_session
+    # @!method deconfigure_session(label)
     #   Deconfigure a session.
     #   @param label [String, Symbol] the session label
     #   @return [void]
     #   @note This only removes the given session from the configuration, making
     #    it "invisible" to `kbsecret`. To actually remove all files associated
     #    with a session, see {KBSecret::Session#unlink!}.
-    # @!method generator
+    # @!method generator(label)
     #   Retrieve a generator's configuration.
-    #   @param gen [String, Symbol] the generator's label
+    #   @param label [String, Symbol] the generator's label
     #   @return [Hash] the generator configuration
     #   @raise [Exceptions::GeneratorUnknownError] if no such generator exists
     # @!method generator_labels
     #   @return [Array<Symbol>] all configured session labels
-    # @!method generator?
-    #   @param gen [String, Symbol] the generator label
+    # @!method generator?(label)
+    #   @param label [String, Symbol] the generator label
     #   @return [Boolean] whether or not the given generator is configured
-    # @!method configure_generator
+    # @!method configure_generator(label, hsh)
     #   Configure a secret generator.
     #   @param label [String, Symbol] the generator label (profile name)
     #   @param hsh [Hash] the generator configuration
     #   @return [void]
-    # @!method deconfigure_generator
+    # @!method deconfigure_generator(label)
     #   Deconfigure a generator.
     #   @param label [String, Symbol] the generator label (profile name)
     #   @return [void]
