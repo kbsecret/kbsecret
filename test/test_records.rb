@@ -45,16 +45,16 @@ class KBSecretRecordsTest < Minitest::Test
       sess.add_record(:login, :foo, "bar", "baz")
 
       # record creation should throw an error if the type doesn't exist
-      assert_raises KBSecret::RecordTypeUnknownError do
+      assert_raises KBSecret::Exceptions::RecordTypeUnknownError do
         sess.add_record(:this_does_not_exist, :foo, "bar")
       end
 
       # record creation should throw an error if the number of arguments is wrong
-      assert_raises KBSecret::RecordCreationArityError do
+      assert_raises KBSecret::Exceptions::RecordCreationArityError do
         sess.add_record(:login, :foo, "bar") # missing an argument
       end
 
-      assert_raises KBSecret::RecordCreationArityError do
+      assert_raises KBSecret::Exceptions::RecordCreationArityError do
         sess.add_record(:login, :foo, "bar", "baz", "quux") # too many arguments
       end
 

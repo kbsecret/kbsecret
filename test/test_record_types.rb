@@ -21,7 +21,7 @@ class KBSecretRecordTypesTest < Minitest::Test
     assert_equal KBSecret::Record::Login, klass
 
     # attempting to find the class for an invalid type should error
-    assert_raises KBSecret::RecordTypeUnknownError do
+    assert_raises KBSecret::Exceptions::RecordTypeUnknownError do
       KBSecret::Record.class_for :kdgndfdfg
     end
   end

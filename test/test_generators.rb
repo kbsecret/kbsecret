@@ -53,7 +53,7 @@ class KBSecretGeneratorsTest < Minitest::Test
 
   def test_nonexistent_generator
     # attempting to access a nonexistent generator with Config.generator should fail
-    assert_raises KBSecret::GeneratorUnknownError do
+    assert_raises KBSecret::Exceptions::GeneratorUnknownError do
       KBSecret::Config.generator :thisshouldnotexist
     end
 
@@ -72,7 +72,7 @@ class KBSecretGeneratorsTest < Minitest::Test
     assert_includes KBSecret::Config.generator_labels, :test_bad_gen
 
     # ...but attempting to instantiate it should fail
-    assert_raises KBSecret::GeneratorFormatError do
+    assert_raises KBSecret::Exceptions::GeneratorFormatError do
       KBSecret::Generator.new :test_bad_gen
     end
 
@@ -86,7 +86,7 @@ class KBSecretGeneratorsTest < Minitest::Test
     assert_includes KBSecret::Config.generator_labels, :test_bad_gen2
 
     # ...but attempting to instantiate it should fail
-    assert_raises KBSecret::GeneratorLengthError do
+    assert_raises KBSecret::Exceptions::GeneratorLengthError do
       KBSecret::Generator.new :test_bad_gen2
     end
   ensure

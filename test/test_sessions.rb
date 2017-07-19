@@ -102,7 +102,7 @@ class KBSecretSessionsTest < Minitest::Test
     FileUtils.touch bad
 
     # attempting to load the session now should fail
-    assert_raises KBSecret::RecordLoadError do
+    assert_raises KBSecret::Exceptions::RecordLoadError do
       sess = KBSecret::Session.new label: label
     end
   ensure
@@ -120,7 +120,7 @@ class KBSecretSessionsTest < Minitest::Test
     KBSecret::Config.configure_session(label, hsh)
 
     # attempting to load a session with no users should fail
-    assert_raises KBSecret::SessionLoadError do
+    assert_raises KBSecret::Exceptions::SessionLoadError do
       KBSecret::Session.new label: label
     end
   ensure
@@ -137,7 +137,7 @@ class KBSecretSessionsTest < Minitest::Test
     KBSecret::Config.configure_session(label, hsh)
 
     # attempting to load a session with a nonexistent Keybase user should fail
-    assert_raises KBSecret::SessionLoadError do
+    assert_raises KBSecret::Exceptions::SessionLoadError do
       KBSecret::Session.new label: label
     end
   ensure
