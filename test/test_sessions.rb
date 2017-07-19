@@ -109,4 +109,38 @@ class KBSecretSessionsTest < Minitest::Test
     sess&.unlink!
     KBSecret::Config.deconfigure_session(label)
   end
+
+  def test_session_with_no_users
+    label = SecureRandom.hex(10).to_sym
+    hsh   = {
+      users: [],
+      root: SecureRandom.uuid,
+    }
+
+    KBSecret::Config.configure_session(label, hsh)
+
+    # attempting to load a session with no users should fail
+    assert_raises KBSecret::SessionLoadError do
+      KBSecret::Session.new label: label
+    end
+  ensure
+    KBSecret::Config.deconfigure_session(label)
+  end
+
+  def test_session_with_bad_users
+    label = SecureRandom.hex(10).to_sym
+    hsh   = {
+      users: ["hopefullythispersonwillnevereverexistonkeybase"],
+      root: SecureRandom.uuid,
+    }
+
+    KBSecret::Config.configure_session(label, hsh)
+
+    # attempting to load a session with a nonexistent Keybase user should fail
+    assert_raises KBSecret::SessionLoadError do
+      KBSecret::Session.new label: label
+    end
+  ensure
+    KBSecret::Config.deconfigure_session(label)
+  end
 end
