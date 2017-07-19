@@ -17,12 +17,19 @@ module KBSecret
     attr_reader :directory
 
     # @param label [String, Symbol] the label of the session to initialize
+    # @raise [SessionLoadError] if the session has no users or any invalid Keybase users
     # @note This does not *create* a new session, but loads one already
     #  specified in {Config::CONFIG_FILE}. To *create* a new session,
     #  see {Config.configure_session}.
     def initialize(label: :default)
       @label     = label.to_sym
       @config    = Config.session(@label)
+
+      raise SessionLoadError, "no users in session" if @config[:users].empty?
+
+      @config[:users].each do |user|
+        raise SessionLoadError, "unknown Keybase user: '#{user}'" unless Keybase::API.user? user
+      end
 
       @directory = rel_path mkdir: true
       @records   = load_records!
@@ -57,9 +64,9 @@ module KBSecret
     # @param label [String, Symbol] the new record's label
     # @param args [Array<String>] the record-type specific arguments
     # @return [void]
-    # @raise UnknownRecordTypeError if the requested type does not exist
+    # @raise [UnknownRecordTypeError] if the requested type does not exist
     #  in {Record.record_types}
-    # @raise RecordCreationArityError if the number of specified record
+    # @raise [RecordCreationArityError] if the number of specified record
     #  arguments does not match the record type's constructor
     def add_record(type, label, *args)
       klass = Record.class_for(type.to_sym)

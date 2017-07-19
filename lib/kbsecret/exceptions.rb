@@ -27,6 +27,13 @@ module KBSecret
     end
   end
 
+  # Raised during session load if an error occurs.
+  class SessionLoadError < KBSecretError
+    def initialize(msg)
+      super "Session loading failure: #{msg}"
+    end
+  end
+
   # Raised during session lookup if an unknown session is requested.
   class SessionUnknownError < KBSecretError
     def initialize(sess)
