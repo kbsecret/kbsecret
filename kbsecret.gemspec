@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "ronn", "~> 0.7.3" # make man
   s.add_development_dependency "yard", "~> 0.9.9" # make doc
 
-  # this need to be installed by users and developers alike
+  # these need to be installed by users and developers alike
   s.add_runtime_dependency "clipboard", "~> 1.1"
   s.add_runtime_dependency "colored2", "~> 3.1"
   s.add_runtime_dependency "dreck", "~> 0.2.1"
