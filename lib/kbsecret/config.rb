@@ -48,8 +48,8 @@ module KBSecret
     # @api private
     DEFAULT_CONFIG = {
       mount: "/keybase",
-      sessions: DEFAULT_SESSION,
-      generators: DEFAULT_GENERATOR,
+      sessions: DEFAULT_SESSION.dup,
+      generators: DEFAULT_GENERATOR.dup,
     }.freeze
 
     # Writes the user's configuration to disk.
