@@ -8,7 +8,7 @@ ZSH_M4_OUT=completions/kbsecret.zsh
 FISH_M4=completions/kbsecret.fish.m4
 FISH_M4_OUT=completions/kbsecret.fish
 
-override CMDS+=$(shell echo bin/kbsecret* | xargs basename -a | \
+override CMDS+=$(shell echo lib/kbsecret/cli/kbsecret* | xargs basename -a | \
 					sed 's/^kbsecret-\{0,1\}//g')
 
 M4FLAGS:=-D__KBSECRET_INTROSPECTABLE_COMMANDS="$(CMDS)"
