@@ -175,6 +175,8 @@ module KBSecret
       # @note Every sync updates the record's timestamp.
       # @return [void]
       def sync!
+        return if @defer_sync
+
         # bump the timestamp every time we sync
         @timestamp = Time.now.to_i
 
@@ -187,6 +189,19 @@ module KBSecret
       #  of {Abstract} if they need to modify their internal fields during initialization.
       def populate_internal_fields
         nil # stub
+      end
+
+      # Evaluate the given block within the current instance, deferring any
+      #  synchronizations caused by method calls (e.g., field changes).
+      # @param implicit [Boolean] whether or not to call {#sync!} at the end of the block
+      # @return [void]
+      # @note This is useful for decreasing the number of writes performed, especially if multiple
+      #  fields within the record are modified simultaneously.
+      def defer_sync(implicit: true, &block)
+        @defer_sync = true
+        instance_eval(&block)
+        @defer_sync = false
+        sync! if implicit
       end
     end
   end

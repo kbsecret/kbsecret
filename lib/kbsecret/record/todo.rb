@@ -35,7 +35,11 @@ module KBSecret
       # @return [void]
       # @see Abstract#populate_internal_fields
       def populate_internal_fields
-        self.status = "suspended"
+        defer_sync implicit: false do
+          self.status = "suspended"
+          self.start = nil
+          self.stop = nil
+        end
       end
 
       # @return [Boolean] whether or not the item is marked as started

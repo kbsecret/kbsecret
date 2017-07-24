@@ -13,6 +13,15 @@ module KBSecret
       data_field :variable, sensitive: false
       data_field :value
 
+      # @return [void]
+      # @see Abstract#populate_internal_fields
+      def populate_internal_fields
+        defer_sync implicit: false do
+          self.variable = variable.shellescape
+          self.value = value.shellescape
+        end
+      end
+
       # @return [String] a sh-style environment assignment
       def to_assignment
         "#{variable}=#{value}"
