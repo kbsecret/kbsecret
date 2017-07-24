@@ -4,7 +4,9 @@ $LOAD_PATH.unshift File.expand_path("lib")
 
 require "rake/testtask"
 
-Rake::TestTask.new { |t| t.libs << "test" }
+desc "Run unit tests"
+Rake::TestTask.new(:test) do |t|
+  t.libs << "test"
+end
 
-desc "Run tests"
 task default: :test

@@ -66,6 +66,10 @@ prep-gems:
 test:
 	rake test
 
+.PHONY: coverage
+coverage:
+	COVERAGE=1 rake test
+
 .PHONY: bash
 bash:
 	m4 $(M4FLAGS) $(BASH_M4) > $(BASH_M4_OUT)
@@ -82,3 +86,4 @@ clean:
 	rm -rf doc/
 	rm -rf man/*.html man/*.1 man/*.ronn
 	rm -rf pkg/
+	rm -rf coverage/

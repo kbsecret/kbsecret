@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require "minitest/autorun"
-require "kbsecret"
-
 require_relative "helpers"
 
 # Tests for KBSecret::Record::* and related classes/modules
@@ -182,6 +179,13 @@ class KBSecretRecordTypesTest < Minitest::Test
       refute record.started?
       refute record.suspended?
       assert record.completed?
+
+      # mark the todo as suspended, bringing it back to its original status
+      record.suspend!
+
+      refute record.started?
+      assert record.suspended?
+      refute record.completed?
 
       # now that the todo is complete, stop should be a (stringified) timestamp
       assert_instance_of String, record.stop

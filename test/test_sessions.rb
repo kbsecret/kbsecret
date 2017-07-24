@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require "minitest/autorun"
-require "kbsecret"
-require "fileutils"
-
 require_relative "helpers"
+
+require "fileutils"
 
 # Tests for KBSecret::Session and related classes/modules
 class KBSecretSessionsTest < Minitest::Test

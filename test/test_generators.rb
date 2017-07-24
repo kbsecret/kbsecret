@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require "minitest/autorun"
-require "kbsecret"
-require "base64"
-
 require_relative "helpers"
+
+require "base64"
 
 # Tests for KBSecret::Generator functionality
 class KBSecretGeneratorsTest < Minitest::Test
