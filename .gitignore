@@ -8,3 +8,4 @@ pkg/
 man/*.html
 man/*.ronn
 man/*.1
+coverage/
