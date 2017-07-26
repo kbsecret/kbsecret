@@ -50,7 +50,7 @@ module KBSecret
     # @deprecated see {create}
     def initialize
       @name = File.basename($PROGRAM_NAME).split("-", 2)[1]
-      @argv = ARGV + Config.command_args(@name)
+      @argv = ARGV.dup
       guard { yield self }
     end
 
