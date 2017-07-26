@@ -8,9 +8,6 @@ module KBSecret
   # An encapsulation of useful methods for kbsecret's CLI.
   # Most methods in this class assume that they are being called from the context of
   class CLI
-    # @return [String] the short name of the command, i.e. without `kbsecret-` prefixed to it
-    attr_reader :name
-
     # @return [Slop::Result, nil] the result of option parsing, if requested
     #   via {#slop}
     attr_reader :opts
@@ -49,7 +46,6 @@ module KBSecret
     # @api private
     # @deprecated see {create}
     def initialize
-      @name = File.basename($PROGRAM_NAME).split("-", 2)[1]
       @argv = ARGV.dup
       guard { yield self }
     end
