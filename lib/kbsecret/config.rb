@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-require "yaml"
 require "fileutils"
+require "inih"
+require "shellwords"
+require "yaml"
 
 module KBSecret
   # Global and per-session configuration for kbsecret.
@@ -13,6 +15,10 @@ module KBSecret
     # The configuration file.
     # @api private
     CONFIG_FILE = File.join(CONFIG_DIR, "config.yml").freeze
+
+    # The command configuration file.
+    # @api private
+    COMMAND_CONFIG_FILE = File.join(CONFIG_DIR, "commands.ini").freeze
 
     # Configuration facets used for method generation.
     # @api private
@@ -63,6 +69,26 @@ module KBSecret
     # @return [Object] the corresponding configuration
     def self.[](key)
       @config[key]
+    end
+
+    # Fetch the configuration for a `kbsecret` command.
+    # @param cmd [String] the short name of the command
+    # @return [Hash, nil] the command's configuration
+    # @example
+    #  # retrieves the config for `kbsecret-list`
+    #  Config.command("list") # => { "args" => "...",  }
+    def self.command(cmd)
+      @command_config[cmd]
+    end
+
+    # Fetch the configured default arguments for a `kbsecret` command.
+    # @param cmd [String] the short name of the command
+    # @return [Array] the command's default arguments
+    # @note Default arguments are split according to normal shell splitting rules.
+    # @example
+    #  Config.command_args("list") # => ["--show-all"]
+    def self.command_args(cmd)
+      @command_config.dig(cmd, "args")&.shellsplit || []
     end
 
     # @!method session(label)
@@ -134,12 +160,18 @@ module KBSecret
       end
     end
 
-    if File.exist?(CONFIG_FILE)
-      user_config = YAML.load_file(CONFIG_FILE)
-    else
-      user_config = DEFAULT_CONFIG
-      FileUtils.mkdir_p CONFIG_DIR
-    end
+    user_config = if File.exist?(CONFIG_FILE)
+                    YAML.load_file(CONFIG_FILE)
+                  else
+                    FileUtils.mkdir_p CONFIG_DIR
+                    DEFAULT_CONFIG
+                  end
+
+    @command_config = if File.exist?(COMMAND_CONFIG_FILE)
+                        INIH.load(COMMAND_CONFIG_FILE)
+                      else
+                        {}
+                      end
 
     @config = DEFAULT_CONFIG.merge(user_config)
     @config[:sessions].merge!(DEFAULT_SESSION)

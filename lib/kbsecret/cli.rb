@@ -6,7 +6,11 @@ require "dreck"
 
 module KBSecret
   # An encapsulation of useful methods for kbsecret's CLI.
+  # Most methods in this class assume that they are being called from the context of
   class CLI
+    # @return [String] the short name of the command, i.e. without `kbsecret-` prefixed to it
+    attr_reader :name
+
     # @return [Slop::Result, nil] the result of option parsing, if requested
     #   via {#slop}
     attr_reader :opts
@@ -39,16 +43,15 @@ module KBSecret
     #  cmd.opts # => Slop::Result
     #  cmd.args # => Dreck::Result
     def self.create(&block)
-      cmd = CLI.new(&block)
-      yield cmd
-      cmd
+      CLI.new(&block)
     end
 
     # @api private
     # @deprecated see {create}
-    def initialize(&block)
-      @trailing = ARGV
-      guard { instance_eval(&block) }
+    def initialize
+      @name = File.basename($PROGRAM_NAME).split("-", 2)[1]
+      @argv = ARGV + Config.command_args(@name)
+      guard { yield self }
     end
 
     # Parse options for a kbsecret utility, adding some default options for
@@ -58,7 +61,7 @@ module KBSecret
     # @return [Slop::Result] the result of argument parsing
     # @note This should be called within the block passed to {#initialize}.
     def slop(cmds: [], errors: true)
-      @opts = Slop.parse suppress_errors: !errors do |o|
+      @opts = Slop.parse @argv, suppress_errors: !errors do |o|
         o.separator "Options:"
 
         yield o
@@ -78,7 +81,7 @@ module KBSecret
         end
       end
 
-      @trailing = @opts.args
+      @argv = @opts.args
     end
 
     # Parse trailing arguments for a kbsecret utility, using the elements remaining
@@ -86,7 +89,7 @@ module KBSecret
     # @param errors [Boolean] whether or not to produce (strict) Dreck errors
     # @note *If* {#slop} is called, it must be called before this.
     def dreck(errors: true, &block)
-      @args = Dreck.parse @trailing, strict: errors do
+      @args = Dreck.parse @argv, strict: errors do
         instance_eval(&block)
       end
     end
