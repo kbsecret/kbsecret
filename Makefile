@@ -84,6 +84,6 @@ fish: # XXX: implement
 clean:
 	rm -f $(BASH_M4_OUT) $(ZSH_M4_OUT) $(FISH_M4_OUT)
 	rm -rf doc/
-	rm -rf man/*.html man/*.1 man/*.ronn
+	rm -rf man/*.html man/*.{1,5} man/*.ronn
 	rm -rf pkg/
 	rm -rf coverage/
