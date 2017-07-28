@@ -8,21 +8,25 @@
 # 3. [foo] gets translated to \[[foo]\]
 # 4. {foo} gets translated to [foo](foo)
 
+codeblock = false
+
 STDIN.each_line do |line|
+  codeblock = !codeblock if /```/.match?(line)
+
   # 1. i prefer explicit <required options>, so escape *and* emphasize them
-  line.gsub!(/<([^<>]+)>/, '&lt;*\1*&gt;')
+  line.gsub!(/<([^<>]+)>/, '&lt;*\1*&gt;') unless codeblock
 
   # 2. i also prefer explicit [optional options], so escape those as well
-  line.gsub!(/(?<!\!)\[([^\[\]]+)\]/, '\[[\1]\]')
+  line.gsub!(/(?<!\!)\[([^\[\]]+)\]/, '\[[\1]\]') unless codeblock
 
   # 3. ronn will get confused with just #2 when trying to mark an option without
   # a reference later in the file, so provide ![foo] for those
-  line.gsub!(/\!\[([^\[\]]+)\]/, '\[\1\]')
+  line.gsub!(/\!\[([^\[\]]+)\]/, '\[\1\]') unless codeblock
 
   # 4. #2 and #3 both screw with normal markdown links, so provide {foo}
   # instead. this is all we really need, since URL labels don't make any sense
   # within roff output
-  line.gsub!(/\{([^\{\}]+)\}/, '[\1](\1)')
+  line.gsub!(/\{([^\{\}]+)\}/, '[\1](\1)') unless codeblock
 
   puts line
 end
