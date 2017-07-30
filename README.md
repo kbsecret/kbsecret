@@ -116,9 +116,9 @@ $ cp completions/kbsecret.bash ${YOUR_COMPLETION_DIR}
 
 Please feel free to contribute completion scripts for other shells!
 
-### TODO
+### Contributing
 
-* zsh/fish completions
-* facility for moving sessions (add users, change session label, etc)
-* glob for available sessions instead of requiring explicit configuration
-* unit tests for command-line utilities
+See ["help wanted"](https://github.com/woodruffw/kbsecret/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+on the [issue tracker](https://github.com/woodruffw/kbsecret/issues).
+
+If you have an idea for a new feature, please suggest it! Pull requests are also welcome.
