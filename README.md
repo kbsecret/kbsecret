@@ -122,3 +122,8 @@ See ["help wanted"](https://github.com/woodruffw/kbsecret/issues?q=is%3Aissue+is
 on the [issue tracker](https://github.com/woodruffw/kbsecret/issues).
 
 If you have an idea for a new feature, please suggest it! Pull requests are also welcome.
+
+### Community and Help
+
+If you'd like help or would just like to chat about KBSecret's development, please
+join us in `#kbsecret` on Freenode.
