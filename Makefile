@@ -65,6 +65,7 @@ prep-gems:
 .PHONY: test
 test:
 	rake test
+	TEST_NO_KEYBASE=1 rake test
 
 .PHONY: coverage
 coverage:
