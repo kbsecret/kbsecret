@@ -14,5 +14,5 @@ require_relative "kbsecret/cli"
 module KBSecret
   # fail very early if the user doesn't have keybase and KBFS running
   raise Keybase::KeybaseNotRunningError unless Keybase.running?
-  raise Keybase::KBFSNotRunningError unless Dir.exist?(Config[:mount])
+  raise Keybase::KBFSNotRunningError unless Dir.exist?(Keybase::Configuration::KBFS_MOUNT)
 end
