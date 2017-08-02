@@ -95,7 +95,7 @@ class KBSecretRecordsTest < Minitest::Test
 
       # the internal structure should be that of an abstract record
       assert_instance_of KBSecret::Session, record.session
-      assert_instance_of Integer, record.timestamp
+      assert_operator record.timestamp, :>=, 0
       assert_instance_of String, record.label
       assert_instance_of Symbol, record.type
       assert_instance_of Hash, record.data
