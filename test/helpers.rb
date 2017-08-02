@@ -29,4 +29,11 @@ module Helpers
     sess&.unlink!
     KBSecret::Config.deconfigure_session(label)
   end
+
+  def fake_argv(args)
+    real_argv = ARGV.dup
+    ARGV.replace args
+    yield
+    ARGV.replace real_argv
+  end
 end
