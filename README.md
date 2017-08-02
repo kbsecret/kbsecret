@@ -2,6 +2,7 @@ KBSecret
 ========
 
 [![Gem Version](https://badge.fury.io/rb/kbsecret.svg)](https://badge.fury.io/rb/kbsecret)
+[![Build Status](https://travis-ci.org/woodruffw/kbsecret.svg?branch=master)](https://travis-ci.org/woodruffw/kbsecret)
 
 *Note*: This is still a work in process. Use it with caution.
 
