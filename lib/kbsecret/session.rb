@@ -27,10 +27,6 @@ module KBSecret
 
       raise Exceptions::SessionLoadError, "no users in session" if @config[:users].empty?
 
-      @config[:users].each do |user|
-        raise Exceptions::SessionLoadError, "unknown user: '#{user}'" unless Keybase::API.user? user
-      end
-
       @directory = rel_path mkdir: true
       @records   = load_records!
     end
