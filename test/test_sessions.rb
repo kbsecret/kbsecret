@@ -124,21 +124,4 @@ class KBSecretSessionsTest < Minitest::Test
   ensure
     KBSecret::Config.deconfigure_session(label)
   end
-
-  def test_session_with_bad_users
-    label = SecureRandom.hex(10).to_sym
-    hsh   = {
-      users: ["hopefullythispersonwillnevereverexistonkeybase"],
-      root: SecureRandom.uuid,
-    }
-
-    KBSecret::Config.configure_session(label, hsh)
-
-    # attempting to load a session with a nonexistent Keybase user should fail
-    assert_raises KBSecret::Exceptions::SessionLoadError do
-      KBSecret::Session.new label: label
-    end
-  ensure
-    KBSecret::Config.deconfigure_session(label)
-  end
 end
