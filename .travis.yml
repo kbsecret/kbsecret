@@ -5,4 +5,4 @@ rvm:
 cache: bundler
 sudo: false
 script:
-  - TEST_NO_KEYBASE=1 bundle exec rake test
+  - COVERALLS=1 TEST_NO_KEYBASE=1 bundle exec rake test

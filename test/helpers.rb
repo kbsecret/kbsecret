@@ -1,7 +1,12 @@
 # frozen_string_literal: true
 
-require "simplecov"
-SimpleCov.start if ENV["COVERAGE"]
+if ENV["COVERAGE"]
+  require "simplecov"
+  SimpleCov.start
+elsif ENV["COVERALLS"]
+  require "coveralls"
+  Coveralls.wear!
+end
 
 require "fileutils"
 require "securerandom"
