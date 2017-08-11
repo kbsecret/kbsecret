@@ -5,7 +5,9 @@ require "json"
 # we have to require abstract first because ruby's module resolution is bad
 require_relative "record/abstract"
 
-Dir[File.join(__dir__, "record/*.rb")].each { |file| require_relative file }
+# we load custom types first, to ensure that the builtin types take precedence
+Dir[File.join(KBSecret::Config::CUSTOM_TYPES_DIR, "*.rb")].each { |t| require_relative t }
+Dir[File.join(__dir__, "record/*.rb")].each { |t| require_relative t }
 
 module KBSecret
   # The namespace for kbsecret records types.

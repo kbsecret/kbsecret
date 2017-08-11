@@ -20,6 +20,10 @@ module KBSecret
     # @api private
     COMMAND_CONFIG_FILE = File.join(CONFIG_DIR, "commands.ini").freeze
 
+    # The directory searched for custom record types.
+    # @api private
+    CUSTOM_TYPES_DIR = File.join(CONFIG_DIR, "record").freeze
+
     # Configuration facets used for method generation.
     # @api private
     CONFIG_FACETS = {
