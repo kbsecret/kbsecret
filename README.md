@@ -2,8 +2,8 @@ KBSecret
 ========
 
 [![Gem Version](https://badge.fury.io/rb/kbsecret.svg)](https://badge.fury.io/rb/kbsecret)
-[![Build Status](https://travis-ci.org/woodruffw/kbsecret.svg?branch=master)](https://travis-ci.org/woodruffw/kbsecret)
-[![Coverage Status](https://coveralls.io/repos/github/woodruffw/kbsecret/badge.svg?branch=coveralls)](https://coveralls.io/github/woodruffw/kbsecret?branch=coveralls)
+[![Build Status](https://travis-ci.org/kbsecret/kbsecret.svg?branch=master)](https://travis-ci.org/kbsecret/kbsecret)
+[![Coverage Status](https://coveralls.io/repos/github/kbsecret/kbsecret/badge.svg?branch=coveralls)](https://coveralls.io/github/kbsecret/kbsecret?branch=coveralls)
 
 *Note*: This is still a work in process. Use it with caution.
 
@@ -35,7 +35,7 @@ $ gem install --pre kbsecret
 For hacking:
 
 ```bash
-$ git clone git@github.com:woodruffw/kbsecret.git && cd kbsecret
+$ git clone git@github.com:kbsecret/kbsecret.git && cd kbsecret
 $ bundle install --path vendor/bundle
 $ RUBYLIB=./lib PATH=./bin:${PATH} bundle exec ./bin/kbsecret help
 ```
@@ -120,8 +120,8 @@ Please feel free to contribute completion scripts for other shells!
 
 ### Contributing
 
-See ["help wanted"](https://github.com/woodruffw/kbsecret/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
-on the [issue tracker](https://github.com/woodruffw/kbsecret/issues).
+See ["help wanted"](https://github.com/kbsecret/kbsecret/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+on the [issue tracker](https://github.com/kbsecret/kbsecret/issues).
 
 If you have an idea for a new feature, please suggest it! Pull requests are also welcome.
 

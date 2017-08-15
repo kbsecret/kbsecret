@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.files                 = Dir["LICENSE", "*.md", ".yardopts", "lib/**/*"]
   s.executables           = Dir["bin/*"].map { |p| File.basename(p) }
   s.required_ruby_version = ">= 2.3.0"
-  s.homepage              = "https://github.com/woodruffw/kbsecret"
+  s.homepage              = "https://github.com/kbsecret/kbsecret"
   s.license               = "MIT"
 
   # these need to be installed by developers alone
