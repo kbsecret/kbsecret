@@ -1,44 +1,31 @@
-KBSecret
+KBSecret ![](https://kbsecret.github.io/res/logo50.png)
 ========
 
 [![Gem Version](https://badge.fury.io/rb/kbsecret.svg)](https://badge.fury.io/rb/kbsecret)
 [![Build Status](https://travis-ci.org/kbsecret/kbsecret.svg?branch=master)](https://travis-ci.org/kbsecret/kbsecret)
 [![Coverage Status](https://coveralls.io/repos/github/kbsecret/kbsecret/badge.svg?branch=coveralls)](https://coveralls.io/github/kbsecret/kbsecret?branch=coveralls)
 
-*Note*: This is still a work in process. Use it with caution.
+KBSecret is a command line utility and library for managing *secrets*.
 
-KBSecret is a combined library/utility that provides a secret management
-interface for [KBFS](https://keybase.io/docs/kbfs) and
-[Keybase](https://keybase.io/).
+Quick links:
 
-### Benefits over current offerings
+* [Installation instructions](https://kbsecret.github.io/installation)
+* [Quick start guide](https://kbsecret.github.io/quickstart)
+* [CLI documentation](https://kbsecret.github.io/man/)
+* [API documentation](http://www.rubydoc.info/gems/kbsecret/)
+* [Customizing your installation](https://kbsecret.github.io/customization)
 
-* Easy password and environment sharing across multiple users.
-  - `kbsecret login -s dev-team github` prints the dev team's GitHub login.
-* No PGP/SSH key setup necessary - you only need a Keybase account.
-  - No more worrying about losing your key.
-* Transparent access - KBFS provides a VFS layer over all reads/writes.
-  - All records are stored encrypted on KBFS.
+## Hacking on KBSecret
 
-### Installation
-
-KBSecret is available via [RubyGems](https://rubygems.org/gems/kbsecret):
-
-```bash
-$ gem install kbsecret
-
-# or, install the latest prerelease:
-
-$ gem install --pre kbsecret
-```
-
-For hacking:
+Want to hack on KBSecret? Here's how you can get started:
 
 ```bash
 $ git clone git@github.com:kbsecret/kbsecret.git && cd kbsecret
 $ bundle install --path vendor/bundle
 $ RUBYLIB=./lib PATH=./bin:${PATH} bundle exec ./bin/kbsecret help
 ```
+
+### System Packages
 
 You can also build (very experimental) installation packages:
 
@@ -47,48 +34,6 @@ $ bundle exec make deb # for apt/dpkg based systems
 $ bundle exec make rpm # for yum/rpm based systems
 $ bundle exec make pacman # for pacman based systems
 $ ls pkg/{deb,rpm,pacman}/*
-```
-
-Documentation is available on [RubyDoc](http://www.rubydoc.info/gems/kbsecret/).
-
-### Usage
-
-```bash
-# create a new login record under the default session
-$ kbsecret new login gmail
-Username? bob@gmail.com
-Password?
-
-# list all records under the default session
-$ kbsecret list
-gmail
-
-# show the requested login record
-$ kbsecret login gmail
-Label: gmail
-	Username: bob@gmail.com
-	Password: barbazquux
-
-# create a new session between 3 keybase users (foo, bar, and baz)
-$ kbsecret new-session -l dev-team -u foo,bar,baz
-
-# list available sessions
-$ kbsecret sessions
-default
-dev-team
-
-# add an environment record to the dev-team session
-$ kbsecret new environment api-key -s dev-team
-Variable? BRAND_NEW_API
-Value?
-
-# list all records under the dev-team session
-$ kbsecret list -s dev-team
-api-key
-
-# get all environment records in dev-team in an easy-to-source format
-$ kbsecret env -s dev-team --all
-export BRAND_NEW_API='0xBADBEEF'
 ```
 
 ### Manual Pages
@@ -129,3 +74,9 @@ If you have an idea for a new feature, please suggest it! Pull requests are also
 
 If you'd like help or would just like to chat about KBSecret's development, please
 join us in `#kbsecret` on Freenode.
+
+## Licensing
+
+KBSecret is licensed under the MIT License.
+
+KBSecret's logo was created by [Dylan Ball](https://github.com/arathnim).
