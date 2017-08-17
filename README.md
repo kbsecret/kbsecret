@@ -3,7 +3,7 @@ KBSecret ![](https://kbsecret.github.io/res/logo50.png)
 
 [![Gem Version](https://badge.fury.io/rb/kbsecret.svg)](https://badge.fury.io/rb/kbsecret)
 [![Build Status](https://travis-ci.org/kbsecret/kbsecret.svg?branch=master)](https://travis-ci.org/kbsecret/kbsecret)
-[![Coverage Status](https://coveralls.io/repos/github/kbsecret/kbsecret/badge.svg?branch=coveralls)](https://coveralls.io/github/kbsecret/kbsecret?branch=coveralls)
+[![Coverage Status](https://coveralls.io/repos/github/kbsecret/kbsecret/badge.svg)](https://coveralls.io/github/kbsecret/kbsecret?branch=coveralls)
 
 KBSecret is a command line utility and library for managing *secrets*.
 
