@@ -73,7 +73,56 @@ class KBSecretCLITest < Minitest::Test
   end
 
   def test_cli_ensure_session
-    skip
+    # first, test session assurance via the --session flag
+    fake_argv %w[--session default] do
+      cmd = KBSecret::CLI.create do |c|
+        c.slop do |o|
+          o.string "-s", "--session", "the session to search in"
+        end
+
+        c.ensure_session!
+      end
+
+      # cmd should be instantiated, and cmd.session should be set to the argv-specified session
+      assert_instance_of KBSecret::CLI, cmd
+      assert_instance_of KBSecret::Session, cmd.session
+      assert_equal :default, cmd.session.label
+    end
+
+    # the default slop value should pick up the slack for us, if we don't specify
+    # the session explicitly
+    fake_argv [] do
+      cmd = KBSecret::CLI.create do |c|
+        c.slop do |o|
+          o.string "-s", "--session", "the session to search in", default: :default
+        end
+
+        c.ensure_session!
+      end
+
+      # cmd should be instantiated, and cmd.session should be set to the argv-specified session
+      assert_instance_of KBSecret::CLI, cmd
+      assert_instance_of KBSecret::Session, cmd.session
+      assert_equal :default, cmd.session.label
+    end
+
+    # session assurance should also work for a trailing argument parsed by dreck
+    fake_argv %w[default] do
+      cmd = KBSecret::CLI.create do |c|
+        c.slop { |_o| nil }
+
+        c.dreck do
+          string :session
+        end
+
+        c.ensure_session! :argument
+      end
+
+      # cmd should be instantiated, and cmd.session should be set to the argv-specified session
+      assert_instance_of KBSecret::CLI, cmd
+      assert_instance_of KBSecret::Session, cmd.session
+      assert_equal :default, cmd.session.label
+    end
   end
 
   def test_cli_ensure_type
