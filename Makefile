@@ -33,7 +33,9 @@ doc:
 
 .PHONY: man
 man: ronnpp
-	ronn --organization="$(VERSION)" --manual="KBSecret Manual" --html --roff man/*.ronn
+	ronn --organization="$(VERSION)" --manual="KBSecret Manual" \
+	--html --roff --style toc,80c \
+	man/*.ronn
 
 .PHONY: ronnpp
 ronnpp:
