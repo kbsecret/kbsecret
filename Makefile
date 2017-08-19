@@ -31,6 +31,11 @@ doc:
 	yardoc
 	yard stats --list-undoc
 
+man-www: man
+	mkdir ../kbsecret.github.io/man/$(VERSION)
+	cp man/man{1,5}/*.html ../kbsecret.github.io/man/$(VERSION)/
+	sed -i '1i* [$(VERSION)]($(VERSION)/kbsecret.1)' ../kbsecret.github.io/man/_manvers.md
+
 .PHONY: man
 man: ronnpp
 	ronn --organization="$(VERSION)" --manual="KBSecret Manual" \
