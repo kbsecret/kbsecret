@@ -79,4 +79,4 @@ join us in `#kbsecret` on Freenode.
 
 KBSecret is licensed under the MIT License.
 
-KBSecret's logo was created by [Dylan Ball](https://github.com/arathnim).
+KBSecret's logo was created by [Arathnim](http://arathnim.me).
