@@ -35,11 +35,12 @@ doc:
 man: ronnpp
 	ronn --organization="$(VERSION)" --manual="KBSecret Manual" \
 	--html --roff --style toc,80c \
-	man/*.ronn
+	man/man{1,5}/*.ronn
 
 .PHONY: ronnpp
 ronnpp:
-	for f in man/*.ronnpp; do ./man/ronnpp < $$f > man/$$(basename $$f .ronnpp).ronn; done
+	for f in man/man1/*.ronnpp; do ./man/ronnpp < $$f > man/man1/$$(basename $$f .ronnpp).ronn; done
+	for f in man/man5/*.ronnpp; do ./man/ronnpp < $$f > man/man5/$$(basename $$f .ronnpp).ronn; done
 
 .PHONY: pkg
 pkg: $(PKGS)
@@ -87,6 +88,6 @@ fish: # XXX: implement
 clean:
 	rm -f $(BASH_M4_OUT) $(ZSH_M4_OUT) $(FISH_M4_OUT)
 	rm -rf doc/
-	rm -rf man/*.html man/*.{1,5} man/*.ronn
+	rm -rf man/man{1,5}/*.{html,1,5,ronn}
 	rm -rf pkg/
 	rm -rf coverage/
