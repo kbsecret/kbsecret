@@ -5,8 +5,8 @@ doc/
 .yardoc/
 Gemfile.lock
 pkg/
-man/*.html
-man/*.ronn
-man/*.1
-man/*.5
+man/**/*.html
+man/**/*.ronn
+man/**/*.1
+man/**/*.5
 coverage/
