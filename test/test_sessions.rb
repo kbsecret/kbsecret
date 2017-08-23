@@ -96,7 +96,7 @@ class KBSecretSessionsTest < Minitest::Test
     sess = KBSecret::Session.new label: label
 
     # create an empty JSON file, which won't parse correctly
-    bad = File.join(sess.directory, "foo.json")
+    bad = File.join(sess.path, "foo.json")
     FileUtils.touch bad
 
     # attempting to load the session now should fail
