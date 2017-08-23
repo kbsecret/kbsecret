@@ -127,7 +127,7 @@ module KBSecret
         @label      = label.to_s
         @type       = self.class.type
         @data       = { @type => body }
-        @path       = File.join(session.directory, "#{label}.json")
+        @path       = File.join(session.path, "#{label}.json")
         @defer_sync = false
 
         populate_internal_fields
@@ -142,7 +142,7 @@ module KBSecret
         @label      = hsh[:label]
         @type       = hsh[:type].to_sym
         @data       = hsh[:data]
-        @path       = File.join(session.directory, "#{label}.json")
+        @path       = File.join(session.path, "#{label}.json")
         @defer_sync = false
       end
 

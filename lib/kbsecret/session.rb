@@ -14,7 +14,7 @@ module KBSecret
     attr_reader :config
 
     # @return [String] the fully-qualified path of the session
-    attr_reader :directory
+    attr_reader :path
 
     # @param label [String, Symbol] the label of the session to initialize
     # @raise [Exceptions::SessionLoadError] if the session has no users or any invalid Keybase users
@@ -27,7 +27,7 @@ module KBSecret
 
       raise Exceptions::SessionLoadError, "no users in session" if @config[:users].empty?
 
-      @directory = rel_path mkdir: true
+      @path = rel_path mkdir: true
       @records   = load_records!
     end
 
@@ -98,16 +98,16 @@ module KBSecret
 
     # Delete the entire session.
     # @return [void]
-    # @note Use this with caution, as *all* files under the session directory
-    #   will be deleted. Furthermore, the session directory itself will
+    # @note Use this with caution, as *all* files under the session path
+    #   will be deleted. Furthermore, the session path itself will
     #   be deleted, and this object will become garbage.
     def unlink!
-      FileUtils.rm_rf(directory)
+      FileUtils.rm_rf(path)
     end
 
     # @return [Array<String>] the fully qualified paths of all records in the session
     def record_paths
-      Dir[File.join(directory, "*.json")]
+      Dir[File.join(path, "*.json")]
     end
 
     # Load all records associated with the session.
@@ -119,7 +119,7 @@ module KBSecret
       end
     end
 
-    # @param mkdir [Boolean] whether or not to make the session directory
+    # @param mkdir [Boolean] whether or not to make the session path
     # @return [String] the fully qualified path to the session
     # @api private
     def rel_path(mkdir: false)
