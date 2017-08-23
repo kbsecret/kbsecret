@@ -10,7 +10,7 @@ Dir[File.join(KBSecret::Config::CUSTOM_TYPES_DIR, "*.rb")].each { |t| require_re
 Dir[File.join(__dir__, "record/*.rb")].each { |t| require_relative t }
 
 module KBSecret
-  # The namespace for kbsecret records types.
+  # The namespace for {KBSecret} record types.
   module Record
     # @return [Array<Class>] the class objects of all non-abstract record types
     def self.record_classes
