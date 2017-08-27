@@ -151,6 +151,15 @@ module KBSecret
       STDERR.puts "#{"Info".green}: #{msg}"
     end
 
+    # Print an informational message via {#info} and exit successfully.
+    # @param msg [String] the message to print
+    # @return [void]
+    # @note This method does not return!
+    def bye(msg)
+      info msg
+      exit
+    end
+
     # Print a warning message unless warnings have been suppressed.
     # @param msg [String] the message to print
     # @return [void]
