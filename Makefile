@@ -31,6 +31,7 @@ doc:
 	yardoc
 	yard stats --list-undoc
 
+.PHONY: man-www
 man-www: man
 	mkdir ../kbsecret.github.io/man/$(VERSION)
 	cp man/man{1,5}/*.html ../kbsecret.github.io/man/$(VERSION)/
