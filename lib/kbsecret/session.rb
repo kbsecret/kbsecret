@@ -27,8 +27,8 @@ module KBSecret
 
       raise Exceptions::SessionLoadError, "no users in session" if @config[:users].empty?
 
-      @path = rel_path mkdir: true
-      @records   = load_records!
+      @path    = rel_path mkdir: true
+      @records = load_records!
     end
 
     # @param label [String, Symbol] the label of the record to fetch
