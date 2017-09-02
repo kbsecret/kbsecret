@@ -23,7 +23,7 @@ if ENV["TEST_NO_KEYBASE"]
   require "kbsecret/cli"
 
   MiniTest.after_run do
-    mnt = Keybase::Configuration::KBFS_MOUNT
+    mnt = Keybase::Config::KBFS_MOUNT
     # just to be extra certain we don't nuke the real KBFS
     FileUtils.rm_rf mnt unless mnt.start_with?("/keybase")
   end

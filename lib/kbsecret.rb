@@ -13,6 +13,6 @@ require_relative "kbsecret/cli"
 # The primary namespace for {KBSecret}.
 module KBSecret
   # fail very early if the user doesn't have keybase and KBFS running
-  raise Keybase::KeybaseNotRunningError unless Keybase.running?
-  raise Keybase::KBFSNotRunningError unless Dir.exist?(Keybase::Configuration::KBFS_MOUNT)
+  raise Keybase::Exceptions::KeybaseNotRunningError unless Keybase.running?
+  raise Keybase::Exceptions::KBFSNotRunningError unless Dir.exist?(Keybase::Config::KBFS_MOUNT)
 end

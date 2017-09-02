@@ -1,7 +1,7 @@
 require "tmpdir"
 
 module Keybase
-  module Configuration
+  module Config
     KBFS_MOUNT = Dir.mktmpdir
   end
 
