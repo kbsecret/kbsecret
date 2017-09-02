@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module KBSecret
-  # A namespace for all exceptions used by {KBSecret}.
+  # A namespace for all exceptions defined by {KBSecret}.
   module Exceptions
     # A generic error in {KBSecret}.
     class KBSecretError < RuntimeError
