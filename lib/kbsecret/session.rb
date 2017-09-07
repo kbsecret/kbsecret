@@ -124,7 +124,7 @@ module KBSecret
     # @api private
     def rel_path(mkdir: false)
       # /keybase/private/[u1,u2,...,uN]/kbsecret/[session]
-      path = File.join(Keybase::Config::KBFS_MOUNT, "private",
+      path = File.join(Config[:mount], "private",
                        Keybase::U[@config[:users]],
                        "kbsecret", @config[:root])
 
