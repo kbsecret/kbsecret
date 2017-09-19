@@ -25,7 +25,10 @@ module KBSecret
       @label     = label.to_sym
       @config    = Config.session(@label)
 
-      raise Exceptions::SessionLoadError, "no users in session" if @config[:users].empty?
+      # team sessions don't have explicit users
+      unless @config[:team]
+        raise Exceptions::SessionLoadError, "no users in session" if @config[:users].empty?
+      end
 
       @path    = rel_path mkdir: true
       @records = load_records!
@@ -123,10 +126,13 @@ module KBSecret
     # @return [String] the fully qualified path to the session
     # @api private
     def rel_path(mkdir: false)
-      # /keybase/private/[u1,u2,...,uN]/kbsecret/[session]
-      path = File.join(Config[:mount], "private",
-                       Keybase::U[@config[:users]],
-                       "kbsecret", @config[:root])
+      path = if @config[:team]
+               File.join(Config[:mount], "team", @config[:team], "kbsecret", @config[:root])
+             else
+               # /keybase/private/[u1,u2,...,uN]/kbsecret/[session]
+               File.join(Config[:mount], "private", Keybase::U[@config[:users]], "kbsecret",
+                         @config[:root])
+             end
 
       FileUtils.mkdir_p path if mkdir
 
