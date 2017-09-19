@@ -64,6 +64,7 @@ module KBSecret
 
         o.bool "-V", "--verbose", "produce more verbose output"
         o.bool "-w", "--no-warn", "suppress warning messages"
+        o.bool "--debug", "produce full backtraces on errors"
 
         o.on "-h", "--help", "show this help message" do
           puts o
@@ -140,6 +141,7 @@ module KBSecret
     def guard
       yield
     rescue => e
+      STDERR.puts e.backtrace if @opts.debug?
       die "#{e.to_s.capitalize}."
     end
 
