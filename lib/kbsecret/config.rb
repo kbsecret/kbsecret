@@ -41,7 +41,7 @@ module KBSecret
     # The default session configuration.
     DEFAULT_SESSION = {
       default: {
-        users: [Keybase.current_user],
+        users: [Keybase::Local.current_user],
         root: "default",
       },
     }.freeze

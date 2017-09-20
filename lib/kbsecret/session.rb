@@ -130,7 +130,7 @@ module KBSecret
                File.join(Config[:mount], "team", @config[:team], "kbsecret", @config[:root])
              else
                # /keybase/private/[u1,u2,...,uN]/kbsecret/[session]
-               File.join(Config[:mount], "private", Keybase::U[@config[:users]], "kbsecret",
+               File.join(Config[:mount], "private", Keybase::Core::U[@config[:users]], "kbsecret",
                          @config[:root])
              end
 
