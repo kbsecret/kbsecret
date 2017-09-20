@@ -1,13 +1,9 @@
 require "tmpdir"
 
 module Keybase
-  def self.current_user
-    "dummy"
-  end
-
-  class U
-    def self.[](*args)
-      args.join(",")
+  module Local
+    def self.current_user
+      "dummy"
     end
   end
 end

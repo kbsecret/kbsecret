@@ -52,7 +52,7 @@ module Helpers
   def unique_label_and_session
     label = SecureRandom.hex(10).to_sym
     hsh = {
-      users: [Keybase.current_user],
+      users: [Keybase::Local.current_user],
       root: SecureRandom.uuid,
     }
 
