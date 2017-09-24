@@ -67,7 +67,7 @@ module KBSecret
         o.bool "--debug", "produce full backtraces on errors"
 
         o.on "-h", "--help", "show this help message" do
-          puts o
+          puts o.to_s prefix: "  "
           exit
         end
 
