@@ -140,7 +140,7 @@ module KBSecret
     #   raise exceptions. The amount of code guarded should be minimized.
     def guard
       yield
-    rescue => e
+    rescue RuntimeError => e
       STDERR.puts e.backtrace if @opts.debug?
       die "#{e.to_s.capitalize}."
     end
