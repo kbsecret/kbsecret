@@ -50,9 +50,9 @@ $ cp man/*.1 ${YOUR_MAN_DIR}
 
 ### Shell Completion
 
-KBSecret provides shell completion functions for bash.
+KBSecret provides shell completion functions for bash and zsh.
 
-To generate them:
+To generate the completions for Bash:
 
 ```bash
 $ bundle exec make bash
@@ -60,6 +60,8 @@ $ # or, if you have additional commands that support --introspect-flags:
 $ CMDS='foo bar baz' bundle exec make bash
 $ cp completions/kbsecret.bash ${YOUR_COMPLETION_DIR}
 ```
+
+To use the completions for zsh, add the completions directory to your $fpath or copy the \_kbsecret file to any of the directories in it.
 
 Please feel free to contribute completion scripts for other shells!
 
