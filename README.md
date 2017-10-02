@@ -61,7 +61,8 @@ $ CMDS='foo bar baz' bundle exec make bash
 $ cp completions/kbsecret.bash ${YOUR_COMPLETION_DIR}
 ```
 
-To use the completions for zsh, add the completions directory to your $fpath or copy the \_kbsecret file to any of the directories in it.
+To use the completions for zsh, add the completions directory to your `$fpath` or copy the
+`completions/_kbsecret` file to any of the directories in it.
 
 Please feel free to contribute completion scripts for other shells!
 
