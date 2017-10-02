@@ -84,9 +84,6 @@ coverage:
 bash:
 	m4 $(M4FLAGS) $(BASH_M4) > $(BASH_M4_OUT)
 
-.PHONY: zsh
-zsh: # XXX: implement
-
 .PHONY: fish
 fish: # XXX: implement
 
