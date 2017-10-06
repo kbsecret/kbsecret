@@ -33,12 +33,12 @@ class KBSecretRecordTypesTest < Minitest::Test
 
       # the data fields should be present in data_fields
       # and have the correct sensitivities
-      assert_equal [:username, :password], record.data_fields
+      assert_equal %i[username password], record.data_fields
       refute record.sensitive?(:username)
       assert record.sensitive?(:password)
 
       # there are no internal fields in a login record
-      assert_equal [:username, :password], record.external_fields
+      assert_equal %i[username password], record.external_fields
       refute record.internal?(:username)
       refute record.internal?(:password)
 
@@ -65,12 +65,12 @@ class KBSecretRecordTypesTest < Minitest::Test
 
       # the data fields should be present in data_fields
       # and have the correct sensitivities
-      assert_equal [:variable, :value], record.data_fields
+      assert_equal %i[variable value], record.data_fields
       refute record.sensitive?(:variable)
       assert record.sensitive?(:value)
 
       # there are no internal fields in an environment record
-      assert_equal [:variable, :value], record.external_fields
+      assert_equal %i[variable value], record.external_fields
       refute record.internal?(:variable)
       refute record.internal?(:value)
 
@@ -104,12 +104,12 @@ class KBSecretRecordTypesTest < Minitest::Test
 
       # the data fields should be present in data_fields
       # and have the correct sensitivities
-      assert_equal [:code, :description], record.data_fields
+      assert_equal %i[code description], record.data_fields
       refute record.sensitive?(:code)
       refute record.sensitive?(:description)
 
       # there are no internal fields in a snippet record
-      assert_equal [:code, :description], record.external_fields
+      assert_equal %i[code description], record.external_fields
       refute record.internal?(:code)
       refute record.internal?(:description)
 
@@ -136,7 +136,7 @@ class KBSecretRecordTypesTest < Minitest::Test
 
       # the data fields should be present in data_fields
       # and have the correct sensitivities
-      assert_equal [:todo, :status, :start, :stop], record.data_fields
+      assert_equal %i[todo status start stop], record.data_fields
       refute record.sensitive?(:todo)
       refute record.sensitive?(:status)
       refute record.sensitive?(:start)
