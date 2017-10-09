@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "colored2", "~> 3.1"
   s.add_runtime_dependency "dreck", "~> 0.2.1"
   s.add_runtime_dependency "inih", "~> 1.1"
-  s.add_runtime_dependency "keybase-unofficial", "~> 0.6.0"
+  s.add_runtime_dependency "keybase-unofficial", "~> 0.7.0"
   s.add_runtime_dependency "slop", "~> 4.6"
   s.add_runtime_dependency "tty-prompt", "~> 0.13"
 end
