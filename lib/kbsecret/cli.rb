@@ -3,11 +3,15 @@
 require "colored2"
 require "slop"
 require "dreck"
+require "abbrev"
 
 module KBSecret
   # An encapsulation of useful methods for kbsecret's CLI.
   # Most methods in this class assume that they are being called from the context of
   class CLI
+    # Abbreviations for record types (e.g., `env` for `environment`).
+    TYPE_ALIASES = Hash.new { |_, k| k }.update(Abbrev.abbrev(Record.record_types)).freeze
+
     # @return [Slop::Result, nil] the result of option parsing, if requested
     #   via {#slop}
     attr_reader :opts
@@ -115,7 +119,7 @@ module KBSecret
     # @note {#slop} and {#dreck} should be called before this, depending on whether
     #   options or arguments are being tested for a valid session.
     def ensure_type!(where = :option)
-      type = where == :option ? @opts[:type] : @args[:type]
+      type = TYPE_ALIASES[where == :option ? @opts[:type] : @args[:type]]
       Record.class_for type
     end
 
