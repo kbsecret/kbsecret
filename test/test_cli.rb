@@ -126,7 +126,53 @@ class KBSecretCLITest < Minitest::Test
   end
 
   def test_cli_ensure_type
-    skip
+    # first, test type assurance via the --type flag
+    fake_argv %w[--type login] do
+      cmd = KBSecret::CLI.create do |c|
+        c.slop do |o|
+          o.string "-t", "--type", "the type"
+        end
+
+        c.ensure_type!
+      end
+
+      # cmd should be instantiated, and the type passed in ARGV should be a valid KBSecret type
+      assert_instance_of KBSecret::CLI, cmd
+      assert KBSecret::Record.type?(cmd.opts[:type])
+    end
+
+    # the default slop value should pick up the slack for us, if we don't specify
+    # the type explicitly
+    fake_argv [] do
+      cmd = KBSecret::CLI.create do |c|
+        c.slop do |o|
+          o.string "-t", "--type", "the type", default: "login"
+        end
+
+        c.ensure_type!
+      end
+
+      # cmd should be instantiated, and the type passed in ARGV should be a valid KBSecret type
+      assert_instance_of KBSecret::CLI, cmd
+      assert KBSecret::Record.type?(cmd.opts[:type])
+    end
+
+    # type assurance should also work for a trailing argument parsed by dreck
+    fake_argv %w[login] do
+      cmd = KBSecret::CLI.create do |c|
+        c.slop { |_o| nil }
+
+        c.dreck do
+          string :type
+        end
+
+        c.ensure_type! :argument
+      end
+
+      # cmd should be instantiated, and the type passed in ARGV should be a valid KBSecret type
+      assert_instance_of KBSecret::CLI, cmd
+      assert KBSecret::Record.type?(cmd.args[:type])
+    end
   end
 
   def test_cli_ensure_generator
