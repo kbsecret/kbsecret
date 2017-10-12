@@ -8,6 +8,7 @@ require "abbrev"
 module KBSecret
   # An encapsulation of useful methods for kbsecret's CLI.
   # Most methods in this class assume that they are being called from the context of
+  # a command-line utility.
   class CLI
     # Abbreviations for record types (e.g., `env` for `environment`).
     TYPE_ALIASES = Hash.new { |_, k| k }.update(Abbrev.abbrev(Record.record_types)).freeze
