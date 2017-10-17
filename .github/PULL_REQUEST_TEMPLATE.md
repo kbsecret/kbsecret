@@ -9,5 +9,6 @@ your work more quickly.
 
 *If* you're changing something in the CLI:
 - [ ] Have you updated the manual pages and shell completion (if necessary)?
+- [ ] Have you introduced CLI unit tests for your changes and ensured that `make test-cli` passes?
 
 Please describe your changes briefly here. Thank you!
