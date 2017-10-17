@@ -73,12 +73,12 @@ prep-gems:
 
 .PHONY: test
 test:
-	rake test
-	TEST_NO_KEYBASE=1 rake test
+	bundle exec rake test
+	TEST_NO_KEYBASE=1 bundle exec rake test
 
 .PHONY: coverage
 coverage:
-	COVERAGE=1 rake test
+	COVERAGE=1 bundle exec rake test
 
 .PHONY: bash
 bash:
