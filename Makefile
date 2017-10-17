@@ -3,8 +3,6 @@ SHELL:=/bin/bash
 
 BASH_M4=completions/kbsecret.bash.m4
 BASH_M4_OUT=completions/kbsecret.bash
-ZSH_M4=completions/kbsecret.zsh.m4
-ZSH_M4_OUT=completions/kbsecret.zsh
 
 override CMDS+=$(shell echo lib/kbsecret/cli/kbsecret* | xargs basename -a | \
 					sed 's/^kbsecret-\{0,1\}//g')
@@ -88,7 +86,7 @@ bash:
 
 .PHONY: clean
 clean:
-	rm -f $(BASH_M4_OUT) $(ZSH_M4_OUT)
+	rm -f $(BASH_M4_OUT)
 	rm -rf doc/
 	rm -rf man/man{1,5}/*.{html,1,5,ronn}
 	rm -rf pkg/
