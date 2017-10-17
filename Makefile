@@ -76,6 +76,10 @@ test:
 	bundle exec rake test
 	TEST_NO_KEYBASE=1 bundle exec rake test
 
+.PHONY: test-cli
+test-cli:
+	bundle exec ruby -I lib:test test/cli/test_all.rb
+
 .PHONY: coverage
 coverage:
 	COVERAGE=1 bundle exec rake test

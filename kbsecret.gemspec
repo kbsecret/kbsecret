@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "ronn", "~> 0.7.3" # make man
   s.add_development_dependency "simplecov", "~> 0" # make coverage
   s.add_development_dependency "yard", "~> 0.9.9" # make doc
+  s.add_development_dependency "aruba", "~> 1.0.0.pre.alpha.2"
 
   # these need to be installed by users and developers alike
   s.add_runtime_dependency "clipboard", "~> 1.1"
