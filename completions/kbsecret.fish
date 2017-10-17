@@ -1,8 +1,5 @@
-# Things that don't work:
-# -h/--help doesn't display command completions
-# todo subcommands
-# various flag argument completions
-# kbsecret generator
+## TODO: various flag argument completions (--session, --generator, etc.) aren't present
+## TODO: find a way to auto-generate all of this
 
 ## standard utilities
 
@@ -25,6 +22,7 @@ function __fish_using_command
 end
 
 ## universal flags
+## TODO: -h/--help doesn't display command completions
 
 complete -f -c kbsecret -s w -l no-warn -d "Suppress warning output"
 complete -f -c kbsecret -s V -l verbose -d "Produce more verbose output"
@@ -100,6 +98,7 @@ complete -f -c kbsecret -n '__fish_needs_command' -a sessions -d "List sessions"
 complete -f -c kbsecret -n '__fish_using_command sessions' -s a -l show-all -d "Show session details"
 
 ## kbsecret todo
+## TODO: no sub-subcommand argument completion support
 
 complete -f -c kbsecret -n '__fish_needs_command' -a todo -d "Control 'to do' records"
 complete -f -c kbsecret -n '__fish_using_command todo' -a start -d "Mark task as started"
@@ -140,6 +139,7 @@ complete -f -c kbsecret -n '__fish_using_command rm-session' -a "(kbsecret sessi
 complete -f -c kbsecret -n '__fish_using_command rm-session' -s d -l delete -d "Delete all records"
 
 ## kbsecret generator
+## TODO: no completion support for the sub-subcommand arguments
 
 complete -f -c kbsecret -n '__fish_needs_command' -a generator -d "Manage generators"
 complete -f -c kbsecret -n '__fish_using_command todo' -a new -d "Add generator"
