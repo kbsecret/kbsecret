@@ -5,8 +5,6 @@ BASH_M4=completions/kbsecret.bash.m4
 BASH_M4_OUT=completions/kbsecret.bash
 ZSH_M4=completions/kbsecret.zsh.m4
 ZSH_M4_OUT=completions/kbsecret.zsh
-FISH_M4=completions/kbsecret.fish.m4
-FISH_M4_OUT=completions/kbsecret.fish
 
 override CMDS+=$(shell echo lib/kbsecret/cli/kbsecret* | xargs basename -a | \
 					sed 's/^kbsecret-\{0,1\}//g')
@@ -24,7 +22,7 @@ PKGS=deb rpm pacman
 all: completions doc man test
 
 .PHONY: completions
-completions: bash zsh fish
+completions: bash zsh
 
 .PHONY: doc
 doc:
@@ -88,12 +86,9 @@ coverage:
 bash:
 	m4 $(M4FLAGS) $(BASH_M4) > $(BASH_M4_OUT)
 
-.PHONY: fish
-fish: # XXX: implement
-
 .PHONY: clean
 clean:
-	rm -f $(BASH_M4_OUT) $(ZSH_M4_OUT) $(FISH_M4_OUT)
+	rm -f $(BASH_M4_OUT) $(ZSH_M4_OUT)
 	rm -rf doc/
 	rm -rf man/man{1,5}/*.{html,1,5,ronn}
 	rm -rf pkg/

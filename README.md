@@ -50,7 +50,7 @@ $ cp man/*.1 ${YOUR_MAN_DIR}
 
 ### Shell Completion
 
-KBSecret provides shell completion functions for bash and zsh.
+KBSecret provides shell completion functions for bash, zsh, and fish.
 
 To generate the completions for Bash:
 
@@ -63,6 +63,8 @@ $ cp completions/kbsecret.bash ${YOUR_COMPLETION_DIR}
 
 To use the completions for zsh, add the completions directory to your `$fpath` or copy the
 `completions/_kbsecret` file to any of the directories in it.
+
+To use the fish completions, copy `completions/kbsecret.fish` to your `~/.config/fish/completions` folder.
 
 Please feel free to contribute completion scripts for other shells!
 
