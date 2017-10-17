@@ -78,6 +78,8 @@ If you have an idea for a new feature, please suggest it! Pull requests are also
 If you'd like help or would just like to chat about KBSecret's development, please
 join us in `#kbsecret` on Freenode.
 
+We also have a Keybase team. Please let us know on IRC if you'd like to be added to it.
+
 ## Licensing
 
 KBSecret is licensed under the MIT License.
