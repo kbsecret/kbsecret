@@ -1,0 +1,28 @@
+# KBSecret style enforcement.
+
+AllCops:
+  TargetRubyVersion: 2.3
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/TrailingCommaInLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/FormatString:
+  EnforcedStyle: percent
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 100
+
+Metrics/MethodLength:
+  Max: 15
