@@ -11,35 +11,51 @@ class CLIBuiltinsTest < Minitest::Test
   end
 
   def test_help
-    run_command_and_stop "kbsecret help"
-    assert_match(/Usage:/, last_command_started.output.chomp)
+    # `kbsecret help` should always run, and should produce a "Usage:" output
+    run_command "kbsecret help" do |cmd|
+      cmd.wait
+      assert_match(/Usage/, cmd.stdout)
+    end
   end
 
   def test_version
-    version_string = "kbsecret version #{KBSecret::VERSION}."
-    run_command_and_stop "kbsecret version"
-    assert_equal version_string, last_command_started.output.chomp
+    exp = "kbsecret version #{KBSecret::VERSION}."
+
+    # `kbsecret version` should always run, and should produce KBSecret's current version
+    run_command "kbsecret version" do |cmd|
+      cmd.wait
+      assert_equal exp, cmd.output.chomp
+    end
   end
 
   def test_commands
+    # `kbsecret commands` should always run
     run_command_and_stop "kbsecret commands"
   end
 
   def test_types
-    run_command_and_stop "kbsecret types"
-
-    KBSecret::Record.record_types.each do |type|
-      assert_includes last_command_started.output.chomp, type.to_s
+    # `kbsecret types` should always run, and should produce every type known to KBSecret
+    run_command "kbsecret types" do |cmd|
+      cmd.wait
+      KBSecret::Record.record_types.each do |type|
+        assert_includes cmd.output, type.to_s
+      end
     end
   end
 
   def test_conf
-    # NOTE: assumes availability of bash shell
-    run_command "bash -c 'unset EDITOR && kbsecret conf'"
-    stop_all_commands
-    assert_match(/You need to set \$EDITOR/, last_command_started.stderr.chomp)
+    # with EDITOR unset, `kbsecret conf` should produce an error message
+    delete_environment_variable "EDITOR"
+    run_command "kbsecret conf" do |cmd|
+      cmd.wait
+      assert_match(/You need to set \$EDITOR/, cmd.stderr)
+    end
 
-    run_command_and_stop "bash -c 'EDITOR=cat && kbsecret conf'"
-    assert_match(/:mount:/, last_command_started.output.chomp)
+    # with EDITOR set to `cat`, `kbsecret conf` should output the configuration
+    set_environment_variable "EDITOR", "cat"
+    run_command "kbsecret conf" do |cmd|
+      cmd.wait
+      assert_match(/:mount:/, cmd.output)
+    end
   end
 end
