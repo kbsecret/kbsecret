@@ -20,13 +20,18 @@ class CLINewTest < Minitest::Test
       value:#{value}
     OUTPUT
 
-    # NOTE: bash -c workaround
     # create environment:
-    run_command_and_stop "bash -c 'echo #{variable}:#{value} | kbsecret new environment -x #{label}'"
+    run_command "kbsecret new environment -x #{label}" do |cmd|
+      cmd.stdin.puts "#{variable}:#{value}"
+      cmd.stdin.close
+      cmd.wait
+    end
 
     # retrieve environment:
-    run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal output.to_s, last_command_stopped.output
+    run_command "kbsecret dump-fields -x #{label}" do |cmd|
+      cmd.wait
+      assert_equal output.to_s, cmd.output
+    end
   ensure
     # remove environment:
     run_command_and_stop "kbsecret rm #{label}"
@@ -41,13 +46,18 @@ class CLINewTest < Minitest::Test
       password:#{password}
     OUTPUT
 
-    # NOTE: bash -c workaround
     # create login:
-    run_command_and_stop "bash -c 'echo #{username}:#{password} | kbsecret new login -x #{label}'"
+    run_command "kbsecret new login -x #{label}" do |cmd|
+      cmd.stdin.puts "#{username}:#{password}"
+      cmd.stdin.close
+      cmd.wait
+    end
 
     # retrieve login:
-    run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal output.to_s, last_command_stopped.output
+    run_command "kbsecret dump-fields -x #{label}" do |cmd|
+      cmd.wait
+      assert_equal output.to_s, cmd.output
+    end
   ensure
     # remove login:
     run_command_and_stop "kbsecret rm #{label}"
@@ -62,13 +72,18 @@ class CLINewTest < Minitest::Test
       description:#{description}
     OUTPUT
 
-    # NOTE: bash -c workaround
     # create snippet:
-    run_command_and_stop "bash -c 'echo #{code}:#{description} | kbsecret new snippet -x #{label}'"
+    run_command "kbsecret new snippet -x #{label}" do |cmd|
+      cmd.stdin.puts "#{code}:#{description}"
+      cmd.stdin.close
+      cmd.wait
+    end
 
     # retrieve snippet:
-    run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal output.to_s, last_command_stopped.output
+    run_command "kbsecret dump-fields -x #{label}" do |cmd|
+      cmd.wait
+      assert_equal output.to_s, cmd.output
+    end
   ensure
     # remove snippet:
     run_command_and_stop "kbsecret rm #{label}"
@@ -86,11 +101,17 @@ class CLINewTest < Minitest::Test
 
     # NOTE: bash -c workaround
     # create todo:
-    run_command_and_stop "bash -c 'echo #{todo} | kbsecret new todo -x #{label}'"
+    run_command "kbsecret new todo -x #{label}" do |cmd|
+      cmd.stdin.puts todo
+      cmd.stdin.close
+      cmd.wait
+    end
 
     # retrieve todo:
-    run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal output.to_s, last_command_stopped.output
+    run_command "kbsecret dump-fields -x #{label}" do |cmd|
+      cmd.wait
+      assert_equal output, cmd.output
+    end
   ensure
     # remove todo:
     run_command_and_stop "kbsecret rm #{label}"
@@ -101,13 +122,18 @@ class CLINewTest < Minitest::Test
     text = "unstructured data"
     output = "text:#{text}"
 
-    # NOTE: bash -c workaround
     # create unstructured:
-    run_command_and_stop "bash -c 'echo #{text} | kbsecret new unstructured -x #{label}'"
+    run_command "kbsecret new unstructured -x #{label}" do |cmd|
+      cmd.stdin.puts text
+      cmd.stdin.close
+      cmd.wait
+    end
 
     # retrieve unstructured:
-    run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal output.to_s, last_command_stopped.output.chomp
+    run_command "kbsecret dump-fields -x #{label}" do |cmd|
+      cmd.wait
+      assert_equal output, cmd.output.chomp
+    end
   ensure
     # remove unstructured:
     run_command_and_stop "kbsecret rm #{label}"
@@ -120,21 +146,31 @@ class CLINewTest < Minitest::Test
     username2 = "user2"
     password2 = "pass2"
 
-    # NOTE: bash -c workaround
     # create login:
-    run_command_and_stop "bash -c 'kbsecret new login -x #{label} <<< #{username}:#{password}'"
+    run_command "kbsecret new login -x #{label}" do |cmd|
+      cmd.stdin.puts "#{username}:#{password}"
+      cmd.stdin.close
+      cmd.wait
+    end
 
     # retrieve login:
-    run_command_and_stop "kbsecret login -x #{label}"
-    assert_equal "#{label}:#{username}:#{password}", last_command_stopped.output.chomp
+    run_command "kbsecret login -x #{label}" do |cmd|
+      cmd.wait
+      assert_equal "#{label}:#{username}:#{password}", cmd.output.chomp
+    end
 
-    # NOTE: bash -c workaround
     # force overwrite of login:
-    run_command_and_stop "bash -c 'kbsecret new login --force -x #{label} <<< #{username2}:#{password2}'"
+    run_command "kbsecret new login --force -x #{label}" do |cmd|
+      cmd.stdin.puts "#{username2}:#{password2}"
+      cmd.stdin.close
+      cmd.wait
+    end
 
     # retrieve overwritten login:
-    run_command_and_stop "kbsecret login -x #{label}"
-    assert_equal "#{label}:#{username2}:#{password2}", last_command_stopped.output.chomp
+    run_command "kbsecret login -x #{label}" do |cmd|
+      cmd.wait
+      assert_equal "#{label}:#{username2}:#{password2}", cmd.output.chomp
+    end
   ensure
     # remove login:
     run_command_and_stop "kbsecret rm #{label}"
@@ -145,13 +181,18 @@ class CLINewTest < Minitest::Test
     username = "user"
     password = "pass"
 
-    # NOTE: bash -c workaround
     # create login:
-    run_command_and_stop "bash -c 'kbsecret new login -i ^ -x #{label} <<< #{username}^#{password}'"
+    run_command "kbsecret new login -i ^ -x #{label}" do |cmd|
+      cmd.stdin.puts "#{username}^#{password}"
+      cmd.stdin.close
+      cmd.wait
+    end
 
     # retrieve login:
-    run_command_and_stop "kbsecret login -x #{label}"
-    assert_equal "#{label}:#{username}:#{password}", last_command_stopped.output.chomp
+    run_command "kbsecret login -x #{label}" do |cmd|
+      cmd.wait
+      assert_equal "#{label}:#{username}:#{password}", cmd.output.chomp
+    end
   ensure
     # remove login:
     run_command_and_stop "kbsecret rm #{label}"
