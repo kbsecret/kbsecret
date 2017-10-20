@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require_relative "test_helper"
 require "aruba"
 
-class CLITest < Minitest::Test
+class CLINewTest < Minitest::Test
   include Aruba::Api
   include Helpers
 
@@ -13,7 +15,7 @@ class CLITest < Minitest::Test
     label = "test-environment"
     variable = "api-key"
     value = "00000"
-    output =  <<~OUTPUT
+    output = <<~OUTPUT
       variable:#{variable}
       value:#{value}
     OUTPUT
@@ -24,7 +26,7 @@ class CLITest < Minitest::Test
 
     # retrieve environment:
     run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal "#{output}", last_command_stopped.output
+    assert_equal output.to_s, last_command_stopped.output
   ensure
     # remove environment:
     run_command_and_stop "kbsecret rm #{label}"
@@ -45,7 +47,7 @@ class CLITest < Minitest::Test
 
     # retrieve login:
     run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal "#{output}", last_command_stopped.output
+    assert_equal output.to_s, last_command_stopped.output
   ensure
     # remove login:
     run_command_and_stop "kbsecret rm #{label}"
@@ -66,7 +68,7 @@ class CLITest < Minitest::Test
 
     # retrieve snippet:
     run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal "#{output}", last_command_stopped.output
+    assert_equal output.to_s, last_command_stopped.output
   ensure
     # remove snippet:
     run_command_and_stop "kbsecret rm #{label}"
@@ -88,7 +90,7 @@ class CLITest < Minitest::Test
 
     # retrieve todo:
     run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal "#{output}", last_command_stopped.output
+    assert_equal output.to_s, last_command_stopped.output
   ensure
     # remove todo:
     run_command_and_stop "kbsecret rm #{label}"
@@ -97,7 +99,7 @@ class CLITest < Minitest::Test
   def test_unstructured
     label = "test-unstructured"
     text = "unstructured data"
-    output =  "text:#{text}\n"
+    output = "text:#{text}"
 
     # NOTE: bash -c workaround
     # create unstructured:
@@ -105,7 +107,7 @@ class CLITest < Minitest::Test
 
     # retrieve unstructured:
     run_command_and_stop "kbsecret dump-fields -x #{label}"
-    assert_equal "#{output}", last_command_stopped.output
+    assert_equal output.to_s, last_command_stopped.output.chomp
   ensure
     # remove unstructured:
     run_command_and_stop "kbsecret rm #{label}"
