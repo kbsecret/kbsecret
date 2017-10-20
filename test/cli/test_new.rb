@@ -199,20 +199,11 @@ class CLINewTest < Minitest::Test
   end
 
   def test_generate
-    # NOTE: cannot test because we cannot add records interactively
-    # The reason for this is the way `kbsecret new` tries to deduce the user's
-    # input mode - it tests whether the current input is a TTY, and the current
-    # test harness has no way to fake this. The solution is to drop the TTY test.
-    skip "-G requires interactive mode"
-
     label = "test-generate"
     username = "user"
 
-    # NOTE: won't work
     # create login:
-    run_command "kbsecret new login -G #{label}" do |cmd|
-      cmd.wait
-      assert_match(/Username\?/, cmd.stderr)
+    run_command "kbsecret new login -G #{label}", io_wait_timeout: 0 do |cmd|
       cmd.stdin.puts username
       cmd.stdin.close
       cmd.wait
@@ -221,7 +212,7 @@ class CLINewTest < Minitest::Test
     # retrieve login:
     run_command "kbsecret login -x #{label}" do |cmd|
       cmd.wait
-      assert_match(/#{label}:#{username}/, cmd.output)
+      assert_match(/#{label}:#{username}:\w+/, cmd.output)
     end
   ensure
     # remove login:
