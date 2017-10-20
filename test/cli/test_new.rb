@@ -218,14 +218,4 @@ class CLINewTest < Minitest::Test
     # remove login:
     run_command_and_stop "kbsecret rm #{label}"
   end
-
-  def test_generator
-    # NOTE: cannot test because we cannot add records interactively
-    skip "-g requires interactive mode"
-  end
-
-  def test_echo
-    # NOTE: cannot test because we cannot add records interactively
-    skip "-e requires interactive mode"
-  end
 end
