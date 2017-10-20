@@ -198,12 +198,35 @@ class CLINewTest < Minitest::Test
     run_command_and_stop "kbsecret rm #{label}"
   end
 
+  def test_interactive
+    label = "test-interactive"
+    username = "user"
+    password = "pass"
+
+    # create login:
+    run_command "kbsecret new login #{label}" do |cmd|
+      cmd.stdin.puts username
+      cmd.stdin.puts password
+      cmd.stdin.close
+      cmd.wait
+    end
+
+    # retrieve login:
+    run_command "kbsecret login -x #{label}" do |cmd|
+      cmd.wait
+      assert_match(/#{label}:#{username}:#{password}/, cmd.output)
+    end
+  ensure
+    # remove login:
+    run_command_and_stop "kbsecret rm #{label}"
+  end
+
   def test_generate
     label = "test-generate"
     username = "user"
 
     # create login:
-    run_command "kbsecret new login -G #{label}", io_wait_timeout: 0 do |cmd|
+    run_command "kbsecret new login -G #{label}" do |cmd|
       cmd.stdin.puts username
       cmd.stdin.close
       cmd.wait
