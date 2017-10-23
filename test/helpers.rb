@@ -47,4 +47,15 @@ module Helpers
     yield
     ARGV.replace real_argv
   end
+
+  def generator_regexp(format: :hex, length: 16)
+    case format
+    when "hex"
+      output = length * 2
+      /\h{#{output}}/
+    else # base64
+      output = ((4 * length / 3) + 3) & ~3
+      /[a-zA-Z0-9+\/=]{#{output}}/
+    end
+  end
 end
