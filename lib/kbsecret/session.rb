@@ -92,6 +92,27 @@ module KBSecret
       records.delete(record)
     end
 
+    # Delete an array of records from the session, if they exist. Does nothing
+    # if no such record can be found.
+    # @param labels [Array<[String, :Symbol]>] the labels of the records to delete
+    # @return [void]
+    def delete_records(labels)
+      if labels.size == 0
+        return
+      elsif labels.size == 1
+        delete_record(label[0])
+        return
+      end
+
+      labels.each do |label|
+        record = records.find { |r| r.label == label.to_s }
+        if record
+          File.delete(record.path)
+          records.delete(record)
+        end
+      end
+    end
+
     # @param label [String, Symbol] the label to test for
     # @return [Boolean] whether or not the session contains a record with the
     #  given label

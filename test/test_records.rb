@@ -36,6 +36,23 @@ class KBSecretRecordsTest < Minitest::Test
     end
   end
 
+  def test_deletion_of_multiple_records
+    temp_session do |sess|
+      # creating 2 records in an empty session should succeed
+      sess.add_record(:login, :foo, "bar", "baz")
+      sess.add_record(:login, :bar, "baz", "foo")
+      refute_empty sess.records
+      refute_empty sess.records(:login)
+
+      # deleting an array of records should clear the session
+      sess.delete_records([:foo, :bar])
+
+      # the session should now be empty
+      assert_empty sess.records
+      assert_empty sess.records(:login)
+    end
+  end
+
   def test_record_addition_and_deletion
     temp_session do |sess|
       # creating a record in an empty session should succeed
