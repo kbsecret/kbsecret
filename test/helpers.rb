@@ -58,4 +58,43 @@ module Helpers
       /[a-zA-Z0-9+\/=]{#{output}}/
     end
   end
+
+  def create_test_records(types: [], number: 2, session: "default")
+    list = []
+
+    types = KBSecret::Record.record_types.map(&:to_s) if types.empty?
+
+    types.each do |type|
+      number.times do |i|
+        label = "#{type}#{i}"
+        list << label
+
+        case type
+        when "environment"
+          params = "variable#{i}:value#{i}"
+        when "login"
+          params = "username#{i}:password#{i}"
+        when "snippet"
+          params = "code#{i}:description#{i}"
+        when "todo"
+          params = "todo#{i}"
+        when "unstructured"
+          params = "text#{i}"
+        else
+          # can't create an unknown or custom type
+          p "unable to create #{type} records"
+          next
+        end
+
+        # create record:
+        run_command "kbsecret new #{type} -s #{session} -x #{label}" do |cmd|
+          cmd.stdin.puts params
+          cmd.stdin.close
+          cmd.wait
+        end
+      end
+    end
+    # return the list of records to use for expectation checking
+    list
+  end
 end
