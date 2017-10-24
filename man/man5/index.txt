@@ -3,6 +3,6 @@
 kbsecret(1) kbsecret.1.ronn
 kbsecret-new-session(1) kbsecret-new-session.1.ronn
 kbsecret-rm-session(1) kbsecret-rm-session.1.ronn
-kbsecret-rm-session(1) kbsecret-rm-session.1.ronn
+kbsecret-session(1) kbsecret-session.1.ronn
 kbsecret-generator(1) kbsecret-generator.1.ronn
 
