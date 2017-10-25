@@ -6,3 +6,9 @@ cache: bundler
 sudo: false
 script:
   - COVERALLS=1 TEST_NO_KEYBASE=1 bundle exec rake test
+notifications:
+  irc:
+    channels:
+      - "chat.freenode.net#kbsecret"
+    on_success: change
+    on_failure: always
