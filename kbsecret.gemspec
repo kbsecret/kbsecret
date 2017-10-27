@@ -16,13 +16,14 @@ Gem::Specification.new do |s|
   s.license               = "MIT"
 
   # these need to be installed by developers alone
+  s.add_development_dependency "aruba", "~> 1.0.0.pre.alpha.2" # make test-cli
   s.add_development_dependency "fpm", "~> 1.8" # make pkgs
   s.add_development_dependency "minitest", "~> 5.10" # make test
   s.add_development_dependency "rake", "~> 12.0" # make test
   s.add_development_dependency "ronn", "~> 0.7.3" # make man
+  s.add_development_dependency "rubocop", "~> 0.51" # make lint
   s.add_development_dependency "simplecov", "~> 0" # make coverage
   s.add_development_dependency "yard", "~> 0.9.9" # make doc
-  s.add_development_dependency "aruba", "~> 1.0.0.pre.alpha.2"
 
   # these need to be installed by users and developers alike
   s.add_runtime_dependency "clipboard", "~> 1.1"
