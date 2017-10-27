@@ -70,7 +70,6 @@ prep-gems:
 .PHONY: test
 test:
 	bundle exec rake test
-	TEST_NO_KEYBASE=1 bundle exec rake test
 
 .PHONY: test-cli
 test-cli:
@@ -79,6 +78,10 @@ test-cli:
 .PHONY: coverage
 coverage:
 	COVERAGE=1 bundle exec rake test
+
+.PHONY: lint
+lint:
+	bundle exec rubocop lib/ test/
 
 .PHONY: bash
 bash:
