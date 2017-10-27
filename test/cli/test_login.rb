@@ -97,7 +97,7 @@ class CLILoginTest < Minitest::Test
     error_pattern = /No such record\(s\)/
 
     # create a new session
-    run_command_and_stop "kbsecret session new -r test #{session}"
+    run_command "kbsecret session new -r test #{session}", &:wait
 
     # fail to retrieve nonexistent logins:
     run_command "kbsecret login -s #{session} -a" do |cmd|
@@ -138,7 +138,7 @@ class CLILoginTest < Minitest::Test
     pattern = /(#{label}|#{label1}):#{username}:#{password}\n(#{label1}|#{label}):#{username}:#{password}/
 
     # create a new session
-    run_command_and_stop "kbsecret session new -r test #{session}"
+    run_command "kbsecret session new -r test #{session}", &:wait
 
     # create login:
     run_command "kbsecret new login -s #{session} -x #{label}" do |cmd|
@@ -219,7 +219,7 @@ class CLILoginTest < Minitest::Test
     end
 
     # create a new session
-    run_command_and_stop "kbsecret session new #{session} -r test"
+    run_command "kbsecret session new #{session} -r test", &:wait
 
     # create login in session:
     run_command "kbsecret new login -s #{session} -x #{session_label}" do |cmd|

@@ -14,38 +14,8 @@ require "fileutils"
 require "securerandom"
 require "minitest/autorun"
 
-if ENV["TEST_NO_KEYBASE"]
-  # back up the user's config, if it exists, so that we don't clobber it during testing
-  conf_path = File.expand_path "~/.config/kbsecret/"
-  FileUtils.mkdir_p conf_path
-
-  conf_file = File.join conf_path, "config.yml"
-  FileUtils.mv conf_file, "#{conf_file}.bak", force: true if File.file?(conf_file)
-
-  dummy_config = { mount: Dir.mktmpdir }
-  File.write conf_file, dummy_config.to_yaml
-
-  require_relative "stub/keybase"
-  require "keybase/api"
-  require "kbsecret/exceptions"
-  require "kbsecret/config"
-  require "kbsecret/record"
-  require "kbsecret/session"
-  require "kbsecret/generator"
-  require "kbsecret/cli"
-
-  MiniTest.after_run do
-    mnt = KBSecret::Config[:mount]
-    # just to be extra certain we don't nuke the real KBFS
-    FileUtils.rm_rf mnt unless mnt.start_with?("/keybase")
-
-    # restore the original config, if one exists
-    FileUtils.mv "#{conf_file}.bak", conf_file, force: true if File.file?("#{conf_file}.bak")
-  end
-else
-  require "keybase"
-  require "kbsecret"
-end
+require "keybase"
+require "kbsecret"
 
 # Helper methods for unit tests.
 module Helpers
