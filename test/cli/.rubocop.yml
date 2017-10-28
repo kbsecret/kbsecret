@@ -1,0 +1,27 @@
+# KBSecret style enforcement.
+# overrides for CLI tests
+
+inherit_from: ../../.rubocop.yml
+
+# we are organizing our tests in one class per command
+# this necessitates some long classes
+Metrics/ClassLength:
+  Enabled: false
+
+# we are organizing many of our tests in one method per option
+# this necessitates some long methods
+Metrics/MethodLength:
+  Enabled: false
+
+# see above
+# this necessitates some complex methods
+Metrics/AbcSize:
+  Enabled: false
+
+# see above
+# this necessitates some complex methods
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Style/RegexpLiteral:
+  AllowInnerSlashes: true
