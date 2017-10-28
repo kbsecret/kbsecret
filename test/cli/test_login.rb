@@ -2,6 +2,7 @@
 
 require "helpers"
 
+# tests cli command: login
 class CLILoginTest < Minitest::Test
   include Aruba::Api
   include Helpers
@@ -90,9 +91,15 @@ class CLILoginTest < Minitest::Test
     label1 = "test-session-login1"
     username = "user"
     password = "pass"
-    # NOTE: fragile. consider something more robust
-    # NOTE: need regex since we can't be sure of the order in which the logins will be retreived
-    pattern = /Label: (#{label}|#{label1})\n\tUsername: #{username}\n\tPassword: #{password}\nLabel: (#{label1}|#{label})\n\tUsername: #{username}\n\tPassword: #{password}\n/
+    # NOTE: can't be sure of the order in which the logins will be retreived
+    patterns = [
+      /(#{label}|#{label1})/,
+      /#{username}/,
+      /#{password}/,
+      /(#{label1}|#{label})/,
+      /#{username}/,
+      /#{password}/,
+    ]
     error_pattern = /No such record\(s\)/
 
     # create a new session
@@ -119,9 +126,11 @@ class CLILoginTest < Minitest::Test
     end
 
     # retrieve logins:
-    run_command "kbsecret login -s #{session} -a" do |cmd|
+    run_command "kbsecret login --all -s #{session}" do |cmd|
       cmd.wait
-      assert_match pattern, cmd.output
+      cmd.output.lines.each_with_index do |line, i|
+        assert_match patterns[i], line
+      end
     end
   ensure
     # remove session:
@@ -134,7 +143,15 @@ class CLILoginTest < Minitest::Test
     label1 = "test-session-login1"
     username = "user"
     password = "pass"
-    pattern = /(#{label}|#{label1}):#{username}:#{password}\n(#{label1}|#{label}):#{username}:#{password}/
+    # NOTE: can't be sure of the order in which the logins will be retreived
+    patterns = [
+      /(#{label}|#{label1})/,
+      /#{username}/,
+      /#{password}/,
+      /(#{label1}|#{label})/,
+      /#{username}/,
+      /#{password}/,
+    ]
 
     # create a new session
     run_command "kbsecret session new -r test #{session}", &:wait
@@ -156,7 +173,9 @@ class CLILoginTest < Minitest::Test
     # retrieve logins:
     run_command "kbsecret login -s #{session} -ax" do |cmd|
       cmd.wait
-      assert_match pattern, cmd.output
+      cmd.output.lines.each_with_index do |line, i|
+        assert_match patterns[i], line
+      end
     end
   ensure
     # remove session:
@@ -165,8 +184,6 @@ class CLILoginTest < Minitest::Test
 
   def test_nonesuch
     label = "test-nonesuch"
-    username = "user"
-    password = "pass"
     error_pattern = /No such record\(s\)/
 
     # fail to retrieve nonexistent login:
