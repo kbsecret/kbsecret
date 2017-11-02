@@ -80,14 +80,14 @@ module KBSecret
       record.sync!
     end
 
-    # Import an existing record
+    # Load an existing record
     # @param record [Record] an instance of a record
     # @return [void]
     def import_record(record)
       klass = record.class
-      new_record = klass.new(self, record.label, record.data.values.first)
-      records << new_record
-      new_record.sync!
+      imported_record = klass.load!(self, record.to_h)
+      records << imported_record
+      imported_record.sync!
     end
 
     # Delete a record from the session, if it exists. Does nothing if
