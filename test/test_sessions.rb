@@ -139,6 +139,10 @@ class KBSecretSessionsTest < Minitest::Test
         refute_empty target_session.records
         assert_includes target_session.record_labels, record_label
       end
+
+      assert_raises KBSecret::Exceptions::RecordDuplicationError do
+        source_session.import_record(source_session[record_label])
+      end
     end
   end
 end
