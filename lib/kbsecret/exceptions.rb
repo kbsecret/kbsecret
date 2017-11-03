@@ -63,5 +63,11 @@ module KBSecret
         super "Bad secret generator length (#{length}, must be positive)"
       end
     end
+
+    class RecordDuplicationError < KBSecretError
+      def initialize(session, record)
+        super "Record #{record.label} already exists in session #{session.label}"
+      end
+    end
   end
 end

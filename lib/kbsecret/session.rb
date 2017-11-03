@@ -84,7 +84,7 @@ module KBSecret
     # @param record [Record] an instance of a record
     # @return [void]
     def import_record(record)
-      raise Exceptions::RecordDuplicationError.new(self, record.session) if self == record.session
+      raise Exceptions::RecordDuplicationError.new(self, record) if self == record.session
       klass = record.class
       imported_record = klass.load!(self, record.to_h)
       records << imported_record
