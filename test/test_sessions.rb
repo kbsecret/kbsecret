@@ -128,8 +128,8 @@ class KBSecretSessionsTest < Minitest::Test
   def test_import_record
     temp_session do |source_session|
       record_type  = :login
-      record_label = 'test_login'
-      record_data  = ['test', 'password']
+      record_label = "test_login"
+      record_data  = %w[test password]
       source_session.add_record(record_type, record_label, *record_data)
 
       temp_session do |target_session|
