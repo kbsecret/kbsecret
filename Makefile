@@ -73,7 +73,7 @@ test:
 
 .PHONY: test-cli
 test-cli:
-	bundle exec ruby -I lib:test test/cli/test_all.rb
+	bundle exec rake test-cli
 
 .PHONY: coverage
 coverage:

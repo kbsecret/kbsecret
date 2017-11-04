@@ -13,6 +13,7 @@ require "tmpdir"
 require "fileutils"
 require "securerandom"
 require "minitest/autorun"
+require "aruba/api"
 
 require "keybase"
 require "kbsecret"

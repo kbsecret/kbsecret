@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "test_helper"
-require "aruba"
+require "helpers"
 
 class CLINewTest < Minitest::Test
   include Aruba::Api
