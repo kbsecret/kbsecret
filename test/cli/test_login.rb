@@ -165,8 +165,6 @@ class CLILoginTest < Minitest::Test
 
   def test_nonesuch
     label = "test-nonesuch"
-    username = "user"
-    password = "pass"
     error_pattern = /No such record\(s\)/
 
     # fail to retrieve nonexistent login:
