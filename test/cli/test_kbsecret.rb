@@ -2,6 +2,7 @@
 
 require "helpers"
 
+# tests cli commands: built-in (help, version, commands, types, & conf)
 class CLIBuiltinsTest < Minitest::Test
   include Aruba::Api
   include Helpers

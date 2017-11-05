@@ -2,6 +2,7 @@
 
 require "helpers"
 
+# tests cli command: new
 class CLINewTest < Minitest::Test
   include Aruba::Api
   include Helpers
