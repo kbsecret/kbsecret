@@ -124,4 +124,25 @@ class KBSecretSessionsTest < Minitest::Test
   ensure
     KBSecret::Config.deconfigure_session(label)
   end
+
+  def test_import_record
+    temp_session do |source_session|
+      record_type  = :login
+      record_label = "test_login"
+      record_data  = %w[test password]
+      source_session.add_record(record_type, record_label, *record_data)
+
+      temp_session do |target_session|
+        assert_empty target_session.records
+
+        target_session.import_record(source_session[record_label])
+        refute_empty target_session.records
+        assert_includes target_session.record_labels, record_label
+      end
+
+      assert_raises KBSecret::Exceptions::RecordDuplicationError do
+        source_session.import_record(source_session[record_label])
+      end
+    end
+  end
 end

@@ -80,6 +80,17 @@ module KBSecret
       record.sync!
     end
 
+    # Load an existing record from another session
+    # @param record [Record] an instance of a record
+    # @return [void]
+    def import_record(record)
+      raise Exceptions::RecordDuplicationError.new(self, record) if self == record.session
+      klass = record.class
+      imported_record = klass.load!(self, record.to_h)
+      records << imported_record
+      imported_record.sync!
+    end
+
     # Delete a record from the session, if it exists. Does nothing if
     # no such record can be found.
     # @param label [String, Symbol] the label of the record to delete
