@@ -64,6 +64,7 @@ module KBSecret
       end
     end
 
+    # Raised during record import if the session already contains the record.
     class RecordDuplicationError < KBSecretError
       def initialize(session, record)
         super "Record #{record.label} already exists in session #{session.label}"
