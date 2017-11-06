@@ -145,4 +145,36 @@ class KBSecretSessionsTest < Minitest::Test
       end
     end
   end
+
+  def test_equality
+    temp_session do |sess1|
+      # a session should be equal to itself
+      assert_equal sess1, sess1
+
+      # a session should not be equal to an object of a different class
+      obj = Object.new
+      refute_equal sess1, obj
+
+      temp_session do |sess2|
+        # a session should not be equal to a session with a different root
+        refute_equal sess1, sess2
+      end
+    end
+  end
+
+  def test_equality_different_labels
+    temp_session do |sess1|
+      label = "different-label-equality"
+      hsh = KBSecret::Config.session sess1.label
+
+      KBSecret::Config.configure_session label, hsh
+      sess2 = KBSecret::Session.new label: label
+
+      # sessions with the same root should be equal, even if they have different labels
+      assert_equal sess1, sess2
+
+      sess2&.unlink!
+      KBSecret::Config.deconfigure_session label
+    end
+  end
 end

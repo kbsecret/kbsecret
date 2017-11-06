@@ -125,6 +125,15 @@ module KBSecret
       Dir[File.join(path, "*.json")]
     end
 
+    # Compare two sessions for equality.
+    # @param other [Session] the other object to compare against
+    # @return [Boolean] whether or not the two sessions are equal
+    # @note The equality of two sessions is determined *solely* by them having the same
+    #  session directory, *not* by having the same label *or* the same in-memory state.
+    def ==(other)
+      other.class == self.class && other.path == path
+    end
+
     # Load all records associated with the session.
     # @return [Array<Record::Abstract>] all records in the session
     # @api private
