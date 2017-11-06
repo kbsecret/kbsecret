@@ -80,9 +80,10 @@ module KBSecret
       record.sync!
     end
 
-    # Load an existing record from another session
-    # @param record [Record] an instance of a record
+    # Import an existing record from another session.
+    # @param record [Record] the record to import
     # @return [void]
+    # @raise [Exceptions::RecordDuplicationError] if the record is already in the session
     def import_record(record)
       raise Exceptions::RecordDuplicationError.new(self, record) if self == record.session
       klass = record.class
