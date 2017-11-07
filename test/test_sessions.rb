@@ -125,23 +125,99 @@ class KBSecretSessionsTest < Minitest::Test
     KBSecret::Config.deconfigure_session(label)
   end
 
+  def test_add_record_overwrite
+    temp_session do |sess|
+      # the session shouldn't contain any records before we add one
+      assert_empty sess.records
+
+      sess.add_record :login, "test-add-overwrite", "foo", "bar"
+
+      # the session should contain exactly one record, and that record should be the one
+      # we added (same type and label)
+      assert_equal 1, sess.records.size
+      assert_equal :login, sess["test-add-overwrite"].type
+
+      # attempting to add a new record with the same label should fail
+      assert_raises KBSecret::Exceptions::RecordOverwriteError do
+        sess.add_record :environment, "test-add-overwrite", "baz", "quux"
+      end
+
+      # since the overwrite failed, the state of the session shouldn't have changed
+      assert_equal 1, sess.records.size
+      assert_equal :login, sess["test-add-overwrite"].type
+
+      # ...but adding a new record with an explicit overwrite should succeed
+      sess.add_record :environment, "test-add-overwrite", "baz", "quux", overwrite: true
+
+      # the size of the session should still be 1 (since an overwrite occurred), and the record
+      # in the session should be the new one
+      assert_equal 1, sess.records.size
+      assert_equal :environment, sess["test-add-overwrite"].type
+    end
+  end
+
   def test_import_record
-    temp_session do |source_session|
+    temp_session do |src|
       record_type  = :login
       record_label = "test_login"
       record_data  = %w[test password]
-      source_session.add_record(record_type, record_label, *record_data)
+      src.add_record(record_type, record_label, *record_data)
 
-      temp_session do |target_session|
-        assert_empty target_session.records
+      temp_session do |dst|
+        # the target session shouldn't contain any records before we import one
+        assert_empty dst.records
 
-        target_session.import_record(source_session[record_label])
-        refute_empty target_session.records
-        assert_includes target_session.record_labels, record_label
+        dst.import_record(src[record_label])
+
+        # the target session should now contain a record, and that record should be the
+        # one we've imported
+        refute_empty dst.records
+        assert_includes dst.record_labels, record_label
+      end
+    end
+  end
+
+  def test_import_record_circular
+    temp_session do |sess|
+      sess.add_record :login, "test-import-circular", "foo", "bar"
+
+      # importing a record into ourself should fail
+      assert_raises KBSecret::Exceptions::SessionImportError do
+        sess.import_record sess["test-import-circular"]
       end
 
-      assert_raises KBSecret::Exceptions::RecordDuplicationError do
-        source_session.import_record(source_session[record_label])
+      # ...but should not delete the record
+      assert sess.record? "test-import-circular"
+    end
+  end
+
+  def test_import_record_overwrite
+    temp_session do |src|
+      src.add_record :login, "test-import-overwrite", "foo", "bar"
+
+      temp_session do |dst|
+        dst.add_record :environment, "test-import-overwrite", "baz", "quux"
+
+        # attempting to import a record with a taken label should fail
+        assert_raises KBSecret::Exceptions::RecordOverwriteError do
+          dst.import_record src["test-import-overwrite"]
+        end
+
+        # since the import failed, the destination session's record should be unharmed
+        rec = dst["test-import-overwrite"]
+        assert_equal :environment, rec.type
+        assert_equal "baz", rec.variable
+        assert_equal "quux", rec.value
+        assert_equal dst, rec.session
+
+        # ...but attempting to import with an overwrite should succeed
+        dst.import_record src["test-import-overwrite"], overwrite: true
+        rec = dst["test-import-overwrite"]
+
+        assert_equal :login, rec.type
+        assert_equal "foo", rec.username
+        assert_equal "bar", rec.password
+        assert_equal dst, rec.session
       end
     end
   end

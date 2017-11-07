@@ -62,16 +62,24 @@ module KBSecret
     # @param type [String, Symbol] the type of record (see {Record.record_types})
     # @param label [String, Symbol] the new record's label
     # @param args [Array<String>] the record-type specific arguments
+    # @param overwrite [Boolean] whether or not to overwrite an existing record if necessary
     # @return [void]
     # @raise [Exceptions::UnknownRecordTypeError] if the requested type does not exist
     #  in {Record.record_types}
     # @raise [Exceptions::RecordCreationArityError] if the number of specified record
     #  arguments does not match the record type's constructor
-    def add_record(type, label, *args)
+    # @raise [Exceptions::RecordOverwriteError] if the record addition would cause an
+    #  unchecked overwrite
+    def add_record(type, label, *args, overwrite: false)
       klass = Record.class_for(type.to_sym)
       arity = klass.external_fields.length
 
       raise Exceptions::RecordCreationArityError.new(arity, args.size) unless arity == args.size
+
+      if record? label
+        raise Exceptions::RecordOverwriteError.new(self, label) unless overwrite
+        delete_record label
+      end
 
       body   = klass.external_fields.zip(args).to_h
       record = klass.new(self, label.to_s, **body)
@@ -82,10 +90,18 @@ module KBSecret
 
     # Import an existing record from another session.
     # @param record [Record] the record to import
+    # @param overwrite [Boolean] whether or not to overwrite an existing record if necessary
     # @return [void]
-    # @raise [Exceptions::RecordDuplicationError] if the record is already in the session
-    def import_record(record)
-      raise Exceptions::RecordDuplicationError.new(self, record) if self == record.session
+    # @raise [Exceptions::SessionImportError] if the record's source session is our session
+    # @raise [Exceptions::RecordOverwriteError] if record import would cause an unchecked overwrite
+    def import_record(record, overwrite: false)
+      raise Exceptions::SessionImportError, self if self == record.session
+
+      if record? record.label
+        raise Exceptions::RecordOverwriteError.new(self, record.label) unless overwrite
+        delete_record record.label
+      end
+
       klass = record.class
       imported_record = klass.load!(self, record.to_h)
       records << imported_record

@@ -29,6 +29,13 @@ module KBSecret
       end
     end
 
+    # Raised when record creation or import would cause an unintended overwrite.
+    class RecordOverwriteError < KBSecretError
+      def initialize(session, label)
+        super "Record '#{label}' already exists in '#{session.label}'"
+      end
+    end
+
     # Raised during session load if an error occurs.
     class SessionLoadError < KBSecretError
       def initialize(msg)
@@ -40,6 +47,13 @@ module KBSecret
     class SessionUnknownError < KBSecretError
       def initialize(sess)
         super "Unknown session: '#{sess}'"
+      end
+    end
+
+    # Raised during record import if the source is the same as the destination.
+    class SessionImportError < KBSecretError
+      def initialize(session)
+        super "Session '#{session.label}' cannot import records from itself"
       end
     end
 
@@ -61,13 +75,6 @@ module KBSecret
     class GeneratorLengthError < KBSecretError
       def initialize(length)
         super "Bad secret generator length (#{length}, must be positive)"
-      end
-    end
-
-    # Raised during record import if the session already contains the record.
-    class RecordDuplicationError < KBSecretError
-      def initialize(session, record)
-        super "Record #{record.label} already exists in session #{session.label}"
       end
     end
   end
