@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "colored2"
 require "slop"
 require "dreck"
 require "abbrev"
+require "pastel"
 
 module KBSecret
   # An encapsulation of useful methods for kbsecret's CLI.
@@ -12,6 +12,9 @@ module KBSecret
   class CLI
     # Abbreviations for record types (e.g., `env` for `environment`).
     TYPE_ALIASES = Hash.new { |_, k| k }.update(Abbrev.abbrev(Record.record_types)).freeze
+
+    # ANSI color objects for prettifying output.
+    GREEN, YELLOW, RED = ->(p) { [p.green, p.yellow, p.red].map(&:detach) }.call(Pastel.new)
 
     # @return [Slop::Result, nil] the result of option parsing, if requested
     #   via {#slop}
@@ -155,7 +158,7 @@ module KBSecret
     # @return [void]
     def info(msg)
       return unless @opts.verbose?
-      STDERR.puts "#{"Info".green}: #{msg}"
+      STDERR.puts "#{GREEN["Info"]}: #{msg}"
     end
 
     # Print an informational message via {#info} and exit successfully.
@@ -172,7 +175,7 @@ module KBSecret
     # @return [void]
     def warn(msg)
       return if @opts.no_warn?
-      STDERR.puts "#{"Warning".yellow}: #{msg}"
+      STDERR.puts "#{YELLOW["Warning"]}: #{msg}"
     end
 
     # Print an error message and terminate.
@@ -180,7 +183,7 @@ module KBSecret
     # @return [void]
     # @note This method does not return!
     def die(msg)
-      pretty = "#{"Fatal".red}: #{msg}"
+      pretty = "#{RED["Fatal"]}: #{msg}"
       abort pretty
     end
 
@@ -190,7 +193,7 @@ module KBSecret
       # @return [void]
       # @note This method does not return!
       def die(msg)
-        pretty = "#{"Fatal".red}: #{msg}"
+        pretty = "#{RED["Fatal"]}: #{msg}"
         abort pretty
       end
 
