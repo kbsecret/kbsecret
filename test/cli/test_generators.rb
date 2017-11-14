@@ -6,6 +6,7 @@ require "helpers"
 class CLIGeneratorsTest < Minitest::Test
   include Aruba::Api
   include Helpers
+  include Helpers::CLI
 
   def setup
     setup_aruba
@@ -16,9 +17,8 @@ class CLIGeneratorsTest < Minitest::Test
     # so our patterns will need to accommodate this possibility
     pattern = /default/
     # retrieve generators:
-    run_command "kbsecret generators" do |cmd|
-      cmd.wait
-      assert_match pattern, cmd.output
+    kbsecret "generators", interactive: false do |stdout, _|
+      assert_match pattern, stdout
     end
   end
 
@@ -26,9 +26,8 @@ class CLIGeneratorsTest < Minitest::Test
     pattern = /default\n\tFormat: hex\n\tLength: 16/
 
     # retrieve generators:
-    run_command "kbsecret generators -a" do |cmd|
-      cmd.wait
-      assert_match pattern, cmd.output
+    kbsecret "generators -a", interactive: false do |stdout, _|
+      assert_match pattern, stdout
     end
   end
 
@@ -37,16 +36,15 @@ class CLIGeneratorsTest < Minitest::Test
     pattern = /default.*#{label}|#{label}.*default/m
 
     # add generator
-    run_command_and_stop "kbsecret generator new #{label} -F hex -l 64"
+    kbsecret "generator new #{label} -F hex -l 64"
 
     # retrieve generators:
-    run_command "kbsecret generators" do |cmd|
-      cmd.wait
-      assert_match pattern, cmd.output
+    kbsecret "generators", interactive: false do |stdout, _|
+      assert_match pattern, stdout
     end
   ensure
     # remove generator
-    run_command_and_stop "kbsecret generator rm #{label}"
+    kbsecret "generator rm #{label}"
   end
 
   def test_generators_added_show_all
@@ -58,25 +56,23 @@ class CLIGeneratorsTest < Minitest::Test
     pattern = /#{default_detail}.*#{test_detail}|#{test_detail}.*#{default_detail}/m
 
     # add generator
-    run_command_and_stop "kbsecret generator new #{label} -F #{format} -l #{length}"
+    kbsecret "generator new #{label} -F #{format} -l #{length}"
 
     # retrieve generators:
-    run_command "kbsecret generators -a" do |cmd|
-      cmd.wait
-      assert_match pattern, cmd.output
+    kbsecret "generators -a", interactive: false do |stdout, _|
+      assert_match pattern, stdout
     end
   ensure
     # remove generator
-    run_command_and_stop "kbsecret generator rm #{label}"
+    kbsecret "generator rm #{label}"
   end
 
   def test_generators_unknown_option
     error_pattern = /Unknown option/
 
     # retrieve generators:
-    run_command "kbsecret generators -x" do |cmd|
-      cmd.wait
-      assert_match error_pattern, cmd.stderr
+    kbsecret "generators -x", interactive: false do |_, stderr|
+      assert_match error_pattern, stderr
     end
   end
 end

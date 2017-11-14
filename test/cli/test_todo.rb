@@ -6,14 +6,15 @@ require "helpers"
 class CLITodoTest < Minitest::Test
   include Aruba::Api
   include Helpers
+  include Helpers::CLI
 
   def setup
     setup_aruba
   end
 
   def test_todo
-    label = "test-todo"
-    todo = "code stuff"
+    label  = "test-todo"
+    todo   = "code stuff"
     output = <<~OUTPUT
       todo:#{todo}
       status:suspended
@@ -25,47 +26,41 @@ class CLITodoTest < Minitest::Test
     pattern_complete  = /todo:#{todo}\nstatus:complete\n/
 
     # create todo:
-    run_command "kbsecret new todo -x #{label}" do |cmd|
+    kbsecret "new todo -x #{label}" do |cmd|
       cmd.stdin.puts todo
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve todo:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal output, cmd.output
+    kbsecret "dump-fields -x #{label}", interactive: false do |stdout, _|
+      assert_equal output, stdout
     end
 
     # start todo
-    run_command_and_stop "kbsecret todo start #{label}"
+    kbsecret "todo start #{label}"
 
     # retrieve started todo:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_start, cmd.output
+    kbsecret "dump-fields -x #{label}", interactive: false do |stdout, _|
+      assert_match pattern_start, stdout
     end
 
     # suspend todo
-    run_command_and_stop "kbsecret todo suspend #{label}"
+    kbsecret "todo suspend #{label}"
 
     # retrieve suspended todo:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_suspend, cmd.output
+    kbsecret "dump-fields -x #{label}", interactive: false do |stdout, _|
+      assert_match pattern_suspend, stdout
     end
 
     # complete todo
-    run_command_and_stop "kbsecret todo complete #{label}"
+    kbsecret "todo complete #{label}"
 
     # retrieve completed todo:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_complete, cmd.output
+    kbsecret "dump-fields -x #{label}", interactive: false do |stdout, _|
+      assert_match pattern_complete, stdout
     end
   ensure
     # remove todo:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_session
@@ -80,62 +75,52 @@ class CLITodoTest < Minitest::Test
     error_pattern_no_session = /Unknown session/
 
     # create default todo:
-    run_command "kbsecret new todo -x #{default_label}" do |cmd|
+    kbsecret "new todo -x #{default_label}" do |cmd|
       cmd.stdin.puts default_todo
-      cmd.stdin.close
-      cmd.wait
     end
 
     # create a new session
-    run_command_and_stop "kbsecret session new #{session} -r test"
+    kbsecret "session new #{session} -r test"
 
     # create todo in session:
-    run_command "kbsecret new todo -s #{session} -x #{session_label}" do |cmd|
+    kbsecret "new todo -s #{session} -x #{session_label}" do |cmd|
       cmd.stdin.puts session_todo
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve default todo:
-    run_command "kbsecret dump-fields -x -s default #{default_label}" do |cmd|
-      cmd.wait
-      assert_match default_pattern_suspend, cmd.output
+    kbsecret "dump-fields -x -s default #{default_label}", interactive: false do |stdout, _|
+      assert_match default_pattern_suspend, stdout
     end
 
     # retrieve todo from session:
-    run_command "kbsecret dump-fields -x -s #{session} #{session_label}" do |cmd|
-      cmd.wait
-      assert_match session_pattern_suspend, cmd.output
+    kbsecret "dump-fields -x -s #{session} #{session_label}", interactive: false do |stdout, _|
+      assert_match session_pattern_suspend, stdout
     end
 
     # fail to retreive session todo from default session:
-    run_command "kbsecret dump-fields -x #{session_label}" do |cmd|
-      cmd.wait
-      assert_match error_pattern_no_record, cmd.stderr
+    kbsecret "dump-fields -x #{session_label}", interactive: false do |_, stderr|
+      assert_match error_pattern_no_record, stderr
     end
 
     # fail to retreive default todo from session:
-    run_command "kbsecret dump-fields -x -s #{session} #{default_label}" do |cmd|
-      cmd.wait
-      assert_match error_pattern_no_record, cmd.stderr
+    kbsecret "dump-fields -x -s #{session} #{default_label}", interactive: false do |_, stderr|
+      assert_match error_pattern_no_record, stderr
     end
 
     # remove session:
-    run_command_and_stop "kbsecret session rm -d #{session}"
+    kbsecret "session rm -d #{session}"
 
     # fail to retreive todo from removed session:
-    run_command "kbsecret dump-fields -x -s #{session} #{session_label}" do |cmd|
-      cmd.wait
-      assert_match error_pattern_no_session, cmd.stderr
+    kbsecret "dump-fields -x -s #{session} #{session_label}", interactive: false do |_, stderr|
+      assert_match error_pattern_no_session, stderr
     end
   ensure
     # remove default todo:
-    run_command_and_stop "kbsecret rm #{default_label}"
+    kbsecret "rm #{default_label}"
 
     # fail to retreive default todo:
-    run_command "kbsecret dump-fields -x #{default_label}" do |cmd|
-      cmd.wait
-      assert_match error_pattern_no_record, cmd.stderr
+    kbsecret "dump-fields -x #{default_label}", interactive: false do |_, stderr|
+      assert_match error_pattern_no_record, stderr
     end
   end
 
@@ -148,75 +133,64 @@ class CLITodoTest < Minitest::Test
     pattern_complete  = /todo:#{todo}\nstatus:complete\n/
 
     # create default todo:
-    run_command "kbsecret new todo -x #{label}" do |cmd|
+    kbsecret "new todo -x #{label}" do |cmd|
       cmd.stdin.puts todo
-      cmd.stdin.close
-      cmd.wait
     end
 
     # create a new session
-    run_command_and_stop "kbsecret session new #{session} -r test"
+    kbsecret "session new #{session} -r test"
 
     # create todo in session:
-    run_command "kbsecret new todo -s #{session} -x #{label}" do |cmd|
+    kbsecret "new todo -s #{session} -x #{label}" do |cmd|
       cmd.stdin.puts todo
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve default todo:
-    run_command "kbsecret dump-fields -x -s default #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_suspend, cmd.output
+    kbsecret "dump-fields -x -s default #{label}", interactive: false do |stdout, _|
+      assert_match pattern_suspend, stdout
     end
 
     # retrieve todo from session:
-    run_command "kbsecret dump-fields -x -s #{session} #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_suspend, cmd.output
+    kbsecret "dump-fields -x -s #{session} #{label}", interactive: false do |stdout, _|
+      assert_match pattern_suspend, stdout
     end
 
     # start session todo
-    run_command_and_stop "kbsecret todo start -s #{session} #{label}"
+    kbsecret "todo start -s #{session} #{label}"
 
     # retrieve started todo:
-    run_command "kbsecret dump-fields -x -s #{session} #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_start, cmd.output
+    kbsecret "dump-fields -x -s #{session} #{label}", interactive: false do |stdout, _|
+      assert_match pattern_start, stdout
     end
 
     # confirm default todo is still suspended:
-    run_command "kbsecret dump-fields -x -s default #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_suspend, cmd.output
+    kbsecret "dump-fields -x -s default #{label}", interactive: false do |stdout, _|
+      assert_match pattern_suspend, stdout
     end
 
     # complete session todo
-    run_command_and_stop "kbsecret todo complete -s #{session} #{label}"
+    kbsecret "todo complete -s #{session} #{label}"
 
     # retrieve completed todo:
-    run_command "kbsecret dump-fields -x -s #{session} #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_complete, cmd.output
+    kbsecret "dump-fields -x -s #{session} #{label}", interactive: false do |stdout, _|
+      assert_match pattern_complete, stdout
     end
 
     # confirm default todo is still suspended:
-    run_command "kbsecret dump-fields -x -s default #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_suspend, cmd.output
+    kbsecret "dump-fields -x -s default #{label}", interactive: false do |stdout, _|
+      assert_match pattern_suspend, stdout
     end
 
     # remove session:
-    run_command_and_stop "kbsecret session rm -d #{session}"
+    kbsecret "session rm -d #{session}"
 
     # confirm default todo still exists:
-    run_command "kbsecret dump-fields -x -s default #{label}" do |cmd|
-      cmd.wait
-      assert_match pattern_suspend, cmd.output
+    kbsecret "dump-fields -x -s default #{label}", interactive: false do |stdout, _|
+      assert_match pattern_suspend, stdout
     end
   ensure
     # remove default todo:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_nonesuch
@@ -224,9 +198,8 @@ class CLITodoTest < Minitest::Test
     error_pattern = /No such record/
 
     # fail to retrieve nonexistent todo:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_match error_pattern, cmd.stderr
+    kbsecret "dump-fields -x #{label}", interactive: false do |_, stderr|
+      assert_match error_pattern, stderr
     end
   end
 
@@ -236,19 +209,16 @@ class CLITodoTest < Minitest::Test
     error_pattern = /Too few arguments given/
 
     # create todo:
-    run_command "kbsecret new todo -x #{label}" do |cmd|
+    kbsecret "new todo -x #{label}" do |cmd|
       cmd.stdin.puts todo
-      cmd.stdin.close
-      cmd.wait
     end
 
     # fail to retrieve todo without label:
-    run_command "kbsecret dump-fields -x" do |cmd|
-      cmd.wait
-      assert_match error_pattern, cmd.output
+    kbsecret "dump-fields -x", interactive: false do |_, stderr|
+      assert_match error_pattern, stderr
     end
   ensure
     # remove todo:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 end

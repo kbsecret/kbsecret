@@ -6,6 +6,7 @@ require "helpers"
 class CLIListTest < Minitest::Test
   include Aruba::Api
   include Helpers
+  include Helpers::CLI
 
   def setup
     setup_aruba
@@ -18,20 +19,17 @@ class CLIListTest < Minitest::Test
     pattern = /#{label}/
 
     # create login:
-    run_command "kbsecret new login -x #{label}" do |cmd|
+    kbsecret "new login -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve login within the list:
-    run_command "kbsecret list" do |cmd|
-      cmd.wait
-      assert_match pattern, cmd.output
+    kbsecret "list", interactive: false do |stdout, _|
+      assert_match pattern, stdout
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_session
@@ -39,19 +37,18 @@ class CLIListTest < Minitest::Test
     number = 3
 
     # create a new session
-    run_command_and_stop "kbsecret session new -r test #{session}"
+    kbsecret "session new -r test #{session}"
 
     expected = create_test_records number: number, session: session
 
     # retrieve records:
-    run_command "kbsecret list -s #{session}" do |cmd|
-      cmd.wait
-      records = cmd.output.split("\n")
+    kbsecret "list -s #{session}", interactive: false do |stdout, _|
+      records = stdout.split("\n")
       assert_equal records.sort == expected.sort, true
     end
   ensure
     # remove session:
-    run_command_and_stop "kbsecret session rm -d #{session}"
+    kbsecret "session rm -d #{session}"
   end
 
   def test_type
@@ -60,7 +57,7 @@ class CLIListTest < Minitest::Test
     types = KBSecret::Record.record_types.map(&:to_s)
 
     # create a new session
-    run_command_and_stop "kbsecret session new -r test #{session}"
+    kbsecret "session new -r test #{session}"
 
     # create test records and an inventory
     expected = create_test_records number: number, session: session
@@ -69,15 +66,14 @@ class CLIListTest < Minitest::Test
       filtered = expected.grep(/#{type}/)
 
       # retrieve records:
-      run_command "kbsecret list -s #{session} -t #{type}" do |cmd|
-        cmd.wait
-        records = cmd.output.split("\n")
+      kbsecret "list -s #{session} -t #{type}", interactive: false do |stdout, _|
+        records = stdout.split("\n")
         assert_equal records.sort == filtered.sort, true
       end
     end
   ensure
     # remove session:
-    run_command_and_stop "kbsecret session rm -d #{session}"
+    kbsecret "session rm -d #{session}"
   end
 
   def test_show_all
@@ -93,25 +89,22 @@ class CLIListTest < Minitest::Test
     ]
 
     # create a new session
-    run_command_and_stop "kbsecret session new -r test #{session}"
+    kbsecret "session new -r test #{session}"
 
     # create login in session:
-    run_command "kbsecret new login -s #{session} -x #{label}" do |cmd|
+    kbsecret "new login -s #{session} -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve list from session:
-    run_command "kbsecret list --show-all -s #{session}" do |cmd|
-      cmd.wait
-      lines = cmd.output.split("\n")
+    kbsecret "list --show-all -s #{session}", interactive: false do |stdout, _|
+      lines = stdout.split("\n")
       lines.each_with_index do |line, i|
         assert_match patterns[i], line
       end
     end
   ensure
     # remove session:
-    run_command_and_stop "kbsecret session rm -d #{session}"
+    kbsecret "session rm -d #{session}"
   end
 end

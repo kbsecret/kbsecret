@@ -6,6 +6,7 @@ require "helpers"
 class CLILoginTest < Minitest::Test
   include Aruba::Api
   include Helpers
+  include Helpers::CLI
 
   def setup
     setup_aruba
@@ -22,20 +23,17 @@ class CLILoginTest < Minitest::Test
     OUTPUT
 
     # create login:
-    run_command "kbsecret new login -x #{label}" do |cmd|
+    kbsecret "new login -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve login:
-    run_command "kbsecret login #{label}" do |cmd|
-      cmd.wait
-      assert_equal output, cmd.output
+    kbsecret "login #{label}", interactive: false do |stdout, _|
+      assert_equal output, stdout
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_terse
@@ -45,20 +43,17 @@ class CLILoginTest < Minitest::Test
     output = "#{label}:#{username}:#{password}"
 
     # create login:
-    run_command "kbsecret new login -x #{label}" do |cmd|
+    kbsecret "new login -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve login tersely:
-    run_command "kbsecret login -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal output, cmd.output.chomp
+    kbsecret "login -x #{label}", interactive: false do |stdout, _|
+      assert_equal output, stdout.chomp
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_terse_separator
@@ -69,20 +64,17 @@ class CLILoginTest < Minitest::Test
     output = [label, username, password].join separator
 
     # create login:
-    run_command "kbsecret new login -x #{label}" do |cmd|
+    kbsecret "new login -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve login with separator:
-    run_command "kbsecret login -i #{separator} -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal output, cmd.output.chomp
+    kbsecret "login -i #{separator} -x #{label}", interactive: false do |stdout, _|
+      assert_equal output, stdout.chomp
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_all
@@ -103,38 +95,32 @@ class CLILoginTest < Minitest::Test
     error_pattern = /No such record\(s\)/
 
     # create a new session
-    run_command "kbsecret session new -r test #{session}", &:wait
+    kbsecret "session new -r test #{session}"
 
     # fail to retrieve nonexistent logins:
-    run_command "kbsecret login -s #{session} -a" do |cmd|
-      cmd.wait
-      assert_match error_pattern, cmd.stderr
+    kbsecret "login -s #{session} -a", interactive: false do |_, stderr|
+      assert_match error_pattern, stderr
     end
 
     # create login:
-    run_command "kbsecret new login -s #{session} -x #{label}" do |cmd|
+    kbsecret "new login -s #{session} -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # create another login:
-    run_command "kbsecret new login -s #{session} -x #{label1}" do |cmd|
+    kbsecret "new login -s #{session} -x #{label1}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve logins:
-    run_command "kbsecret login --all -s #{session}" do |cmd|
-      cmd.wait
-      cmd.output.lines.each_with_index do |line, i|
+    kbsecret "login --all -s #{session}", interactive: false do |stdout, _|
+      stdout.lines.each_with_index do |line, i|
         assert_match patterns[i], line
       end
     end
   ensure
     # remove session:
-    run_command_and_stop "kbsecret session rm -d #{session}"
+    kbsecret "session rm -d #{session}"
   end
 
   def test_all_terse
@@ -154,32 +140,27 @@ class CLILoginTest < Minitest::Test
     ]
 
     # create a new session
-    run_command "kbsecret session new -r test #{session}", &:wait
+    kbsecret "session new -r test #{session}"
 
     # create login:
-    run_command "kbsecret new login -s #{session} -x #{label}" do |cmd|
+    kbsecret "new login -s #{session} -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # create another login:
-    run_command "kbsecret new login -s #{session} -x #{label1}" do |cmd|
+    kbsecret "new login -s #{session} -x #{label1}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve logins:
-    run_command "kbsecret login -s #{session} -ax" do |cmd|
-      cmd.wait
-      cmd.output.lines.each_with_index do |line, i|
+    kbsecret "login -s #{session} -ax", interactive: false do |stdout, _|
+      stdout.lines.each_with_index do |line, i|
         assert_match patterns[i], line
       end
     end
   ensure
     # remove session:
-    run_command_and_stop "kbsecret session rm -d #{session}"
+    kbsecret "session rm -d #{session}"
   end
 
   def test_nonesuch
@@ -187,9 +168,8 @@ class CLILoginTest < Minitest::Test
     error_pattern = /No such record\(s\)/
 
     # fail to retrieve nonexistent login:
-    run_command "kbsecret login -x #{label}" do |cmd|
-      cmd.wait
-      assert_match error_pattern, cmd.stderr
+    kbsecret "login -x #{label}", interactive: false do |_, stderr|
+      assert_match error_pattern, stderr
     end
   end
 
@@ -200,20 +180,17 @@ class CLILoginTest < Minitest::Test
     error_pattern = /Too few arguments given/
 
     # create login:
-    run_command "kbsecret new login -x #{label}" do |cmd|
+    kbsecret "new login -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # fail to retrieve login without label:
-    run_command "kbsecret login" do |cmd|
-      cmd.wait
-      assert_match error_pattern, cmd.output
+    kbsecret "login", interactive: false do |_, stderr|
+      assert_match error_pattern, stderr
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_session
@@ -228,56 +205,47 @@ class CLILoginTest < Minitest::Test
     error_pattern_no_session = /Unknown session/
 
     # create default login:
-    run_command "kbsecret new login -x #{default_label}" do |cmd|
+    kbsecret "new login -x #{default_label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # create a new session
-    run_command "kbsecret session new #{session} -r test", &:wait
+    kbsecret "session new #{session} -r test"
 
     # create login in session:
-    run_command "kbsecret new login -s #{session} -x #{session_label}" do |cmd|
+    kbsecret "new login -s #{session} -x #{session_label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve default login:
-    run_command "kbsecret login -s default -x #{default_label}" do |cmd|
-      cmd.wait
-      assert_equal default_output, cmd.output.chomp
+    kbsecret "login -s default -x #{default_label}", interactive: false do |stdout, _|
+      assert_equal default_output, stdout.chomp
     end
 
     # retrieve login from session:
-    run_command "kbsecret login -s #{session} -x #{session_label}" do |cmd|
-      cmd.wait
-      assert_equal session_output, cmd.output.chomp
+    kbsecret "login -s #{session} -x #{session_label}", interactive: false do |stdout, _|
+      assert_equal session_output, stdout.chomp
     end
 
     # fail to retreive session login from default session:
-    run_command "kbsecret login -x #{session_label}" do |cmd|
-      cmd.wait
-      assert_match error_pattern_no_record, cmd.stderr
+    kbsecret "login -x #{session_label}", interactive: false do |_, stderr|
+      assert_match error_pattern_no_record, stderr
     end
 
     # fail to retreive default login from session:
-    run_command "kbsecret login -x -s #{session} #{default_label}" do |cmd|
-      cmd.wait
-      assert_match error_pattern_no_record, cmd.stderr
+    kbsecret "login -x -s #{session} #{default_label}", interactive: false do |_, stderr|
+      assert_match error_pattern_no_record, stderr
     end
 
     # remove session:
-    run_command_and_stop "kbsecret session rm -d #{session}"
+    kbsecret "session rm -d #{session}"
 
     # fail to retreive login from removed session:
-    run_command "kbsecret login -s #{session} #{session_label}" do |cmd|
-      cmd.wait
-      assert_match error_pattern_no_session, cmd.stderr
+    kbsecret "login -s #{session} #{session_label}", interactive: false do |_, stderr|
+      assert_match error_pattern_no_session, stderr
     end
   ensure
     # remove default login:
-    run_command_and_stop "kbsecret rm #{default_label}"
+    kbsecret "rm #{default_label}"
   end
 end

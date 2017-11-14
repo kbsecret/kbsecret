@@ -6,6 +6,7 @@ require "helpers"
 class CLINewTest < Minitest::Test
   include Aruba::Api
   include Helpers
+  include Helpers::CLI
 
   def setup
     setup_aruba
@@ -21,20 +22,17 @@ class CLINewTest < Minitest::Test
     OUTPUT
 
     # create environment:
-    run_command "kbsecret new environment -x #{label}" do |cmd|
+    kbsecret "new environment -x #{label}" do |cmd|
       cmd.stdin.puts "#{variable}:#{value}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve environment:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal output.to_s, cmd.output
+    kbsecret "dump-fields -x #{label}", interactive: false do |stdout, _|
+      assert_equal output.to_s, stdout
     end
   ensure
     # remove environment:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_login
@@ -47,20 +45,17 @@ class CLINewTest < Minitest::Test
     OUTPUT
 
     # create login:
-    run_command "kbsecret new login -x #{label}" do |cmd|
+    kbsecret "new login -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve login:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal output.to_s, cmd.output
+    kbsecret "dump-fields -x #{label}", interactive: false do |stdout, _|
+      assert_equal output, stdout
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_snippet
@@ -73,20 +68,17 @@ class CLINewTest < Minitest::Test
     OUTPUT
 
     # create snippet:
-    run_command "kbsecret new snippet -x #{label}" do |cmd|
+    kbsecret "new snippet -x #{label}" do |cmd|
       cmd.stdin.puts "#{code}:#{description}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve snippet:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal output.to_s, cmd.output
+    kbsecret "dump-fields -x #{label}", interactive: false do |stdout, _|
+      assert_equal output, stdout
     end
   ensure
     # remove snippet:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_todo
@@ -101,20 +93,17 @@ class CLINewTest < Minitest::Test
 
     # NOTE: bash -c workaround
     # create todo:
-    run_command "kbsecret new todo -x #{label}" do |cmd|
+    kbsecret "new todo -x #{label}" do |cmd|
       cmd.stdin.puts todo
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve todo:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal output, cmd.output
+    kbsecret "dump-fields -x #{label}", interactive: false do |stdout, _|
+      assert_equal output, stdout
     end
   ensure
     # remove todo:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_unstructured
@@ -123,20 +112,17 @@ class CLINewTest < Minitest::Test
     output = "text:#{text}"
 
     # create unstructured:
-    run_command "kbsecret new unstructured -x #{label}" do |cmd|
+    kbsecret "new unstructured -x #{label}" do |cmd|
       cmd.stdin.puts text
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve unstructured:
-    run_command "kbsecret dump-fields -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal output, cmd.output.chomp
+    kbsecret "dump-fields -x #{label}", interactive: false do |stdout, _|
+      assert_equal output, stdout.chomp
     end
   ensure
     # remove unstructured:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_force
@@ -147,33 +133,27 @@ class CLINewTest < Minitest::Test
     password2 = "pass2"
 
     # create login:
-    run_command "kbsecret new login -x #{label}" do |cmd|
+    kbsecret "new login -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}:#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve login:
-    run_command "kbsecret login -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal "#{label}:#{username}:#{password}", cmd.output.chomp
+    kbsecret "login -x #{label}", interactive: false do |stdout, _|
+      assert_equal "#{label}:#{username}:#{password}", stdout.chomp
     end
 
     # force overwrite of login:
-    run_command "kbsecret new login --force -x #{label}" do |cmd|
+    kbsecret "new login --force -x #{label}" do |cmd|
       cmd.stdin.puts "#{username2}:#{password2}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve overwritten login:
-    run_command "kbsecret login -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal "#{label}:#{username2}:#{password2}", cmd.output.chomp
+    kbsecret "login -x #{label}", interactive: false do |stdout, _|
+      assert_equal "#{label}:#{username2}:#{password2}", stdout.chomp
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_separator
@@ -182,20 +162,17 @@ class CLINewTest < Minitest::Test
     password = "pass"
 
     # create login:
-    run_command "kbsecret new login -i ^ -x #{label}" do |cmd|
+    kbsecret "new login -i ^ -x #{label}" do |cmd|
       cmd.stdin.puts "#{username}^#{password}"
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve login:
-    run_command "kbsecret login -x #{label}" do |cmd|
-      cmd.wait
-      assert_equal "#{label}:#{username}:#{password}", cmd.output.chomp
+    kbsecret "login -x #{label}", interactive: false do |stdout, _|
+      assert_equal "#{label}:#{username}:#{password}", stdout.chomp
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_interactive
@@ -204,21 +181,18 @@ class CLINewTest < Minitest::Test
     password = "pass"
 
     # create login:
-    run_command "kbsecret new login #{label}" do |cmd|
+    kbsecret "new login #{label}" do |cmd|
       cmd.stdin.puts username
       cmd.stdin.puts password
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve login:
-    run_command "kbsecret login -x #{label}" do |cmd|
-      cmd.wait
-      assert_match(/#{label}:#{username}:#{password}/, cmd.output)
+    kbsecret "login -x #{label}", interactive: false do |stdout, _|
+      assert_match(/#{label}:#{username}:#{password}/, stdout)
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 
   def test_generate
@@ -226,19 +200,16 @@ class CLINewTest < Minitest::Test
     username = "user"
 
     # create login:
-    run_command "kbsecret new login -G #{label}" do |cmd|
+    kbsecret "new login -G #{label}" do |cmd|
       cmd.stdin.puts username
-      cmd.stdin.close
-      cmd.wait
     end
 
     # retrieve login:
-    run_command "kbsecret login -x #{label}" do |cmd|
-      cmd.wait
-      assert_match(/#{label}:#{username}:\w+/, cmd.output)
+    kbsecret "login -x #{label}", interactive: false do |stdout, _|
+      assert_match(/#{label}:#{username}:\w+/, stdout)
     end
   ensure
     # remove login:
-    run_command_and_stop "kbsecret rm #{label}"
+    kbsecret "rm #{label}"
   end
 end
