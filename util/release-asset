@@ -1,0 +1,70 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+# release-asset: Turns the latest tag on the KBSecret repo into a GitHub release
+# and uploads a tarball containing manual pages and other generated files to accompany it.
+
+require "octokit"
+
+REPO = "kbsecret/kbsecret"
+
+def hai(s)
+  puts "[+] #{s}"
+end
+
+def bai(s)
+  STDERR.puts "[!] #{s}"
+  exit 1
+end
+
+def make(t)
+  hai "make #{t}"
+  `make #{t}`
+end
+
+api_key = `kbsecret env -s keys -v kbsecret-release-github-api`.chomp
+
+hai "Authenticating with GitHub"
+
+client = Octokit::Client.new access_token: api_key
+client.user.login
+
+hai "Finding the most recent Git tag for #{REPO}"
+
+tag        = client.tags(REPO).first.name
+asset      = "kbsecret-#{tag}.tar.gz"
+asset_path = "/tmp/#{asset}"
+
+hai "Found tag: #{tag}"
+hai "Checking whether #{tag} already has a release"
+
+releases = client.releases(REPO)
+release = releases.find { |r| r.tag_name == tag }
+
+if release.nil?
+  hai "Creating a release for #{tag}"
+  release = client.create_release(REPO, tag, prerelease: tag.include?("pre"))
+else
+  hai "#{tag} is already released, not re-releasing"
+end
+
+hai "Building manual pages, docs, and completions"
+
+bai "No Makefile. Make sure you're in the project root." unless File.file?("Makefile")
+
+make "man"
+make "doc"
+make "bash"
+
+hai "Building tarball"
+
+dir = File.basename(Dir.pwd)
+Dir.chdir("..") do
+  `tar czfv #{asset_path} #{dir}`
+end
+
+hai "Attaching the tarball to the release"
+
+client.upload_asset(release.url, asset_path, name: asset)
+
+hai "Done!"
