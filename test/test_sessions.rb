@@ -253,4 +253,13 @@ class KBSecretSessionsTest < Minitest::Test
       KBSecret::Config.deconfigure_session label
     end
   end
+
+  def test_session_hash_style_initializer
+    temp_session do |sess1|
+      sess2 = KBSecret::Session[sess1.label]
+
+      assert_instance_of KBSecret::Session, sess2
+      assert_equal sess1, sess2
+    end
+  end
 end

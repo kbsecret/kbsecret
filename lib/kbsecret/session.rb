@@ -17,6 +17,13 @@ module KBSecret
     attr_reader :path
 
     # @param label [String, Symbol] the label of the session to initialize
+    # @return [Session]
+    # @see #initialize
+    def self.[](label)
+      new(label: label)
+    end
+
+    # @param label [String, Symbol] the label of the session to initialize
     # @raise [Exceptions::SessionLoadError] if the session has no users or any invalid Keybase users
     # @note This does not *create* a new session, but loads one already
     #  specified in {Config::CONFIG_FILE}. To *create* a new session,
