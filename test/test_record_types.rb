@@ -91,6 +91,11 @@ class KBSecretRecordTypesTest < Minitest::Test
 
       assert_equal "export BAR_API=0xFEEDFACE", record.to_export
       assert_equal "BAR_API=0xFEEDFACE", record.to_assignment
+
+      # loading into the environment should work
+      record.load!
+
+      assert_equal "0xFEEDFACE", ENV["BAR_API"]
     end
   end
 

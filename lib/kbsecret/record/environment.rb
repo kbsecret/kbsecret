@@ -31,6 +31,12 @@ module KBSecret
       def to_export
         "export #{to_assignment}"
       end
+
+      # Load this record's environment variable into the environment of the current process.
+      # @return [void]
+      def load!
+        ENV[variable] = value
+      end
     end
   end
 end
