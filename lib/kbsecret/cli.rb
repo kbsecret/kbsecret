@@ -110,7 +110,7 @@ module KBSecret
     #   options or arguments are being tested for a valid session.
     def ensure_session!(where = :option)
       label = where == :option ? @opts[:session] : @args[:session]
-      @session = Session.new label: label
+      @session = Session[label]
     end
 
     # Ensure that a record type passed in as an option or argument is resolvable
