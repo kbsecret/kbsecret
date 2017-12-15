@@ -34,8 +34,7 @@ module Helpers
         cmd.wait
         yield cmd.stdout, cmd.stderr if block_given?
       end
-    rescue Exception => e
-      puts e
+    rescue StandardError => e
       raise e
     end
 
