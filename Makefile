@@ -20,7 +20,7 @@ PKGS=deb rpm pacman
 all: completions doc man test
 
 .PHONY: completions
-completions: bash zsh
+completions: bash
 
 .PHONY: doc
 doc:

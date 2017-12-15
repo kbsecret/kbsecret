@@ -1,5 +1,6 @@
 ## TODO: various flag argument completions (--session, --generator, etc.) aren't present
 ## TODO: find a way to auto-generate all of this
+## TODO: kbsecret session new/rm
 
 ## standard utilities
 
@@ -10,7 +11,7 @@ function __fish_needs_command
   end
   return 1
 end
-   
+
 function __fish_using_command
   set cmd (commandline -opc)
   if [ (count $cmd) -gt 1 ]
@@ -72,21 +73,12 @@ complete -f -c kbsecret -n '__fish_needs_command' -a raw-edit -d "Open the JSON 
 complete -f -c kbsecret -n '__fish_using_command raw-edit' -a "(kbsecret list)"
 complete -f -c kbsecret -n '__fish_using_command raw-edit' -s s -l session -d "The session to search in"
 
-## kbsecret new-session
-
-complete -f -c kbsecret -n '__fish_needs_command' -a new-session -d "Create a new session"
-complete -f -c kbsecret -n '__fish_using_command new-session' -s l -l lavel -d "The session label"
-complete -f -c kbsecret -n '__fish_using_command new-session' -s u -l users -d "The keybase users"
-complete -f -c kbsecret -n '__fish_using_command new-session' -s r -l root -d "The secret root directory"
-complete -f -c kbsecret -n '__fish_using_command new-session' -s f -l force -d "Force creation"
-complete -f -c kbsecret -n '__fish_using_command new-session' -s n -l no-notify -d "Do not send a notification to session members"
-
 ## kbsecret generators
 
 complete -f -c kbsecret -n '__fish_needs_command' -a generators -d "List generators"
 complete -f -c kbsecret -n '__fish_using_command generators' -s a -l show-all -d "Show generator details"
 
-## kbsecret list 
+## kbsecret list
 
 complete -f -c kbsecret -n '__fish_needs_command' -a list -d "List records"
 complete -f -c kbsecret -n '__fish_using_command list' -s s -l session -d "The session to list from"
@@ -131,12 +123,6 @@ complete -f -c kbsecret -n '__fish_using_command new' -s G -l generate -d "Gener
 complete -f -c kbsecret -n '__fish_using_command new' -s g -l generator -d "Use the given generator"
 complete -f -c kbsecret -n '__fish_using_command new' -s x -l terse -d "Read in terse format"
 complete -f -c kbsecret -n '__fish_using_command new' -s i -l ifs -d "Terse fields seperator"
-
-## kbsecret rm-session
-
-complete -f -c kbsecret -n '__fish_needs_command' -a rm-session -d "Deletes a session"
-complete -f -c kbsecret -n '__fish_using_command rm-session' -a "(kbsecret sessions)" -d "Access given record"
-complete -f -c kbsecret -n '__fish_using_command rm-session' -s d -l delete -d "Delete all records"
 
 ## kbsecret generator
 ## TODO: no completion support for the sub-subcommand arguments
