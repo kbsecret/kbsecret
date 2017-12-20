@@ -3,7 +3,7 @@
 require "fileutils"
 
 module KBSecret
-  # Represents a session of N keybase users with collective read/write
+  # Represents a session of Keybase users with collective read and/or write
   # access to a collection of records.
   class Session
     # @return [Symbol] the session's label
