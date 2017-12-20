@@ -96,7 +96,7 @@ module KBSecret
     end
 
     # Import an existing record from another session.
-    # @param record [Record] the record to import
+    # @param record [Record::Abstract] the record to import
     # @param overwrite [Boolean] whether or not to overwrite an existing record if necessary
     # @return [void]
     # @raise [Exceptions::SessionImportError] if the record's source session is our session
