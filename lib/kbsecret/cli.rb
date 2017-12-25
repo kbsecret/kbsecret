@@ -153,12 +153,19 @@ module KBSecret
       die "#{e.to_s.capitalize}."
     end
 
-    # Print an informational message if verbose output has been enabled.
+    # Print an informational message.
     # @param msg [String] the message to print
     # @return [void]
     def info(msg)
-      return unless @opts.verbose?
       STDERR.puts "#{GREEN["Info"]}: #{msg}"
+    end
+
+    # Print an information message, but only if verbose output has been enabled.
+    # @param msg [String] the message to print
+    # @return [void]
+    def verbose(msg)
+      return unless @opts.verbose?
+      info msg
     end
 
     # Print an informational message via {#info} and exit successfully.
