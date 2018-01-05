@@ -10,7 +10,7 @@ module KBSecret
   class Config
     # The configuration directory.
     # @api private
-    CONFIG_DIR = File.expand_path("~/.config/kbsecret").freeze
+    CONFIG_DIR = File.join(Keybase::Local.private_dir, "kbsecret/.config").freeze
 
     # The configuration file.
     # @api private
