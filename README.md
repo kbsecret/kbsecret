@@ -25,17 +25,6 @@ $ bundle install --path vendor/bundle
 $ RUBYLIB=./lib PATH=./bin:${PATH} bundle exec ./bin/kbsecret help
 ```
 
-### System Packages
-
-You can also build (very experimental) installation packages:
-
-```bash
-$ bundle exec make deb # for apt/dpkg based systems
-$ bundle exec make rpm # for yum/rpm based systems
-$ bundle exec make pacman # for pacman based systems
-$ ls pkg/{deb,rpm,pacman}/*
-```
-
 ### Manual Pages
 
 KBSecret's manual pages can be found online
