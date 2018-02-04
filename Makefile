@@ -12,10 +12,6 @@ VERSION:=$(shell git describe --tags --abbrev=0 2>/dev/null \
 			|| git rev-parse --short HEAD \
 			|| echo "unknown-version")
 
-PKG=pkg
-GEM_DEPS=$(PKG)/deps
-PKGS=deb rpm pacman
-
 .PHONY: all
 all: completions doc man test
 
@@ -44,29 +40,6 @@ ronnpp:
 	for f in man/man1/*.ronnpp; do ./man/ronnpp < $$f > man/man1/$$(basename $$f .ronnpp).ronn; done
 	for f in man/man5/*.ronnpp; do ./man/ronnpp < $$f > man/man5/$$(basename $$f .ronnpp).ronn; done
 
-.PHONY: pkg
-pkg: $(PKGS)
-
-.PHONY: $(PKGS)
-$(PKGS): prep-gems
-	pushd . && \
-	mkdir -p $(PKG)/$@ && \
-	cd $(PKG)/$@ && \
-	find ../deps/cache -name "*.gem" | \
-		xargs -rn1 fpm -d ruby -d rubygems \
-		--gem-package-name-prefix "ruby" \
-		--maintainer "william@yossarian.net" \
-		-s gem -t $@ && \
-	fpm --no-gem-fix-name --gem-package-name-prefix "ruby" \
-		-s gem -t $@ kbsecret && \
-	popd
-
-.PHONY: prep-gems
-prep-gems:
-	mkdir -p pkg/deps
-	gem install --norc --no-ri --no-rdoc --install-dir $(GEM_DEPS) kbsecret
-	rm -f $(GEM_DEPS)/cache/kbsecret-*.gem
-
 .PHONY: test
 test:
 	bundle exec rake test
@@ -92,5 +65,4 @@ clean:
 	rm -f $(BASH_M4_OUT)
 	rm -rf doc/
 	rm -rf man/man{1,5}/*.{html,1,5,ronn}
-	rm -rf pkg/
 	rm -rf coverage/
