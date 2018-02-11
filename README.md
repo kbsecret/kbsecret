@@ -1,4 +1,4 @@
-KBSecret ![](https://kbsecret.github.io/res/logo50.png)
+KBSecret ![](https://avatars1.githubusercontent.com/u/31023996?s=50&v=4)
 ========
 
 [![Gem Version](https://badge.fury.io/rb/kbsecret.svg)](https://badge.fury.io/rb/kbsecret)
