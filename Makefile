@@ -25,9 +25,8 @@ doc:
 
 .PHONY: man-www
 man-www: man
-	mkdir ../kbsecret.github.io/man/$(VERSION)
-	cp man/man{1,5}/*.html ../kbsecret.github.io/man/$(VERSION)/
-	sed -i '1i* [$(VERSION)]($(VERSION)/kbsecret.1)' ../kbsecret.github.io/man/_manvers.md
+	rm ../kbsecret-website/man/*.html
+	cp man/man{1,5}/*.html ../kbsecret-website/man/
 
 .PHONY: man
 man: ronnpp
