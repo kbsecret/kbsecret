@@ -2,7 +2,7 @@
 
 require "keybase"
 
-require_relative "version"
+require_relative "kbsecret/version"
 require_relative "kbsecret/exceptions"
 require_relative "kbsecret/config"
 require_relative "kbsecret/record"
