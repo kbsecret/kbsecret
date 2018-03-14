@@ -168,6 +168,7 @@ module KBSecret
                     YAML.load_file(CONFIG_FILE)
                   else
                     FileUtils.mkdir_p CONFIG_DIR
+                    FileUtils.mkdir_p CUSTOM_TYPES_DIR
                     DEFAULT_CONFIG
                   end
 
