@@ -42,6 +42,7 @@ class CLIBuiltinsTest < Minitest::Test
     end
   end
 
+  # TODO: move this to its own file (no longer a builtin)
   def test_conf
     # with EDITOR unset, `kbsecret conf` should produce an error message
     delete_environment_variable "EDITOR"
