@@ -51,7 +51,7 @@ module KBSecret
         # @param field [Symbol] the new field's name
         # @return [void]
         def gen_methods(field)
-          class_eval %[
+          class_eval __FILE__, __LINE__, %[
             def #{field}
               @data[self.class.type.to_sym]["#{field}".to_sym]
             end
