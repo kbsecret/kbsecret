@@ -51,7 +51,7 @@ module KBSecret
         # @param field [Symbol] the new field's name
         # @return [void]
         def gen_methods(field)
-          class_eval __FILE__, __LINE__, %[
+          class_eval %[
             def #{field}
               @data[self.class.type.to_sym]["#{field}".to_sym]
             end
@@ -61,7 +61,7 @@ module KBSecret
               @timestamp = Time.now.to_i
               sync!
             end
-          ]
+          ], __FILE__, __LINE__ - 10
         end
 
         # @param field [Symbol] the field's name
