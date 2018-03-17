@@ -9,11 +9,11 @@ KBSecret is a command line utility and library for managing *secrets*.
 
 Quick links:
 
-* [Installation instructions](https://kbsecret.github.io/installation)
-* [Quick start guide](https://kbsecret.github.io/quickstart)
-* [CLI documentation](https://kbsecret.github.io/man/)
+* [Installation instructions](https://kbsecret.github.io/#/install/)
+* [Quick start guide](https://kbsecret.github.io/#/quickstart/)
+* [CLI documentation](https://kbsecret.github.io/man/kbsecret.1.html)
 * [API documentation](http://www.rubydoc.info/gems/kbsecret/)
-* [Customizing your installation](https://kbsecret.github.io/customization)
+* [Customizing your installation](https://kbsecret.github.io/#/customize/)
 
 ## Hacking on KBSecret
 
