@@ -12,7 +12,7 @@ class CLIConfTest < Minitest::Test
     setup_aruba
   end
 
-  def test_conf_opens_editor
+  def test_conf_opens_main_conf
     # with EDITOR unset, `kbsecret conf` should produce an error message
     delete_environment_variable "EDITOR"
     kbsecret "conf", interactive: false do |_, stderr|
@@ -24,6 +24,26 @@ class CLIConfTest < Minitest::Test
     kbsecret "conf", interactive: false do |stdout, _|
       assert_match(/:mount:/, stdout)
     end
+  end
+
+  def test_conf_opens_command_conf
+    # commands.ini's contents are empty by default, so put some junk in it
+    # for testing purposes
+    File.write(KBSecret::Config::COMMAND_CONFIG_FILE, "[foo]\nargs = --bar")
+
+    # with EDITOR unset, `kbsecret conf -c` should produce an error message
+    delete_environment_variable "EDITOR"
+    kbsecret "conf -c", interactive: false do |_, stderr|
+      assert_match(/You need to set \$EDITOR/, stderr)
+    end
+
+    # with EDITOR set to `cat`, `kbsecret conf -c` should output the commands configuration
+    set_environment_variable "EDITOR", "cat"
+    kbsecret "conf -c", interactive: false do |stdout, _|
+      assert_match(/[foo]\nargs = --bar/, stdout)
+    end
+  ensure
+    FileUtils.rm_rf KBSecret::Config::COMMAND_CONFIG_FILE
   end
 
   def test_conf_prints_conf_directory
