@@ -27,14 +27,14 @@ class CLIConfTest < Minitest::Test
   end
 
   def test_conf_prints_conf_directory
-    kbsecret "conf", "-d", interactive: false do |stdout, _|
+    kbsecret "conf -d", interactive: false do |stdout, _|
       conf_dir = stdout.chomp
       assert Dir.exist?(conf_dir)
     end
   end
 
   def test_conf_prints_record_directory
-    kbsecret "conf", "-v", interactive: false do |stdout, _|
+    kbsecret "conf -v", interactive: false do |stdout, _|
       record_dir = stdout.chomp
       assert Dir.exist?(record_dir)
     end
