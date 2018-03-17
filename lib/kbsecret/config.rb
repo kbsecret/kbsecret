@@ -167,8 +167,6 @@ module KBSecret
     user_config = if File.exist?(CONFIG_FILE)
                     YAML.load_file(CONFIG_FILE)
                   else
-                    FileUtils.mkdir_p CONFIG_DIR
-                    FileUtils.mkdir_p CUSTOM_TYPES_DIR
                     DEFAULT_CONFIG
                   end
 
@@ -181,6 +179,9 @@ module KBSecret
     @config = DEFAULT_CONFIG.merge(user_config)
     @config[:sessions].merge!(DEFAULT_SESSION)
     @config[:generators].merge!(DEFAULT_GENERATOR)
+
+    FileUtils.mkdir_p CONFIG_DIR
+    FileUtils.mkdir_p CUSTOM_TYPES_DIR
 
     sync!
   end
