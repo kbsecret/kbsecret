@@ -6,6 +6,7 @@ rvm:
 cache: bundler
 sudo: required
 before_install:
+  - gem update --system # https://github.com/travis-ci/travis-ci/issues/8978
   - bash test/ci/setup.sh
 script:
   - COVERALLS=1 make test
