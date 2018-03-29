@@ -50,7 +50,7 @@ module KBSecret
       hsh   = JSON.parse(File.read(path), symbolize_names: true)
       klass = class_for hsh[:type]
       klass.load!(session, hsh)
-    rescue RecordTypeUnknownError, JSON::JSONError
+    rescue Exceptions::RecordTypeUnknownError, JSON::JSONError
       raise Exceptions::RecordLoadError, path
     end
   end
