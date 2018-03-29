@@ -16,7 +16,7 @@ class CLIConfTest < Minitest::Test
     # with EDITOR unset, `kbsecret conf` should produce an error message
     delete_environment_variable "EDITOR"
     kbsecret "conf", interactive: false do |_, stderr|
-      assert_match(/You need to set \$EDITOR/, stderr)
+      assert_match(/Missing \$EDITOR/, stderr)
     end
 
     # with EDITOR set to `cat`, `kbsecret conf` should output the configuration
@@ -34,7 +34,7 @@ class CLIConfTest < Minitest::Test
     # with EDITOR unset, `kbsecret conf -c` should produce an error message
     delete_environment_variable "EDITOR"
     kbsecret "conf -c", interactive: false do |_, stderr|
-      assert_match(/You need to set \$EDITOR/, stderr)
+      assert_match(/Missing \$EDITOR/, stderr)
     end
 
     # with EDITOR set to `cat`, `kbsecret conf -c` should output the commands configuration

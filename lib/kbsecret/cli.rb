@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "cli/command"
+
 require "slop"
 require "dreck"
 require "abbrev"
@@ -47,14 +49,14 @@ module KBSecret
     #
     #  cmd.opts # => Slop::Result
     #  cmd.args # => Dreck::Result
-    def self.create(&block)
-      CLI.new(&block)
+    def self.create(argv = ARGV, &block)
+      CLI.new(argv, &block)
     end
 
     # @api private
     # @deprecated see {create}
-    def initialize
-      @argv = ARGV.dup
+    def initialize(argv = ARGV)
+      @argv = argv.dup
       guard { yield self }
     end
 

@@ -5,7 +5,7 @@ require "forwardable"
 
 module KBSecret
   module Record
-    # Represents an abstract kbsecret record that can be subclassed to produce
+    # Represents an abstract {KBSecret} record that can be subclassed to produce
     # more useful records.
     # @abstract
     class Abstract

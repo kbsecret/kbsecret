@@ -12,22 +12,24 @@ Dir[File.join(__dir__, "record/*.rb")].each { |t| require_relative t }
 module KBSecret
   # The namespace for {KBSecret} record types.
   module Record
+    module_function
+
     # @return [Array<Class>] the class objects of all non-abstract record types
-    def self.record_classes
+    def record_classes
       klasses = constants.map(&Record.method(:const_get)).grep(Class)
       klasses.delete(Record::Abstract)
       klasses
     end
 
     # @return [Array<Symbol>] the types of all records
-    def self.record_types
+    def record_types
       record_classes.map(&:type)
     end
 
     # @param type [String, Symbol] the record type
     # @return [Class] the record class corresponding to the given type
     # @raise [Exceptions::RecordTypeUnknownError] if the requested type is unknown
-    def self.class_for(type)
+    def class_for(type)
       klass = record_classes.find { |c| c.type == type.to_sym }
       raise Exceptions::RecordTypeUnknownError, type unless klass
       klass
@@ -35,7 +37,7 @@ module KBSecret
 
     # @param type [String, Symbol] the record type
     # @return [Boolean] whether a record class exists of the given type
-    def self.type?(type)
+    def type?(type)
       return false unless type
       record_types.include?(type.to_sym)
     end
@@ -46,7 +48,7 @@ module KBSecret
     # @return [Record::AbstractRecord] the loaded record
     # @raise [Exceptions::RecordLoadError] if an error occurs during record loading
     # @api private
-    def self.load_record!(session, path)
+    def load_record!(session, path)
       hsh   = JSON.parse(File.read(path), symbolize_names: true)
       klass = class_for hsh[:type]
       klass.load!(session, hsh)
