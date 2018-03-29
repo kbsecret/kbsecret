@@ -65,7 +65,7 @@ module KBSecret
     # Writes the user's configuration to disk.
     # @return [void]
     def self.sync!
-      File.open(CONFIG_FILE, "w") { |io| io.write @config.to_yaml }
+      File.write(CONFIG_FILE, @config.to_yaml)
     end
 
     # Retrieve a configured value.
