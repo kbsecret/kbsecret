@@ -3,13 +3,10 @@ rvm:
     - 2.3
     - 2.4
     - 2.5
-matrix:
-  allow_failures:
-    - rvm: 2.5
 cache: bundler
 sudo: required
 before_install:
-  - gem update --system # https://github.com/travis-ci/travis-ci/issues/8978
+  - gem install bundler # https://github.com/travis-ci/travis-ci/issues/9333#issuecomment-373042916
   - bash test/ci/setup.sh
 script:
   - COVERALLS=1 make test
