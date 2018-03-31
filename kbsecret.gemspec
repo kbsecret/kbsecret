@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
   s.license               = "MIT"
 
   # these need to be installed by developers alone
-  s.add_development_dependency "aruba", "~> 1.0.0.pre.alpha.2" # make test-cli
   s.add_development_dependency "minitest", "~> 5.10" # make test
   s.add_development_dependency "rake", "~> 12.0" # make test
   s.add_development_dependency "ronn", "~> 0.7.3" # make man

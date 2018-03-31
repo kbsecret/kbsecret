@@ -10,7 +10,6 @@ before_install:
   - bash test/ci/setup.sh
 script:
   - COVERALLS=1 make test
-  - make test-cli
 after_script:
   - bash test/ci/teardown.sh
 notifications:

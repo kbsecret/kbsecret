@@ -43,10 +43,6 @@ ronnpp:
 test:
 	bundle exec rake test
 
-.PHONY: test-cli
-test-cli:
-	bundle exec rake test-cli
-
 .PHONY: coverage
 coverage:
 	COVERAGE=1 bundle exec rake test
