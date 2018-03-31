@@ -8,18 +8,18 @@ require "octokit"
 
 REPO = "kbsecret/kbsecret"
 
-def hai(s)
-  puts "[+] #{s}"
+def hai(msg)
+  puts "[+] #{msg}"
 end
 
-def bai(s)
-  STDERR.puts "[!] #{s}"
+def bai(msg)
+  STDERR.puts "[!] #{msg}"
   exit 1
 end
 
-def make(t)
-  hai "make #{t}"
-  `make #{t}`
+def make(target)
+  hai "make #{target}"
+  `make #{target}`
 end
 
 api_key = `kbsecret env -s keys -v kbsecret-release-github-api`.chomp
