@@ -28,6 +28,11 @@ module KBSecret
           end
         end
 
+        # @return [Hash, nil] the configuration for the command, if any.
+        def self.config
+          KBSecret::Config.command(command_name)
+        end
+
         # Sets up any state used by the command. Implemented by children.
         # @abstract
         def setup!
