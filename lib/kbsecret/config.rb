@@ -95,6 +95,21 @@ module KBSecret
       @command_config.dig(cmd, "args")&.shellsplit || []
     end
 
+    # Attempt to resolve an alias into a `kbsecret` command.
+    # @param acmd [String] the command alias
+    # @return [String] the `kbsecret` command, or `acmd` if the alias does not exist
+    # @example
+    #  Config.unalias_command("l") # => "list"
+    #  Config.unalias_command("madeup") # => "madeup"
+    def self.unalias_command(acmd)
+      @command_config.each do |cmd, conf|
+        aliases = conf["aliases"]&.split || []
+        return cmd if aliases.include?(acmd)
+      end
+
+      acmd
+    end
+
     # @!method session(label)
     #   Retrieve a session's configuration.
     #   @param label [String, Symbol] the session's label
