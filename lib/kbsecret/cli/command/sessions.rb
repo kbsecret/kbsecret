@@ -22,7 +22,7 @@ module KBSecret
         def run!
           Config.session_labels.each do |sess_name|
             session_hash = Config.session(sess_name)
-            session      = cli.guard { Session[sess_name] }
+            session      = cli.guard { KBSecret::Session[sess_name] }
 
             puts sess_name
 
