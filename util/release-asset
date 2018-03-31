@@ -67,4 +67,8 @@ hai "Attaching the tarball to the release"
 
 client.upload_asset(release.url, asset_path, name: asset)
 
+hai "Cleaning up"
+
+make "clean"
+
 hai "Done!"
