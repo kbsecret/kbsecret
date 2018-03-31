@@ -47,7 +47,7 @@ module KBSecret
         # @see Command::Abstract#run!
         def run!
           contents = if @filename == "-"
-                       STDIN.read
+                       KBSecret::CLI.stdin.read
                      elsif File.file?(@filename)
                        File.read(@filename)
                      end

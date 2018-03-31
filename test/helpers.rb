@@ -19,6 +19,42 @@ require "kbsecret"
 
 # Helper methods for unit tests.
 module Helpers
+  # Helper methods for CLI unit tests.
+  module CLI
+    def kbsecret(cmd, *args, input: "")
+      pipes = {
+        stdin: IO.pipe,
+        stdout: IO.pipe,
+        stderr: IO.pipe,
+      }
+
+      pipes[:stdin][1].puts input
+
+      fork do
+        # child: close the stdin writer, and stdout/stdin readers
+        pipes[:stdin][1].close
+        pipes[:stdout][0].close
+        pipes[:stderr][0].close
+
+        $stdin = pipes[:stdin][0]
+        $stdout = pipes[:stdout][1]
+        $stderr = pipes[:stderr][1]
+
+        KBSecret::CLI::Command.run!(cmd, *args)
+      end
+
+      # parent: close the stdin reader/writer, and stdout/stderr writers
+      pipes[:stdin][0].close
+      pipes[:stdin][1].close
+      pipes[:stdout][1].close
+      pipes[:stderr][1].close
+
+      Process.wait
+
+      [pipes[:stdout][0].read, pipes[:stderr][0].read]
+    end
+  end
+
   def unique_label_and_session
     label = SecureRandom.hex(10).to_sym
     hsh = {

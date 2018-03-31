@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "helpers"
+require "helpers"
 
+# Tests for KBSecret::CLI.
 class KBSecretCLITest < Minitest::Test
   include Helpers
 

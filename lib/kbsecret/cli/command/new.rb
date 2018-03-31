@@ -58,7 +58,7 @@ module KBSecret
           generator = KBSecret::Generator.new(cli.opts[:generator]) if cli.opts.generate?
 
           fields = if cli.opts.terse?
-                     STDIN.read.chomp.split cli.opts[:ifs]
+                     CLI.stdin.read.chomp.split cli.opts[:ifs]
                    else
                      prompt = TTY::Prompt.new
                      klass = Record.class_for(@type)

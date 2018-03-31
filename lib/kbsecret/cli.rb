@@ -60,7 +60,7 @@ module KBSecret
       guard { yield self }
     end
 
-    # Parse options for a kbsecret utility, adding some default options for
+    # Parse options for a `kbsecret` command, adding some default options for
     #  introspection, verbosity, and help output.
     # @param cmds [Array<String>] additional commands to print in `--introspect-flags`
     # @param errors [Boolean] whether or not to produce Slop errors
@@ -91,7 +91,7 @@ module KBSecret
       @argv = @opts.args
     end
 
-    # Parse trailing arguments for a kbsecret utility, using the elements remaining
+    # Parse trailing arguments for a `kbsecret` command, using the elements remaining
     #  after options have been removed and interpreted via {#slop}.
     # @param errors [Boolean] whether or not to produce (strict) Dreck errors
     # @note *If* {#slop} is called, it must be called before this.
@@ -151,7 +151,7 @@ module KBSecret
     def guard
       yield
     rescue => e
-      STDERR.puts e.backtrace if @opts&.debug?
+      self.stderr.puts e.backtrace if @opts&.debug?
       die "#{e.to_s.capitalize}."
     end
 
@@ -159,7 +159,7 @@ module KBSecret
     # @param msg [String] the message to print
     # @return [void]
     def info(msg)
-      STDERR.puts "#{GREEN["Info"]}: #{msg}"
+      self.stderr.puts "#{GREEN["Info"]}: #{msg}"
     end
 
     # Print an information message, but only if verbose output has been enabled.
@@ -184,7 +184,7 @@ module KBSecret
     # @return [void]
     def warn(msg)
       return if @opts.no_warn?
-      STDERR.puts "#{YELLOW["Warning"]}: #{msg}"
+      self.stderr.puts "#{YELLOW["Warning"]}: #{msg}"
     end
 
     # Print an error message and terminate.
@@ -196,22 +196,38 @@ module KBSecret
       abort pretty
     end
 
-    class << self
-      # Print an error message and terminate.
-      # @param msg [String] the message to print
-      # @return [void]
-      # @note This method does not return!
-      def die(msg)
-        pretty = "#{RED["Fatal"]}: #{msg}"
-        abort pretty
-      end
+    # Print an error message and terminate.
+    # @param msg [String] the message to print
+    # @return [void]
+    # @note This method does not return!
+    def self.die(msg)
+      pretty = "#{RED["Fatal"]}: #{msg}"
+      abort pretty
+    end
 
-      # Finds a reasonable default field separator by checking the environment first
-      #  and then falling back to ":".
-      # @return [String] the field separator
-      def ifs
-        ENV["IFS"] || ":"
-      end
+    # Finds a reasonable default field separator by checking the environment first
+    #  and then falling back to ":".
+    # @return [String] the field separator
+    def self.ifs
+      ENV["IFS"] || ":"
+    end
+
+    # @return [IO] the IO object corresponding to the current standard input
+    # @note Internal `kbsecret` commands should use this, and not `STDIN`.
+    def self.stdin
+      $stdin
+    end
+
+    # @return [IO] the IO object corresponding to the current standard output
+    # @note Internal `kbsecret` commands should use this, and not `STDOUT`.
+    def self.stdout
+      $stdout
+    end
+
+    # @return [IO] the IO object corresponding to the current standard error
+    # @note Internal `kbsecret` commands should use this, and not `STDERR`.
+    def self.stderr
+      $stderr
     end
   end
 end
