@@ -40,11 +40,11 @@ ronnpp:
 	for f in man/man5/*.ronnpp; do ./man/ronnpp < $$f > man/man5/$$(basename $$f .ronnpp).ronn; done
 
 .PHONY: test
-test:
+test: clean
 	bundle exec rake test
 
 .PHONY: coverage
-coverage:
+coverage: clean
 	COVERAGE=1 bundle exec rake test
 
 .PHONY: lint
