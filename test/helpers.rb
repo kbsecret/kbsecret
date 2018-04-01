@@ -35,8 +35,10 @@ module Helpers
       pipes[:stdin][1].puts input
 
       fork do
-        SimpleCov.command_name SecureRandom.uuid
-        SimpleCov.start
+        if ENV["COVERAGE"]
+          SimpleCov.command_name SecureRandom.uuid
+          SimpleCov.start
+        end
 
         # child: close the stdin writer, and stdout/stdin readers
         pipes[:stdin][1].close
