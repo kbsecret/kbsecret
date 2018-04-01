@@ -9,7 +9,7 @@ before_install:
   - gem install bundler # https://github.com/travis-ci/travis-ci/issues/9333#issuecomment-373042916
   - bash test/ci/setup.sh
 script:
-  - COVERALLS=1 make test
+  - COVERAGE=1 make test
 after_script:
   - bash test/ci/teardown.sh
 notifications:

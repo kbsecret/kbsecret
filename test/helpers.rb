@@ -3,9 +3,9 @@
 if ENV["COVERAGE"]
   require "simplecov"
   SimpleCov.start
-elsif ENV["COVERALLS"]
-  require "coveralls"
-  Coveralls.wear!
+
+  require "codecov"
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
 require "yaml"
