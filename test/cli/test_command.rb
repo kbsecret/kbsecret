@@ -6,9 +6,9 @@ require "helpers"
 class KBSecretCommandTest < Minitest::Test
   include Helpers
 
-  def test_command_classes_and_names
-    command_classes = KBSecret::CLI::Command.command_classes
-    command_names = KBSecret::CLI::Command.command_names
+  def test_internal_command_classes_and_names
+    command_classes = KBSecret::CLI::Command.internal_command_classes
+    command_names = KBSecret::CLI::Command.internal_command_names
 
     # command_classes and command_names are both arrays, and both are non-empty
     assert_instance_of Array, command_classes
@@ -22,7 +22,7 @@ class KBSecretCommandTest < Minitest::Test
     # each member of command_names is a String and has a corresponding class in command_classes
     command_names.each do |cmd_name|
       assert_instance_of String, cmd_name
-      assert_instance_of Class, KBSecret::CLI::Command.command_for(cmd_name)
+      assert_instance_of Class, KBSecret::CLI::Command.internal_command_for(cmd_name)
     end
 
     # each member of command_classes is a Class, has a command_name in command_names,
