@@ -2,10 +2,19 @@
 
 if ENV["COVERAGE"]
   require "simplecov"
-  SimpleCov.start
+  SimpleCov.merge_timeout(3600)
 
-  require "codecov"
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  if ENV["CI"]
+    require "codecov"
+    SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  end
+
+  pid = Process.pid
+  SimpleCov.at_exit do
+    SimpleCov.result.format! if Process.pid == pid
+  end
+
+  SimpleCov.start
 end
 
 require "yaml"
@@ -31,6 +40,8 @@ module Helpers
       pipes[:stdin][1].puts input
 
       fork do
+        SimpleCov.command_name Process.pid.to_s
+
         # child: close the stdin writer, and stdout/stdin readers
         pipes[:stdin][1].close
         pipes[:stdout][0].close
