@@ -1,4 +1,4 @@
-# we need this for `make pkg`, since we do some directory traversal
+# we need this for `make man`, since we do some directory traversal
 SHELL:=/bin/bash
 
 BASH_M4=completions/kbsecret.bash.m4
