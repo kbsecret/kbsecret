@@ -11,6 +11,7 @@ class KBSecretCommandListTest < Minitest::Test
     list_helps = [
       %w[list --help],
       %w[list -h],
+      %w[help list],
     ]
 
     list_helps.each do |list_help|

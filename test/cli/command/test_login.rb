@@ -7,6 +7,19 @@ class KBSecretCommandLoginTest < Minitest::Test
   include Helpers
   include Helpers::CLI
 
+  def test_login_help
+    login_helps = [
+      %w[login --help],
+      %w[login -h],
+      %w[help login],
+    ]
+
+    login_helps.each do |login_help|
+      stdout, = kbsecret(*login_help)
+      assert_match(/Usage:/, stdout)
+    end
+  end
+
   def test_login_too_few_arguments
     _, stderr = kbsecret "login"
 

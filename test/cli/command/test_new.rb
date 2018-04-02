@@ -7,6 +7,19 @@ class KBSecretCommandNewTest < Minitest::Test
   include Helpers
   include Helpers::CLI
 
+  def test_new_help
+    new_helps = [
+      %w[new --help],
+      %w[new -h],
+      %w[help new],
+    ]
+
+    new_helps.each do |new_help|
+      stdout, = kbsecret(*new_help)
+      assert_match(/Usage:/, stdout)
+    end
+  end
+
   def test_new_login_record
     kbsecret "new", "login", "test-new-login", input: "foo\nbar\n"
 
