@@ -62,6 +62,14 @@ module Helpers
 
       [pipes[:stdout][0].read, pipes[:stderr][0].read]
     end
+
+    def with_env(env)
+      real_env = ENV.to_h
+      ENV.update(env)
+      yield
+    ensure
+      ENV.update real_env
+    end
   end
 
   def unique_label_and_session
