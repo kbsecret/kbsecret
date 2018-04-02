@@ -61,7 +61,7 @@ class KBSecretCommandNewTest < Minitest::Test
     kbsecret "rm", "test-new-todo"
   end
 
-  def test_terse_input
+  def test_new_terse_input
     kbsecret "new", "login", "test-new-terse1", "-x", input: "foo:bar\n"
     kbsecret "new", "login", "test-new-terse2", "-xi", "~", input: "baz~quux\n"
 
@@ -76,7 +76,7 @@ class KBSecretCommandNewTest < Minitest::Test
     kbsecret "rm", "test-new-terse1", "test-new-terse2"
   end
 
-  def test_generator_input
+  def test_new_generator_input
     # test the default generator profile first
     kbsecret "new", "login", "test-new-generate1", "-G", input: "foo\n"
 
@@ -103,5 +103,9 @@ class KBSecretCommandNewTest < Minitest::Test
   ensure
     kbsecret "rm", "test-new-generate1", "test-new-generate2"
     kbsecret "generator", "rm", "test-generator"
+  end
+
+  def test_new_accepts_session
+    skip
   end
 end
