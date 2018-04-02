@@ -22,6 +22,19 @@ class KBSecretCommandConfTest < Minitest::Test
     ENV["EDITOR"] = old_editor
   end
 
+  def test_conf_opens_config
+    with_env("EDITOR" => "cat") do
+      stdout, = kbsecret "conf"
+
+      assert_match(/:mount:/, stdout)
+    end
+  end
+
+  def test_conf_opens_command_config
+    # XXX: this isn't guaranteed to exist on disk, so i'm not sure how to test this yet
+    skip
+  end
+
   def test_conf_emits_conf_dir
     with_env("EDITOR" => "cat") do
       stdout, = kbsecret "conf", "-d"
