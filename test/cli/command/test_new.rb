@@ -77,9 +77,6 @@ class KBSecretCommandNewTest < Minitest::Test
   end
 
   def test_generator_input
-    # XXX: KBSecret::Config needs to be significantly refactored so that changes to
-    # sessions/generators appear at once.
-    skip
     # test the default generator profile first
     kbsecret "new", "login", "test-new-generate1", "-G", input: "foo\n"
 
@@ -92,6 +89,11 @@ class KBSecretCommandNewTest < Minitest::Test
 
     # create a custom generator, and use it
     kbsecret "generator", "new", "test-generator", "-F", "hex", "-l", "16"
+
+    # N.B. we need to call this because the prior `generator` call only updates `Config`
+    # in its copy of the process.
+    KBSecret::Config.load!
+
     kbsecret "new", "login", "test-new-generate2", "-Gg", "test-generator", input: "baz\n"
 
     login2 = KBSecret::Session[:default]["test-new-generate2"]
