@@ -106,6 +106,45 @@ class KBSecretCommandNewTest < Minitest::Test
   end
 
   def test_new_accepts_session
-    skip
+    session_label = "new-test-session"
+
+    kbsecret "session", "new", session_label, "-r", session_label
+
+    # N.B. we need to call this because the prior `session` call only updates `Config`
+    # in its copy of the process.
+    KBSecret::Config.load!
+
+    kbsecret "new", "login", "-s", session_label, "test-new-session", input: "foo\nbar\n"
+
+    refute KBSecret::Session[:default].record?("test-new-session")
+    assert KBSecret::Session[session_label].record?("test-new-session")
+  ensure
+    kbsecret "session", "rm", "-d", session_label
+  end
+
+  def test_new_fails_on_overwrite
+    kbsecret "new", "login", "test-new-overwrite", input: "foo\nbar\n"
+    _, stderr = kbsecret "new", "login", "test-new-overwrite", input: "baz\nquux\n"
+
+    assert_match(/Refusing to overwrite a record without --force/, stderr)
+
+    login = KBSecret::Session[:default]["test-new-overwrite"]
+
+    assert_equal "foo", login.username
+    assert_equal "bar", login.password
+  ensure
+    kbsecret "rm", "test-new-overwrite"
+  end
+
+  def test_new_force_overwrite
+    kbsecret "new", "login", "test-new-force-overwrite", input: "foo\nbar\n"
+    kbsecret "new", "login", "-f", "test-new-force-overwrite", input: "baz\nquux\n"
+
+    login = KBSecret::Session[:default]["test-new-force-overwrite"]
+
+    assert_equal "baz", login.username
+    assert_equal "quux", login.password
+  ensure
+    kbsecret "rm", "test-new-force-overwrite"
   end
 end
