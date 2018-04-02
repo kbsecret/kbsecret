@@ -27,9 +27,9 @@ module KBSecret
                    Command.internal_command_names
                  else
                    Command.all_command_names
-                 end
+                 end.join "\n"
 
-          puts cmds.join "\n"
+          puts cmds unless cmds.empty?
         end
       end
     end
