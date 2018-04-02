@@ -62,6 +62,27 @@ module KBSecret
       generators: DEFAULT_GENERATOR.dup,
     }.freeze
 
+    # Reads the user's configuration files from disk, introducing default values as necessary.
+    # @return [void]
+    # @api private
+    def self.load!
+      user_config = if File.exist?(CONFIG_FILE)
+                      YAML.load_file(CONFIG_FILE)
+                    else
+                      DEFAULT_CONFIG
+                    end
+
+      @command_config = if File.exist?(COMMAND_CONFIG_FILE)
+                          INIH.load(COMMAND_CONFIG_FILE)
+                        else
+                          {}
+                        end
+
+      @config = DEFAULT_CONFIG.merge(user_config)
+      @config[:sessions].merge!(DEFAULT_SESSION)
+      @config[:generators].merge!(DEFAULT_GENERATOR)
+    end
+
     # Writes the user's configuration to disk.
     # @return [void]
     def self.sync!
@@ -179,25 +200,10 @@ module KBSecret
       end
     end
 
-    user_config = if File.exist?(CONFIG_FILE)
-                    YAML.load_file(CONFIG_FILE)
-                  else
-                    DEFAULT_CONFIG
-                  end
-
-    @command_config = if File.exist?(COMMAND_CONFIG_FILE)
-                        INIH.load(COMMAND_CONFIG_FILE)
-                      else
-                        {}
-                      end
-
-    @config = DEFAULT_CONFIG.merge(user_config)
-    @config[:sessions].merge!(DEFAULT_SESSION)
-    @config[:generators].merge!(DEFAULT_GENERATOR)
-
     FileUtils.mkdir_p CONFIG_DIR
     FileUtils.mkdir_p CUSTOM_TYPES_DIR
 
+    load!
     sync!
   end
 end
