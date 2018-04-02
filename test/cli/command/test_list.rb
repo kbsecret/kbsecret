@@ -51,7 +51,8 @@ class KBSecretCommandListTest < Minitest::Test
   end
 
   def test_list_accepts_session
-    skip # flaky
+    # XXX: Probably the same issue afflicting generators.
+    skip
     session_label = "list-test-session"
 
     kbsecret "session", "new", session_label, "-r", session_label
