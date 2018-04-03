@@ -72,9 +72,7 @@ module KBSecret
                      end
                    end
 
-          cli.guard do
-            cli.session.add_record @type, @label, *fields, overwrite: cli.opts.force?
-          end
+          cli.session.add_record @type, @label, *fields, overwrite: cli.opts.force?
         end
       end
     end

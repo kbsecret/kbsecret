@@ -67,13 +67,11 @@ module KBSecret
 
             unless teams.map(&:fq_name).include?(cli.opts[:team])
               if cli.opts.create_team?
-                cli.guard do
-                  Keybase::Local::Team.create_team cli.opts[:team]
-                  Keybase::Local::Team.add_members cli.opts[:team], users: [{
-                    username: Keybase::Local.current_user,
-                    role: "admin",
-                  }]
-                end
+                Keybase::Local::Team.create_team cli.opts[:team]
+                Keybase::Local::Team.add_members cli.opts[:team], users: [{
+                  username: Keybase::Local.current_user,
+                  role: "admin",
+                }]
               else
                 cli.die "No such team (either nonexistent or non-member)."
               end
