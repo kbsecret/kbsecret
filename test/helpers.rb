@@ -68,6 +68,7 @@ module Helpers
       ENV.update(env)
       yield
     ensure
+      ENV.delete_if { |k, _| env.key?(k) }
       ENV.update real_env
     end
   end
