@@ -9,9 +9,9 @@ class KBSecretCommandCommandsTest < Minitest::Test
 
   def test_commands_help
     commands_helps = [
-      %w[help --help],
-      %w[help -h],
-      %w[help help],
+      %w[commands --help],
+      %w[commands -h],
+      %w[help commands],
     ]
 
     commands_helps.each do |commands_help|

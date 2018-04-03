@@ -9,9 +9,9 @@ class KBSecretCommandGeneratorsTest < Minitest::Test
 
   def test_generators_help
     generators_helps = [
-      %w[help --help],
-      %w[help -h],
-      %w[help help],
+      %w[generators --help],
+      %w[generators -h],
+      %w[help generators],
     ]
 
     generators_helps.each do |generators_help|

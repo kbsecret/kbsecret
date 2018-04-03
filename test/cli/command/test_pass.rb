@@ -9,9 +9,9 @@ class KBSecretCommandPassTest < Minitest::Test
 
   def test_pass_help
     pass_helps = [
-      %w[help --help],
-      %w[help -h],
-      %w[help help],
+      %w[pass --help],
+      %w[pass -h],
+      %w[help pass],
     ]
 
     pass_helps.each do |pass_help|
