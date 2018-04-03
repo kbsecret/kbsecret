@@ -27,8 +27,8 @@ module KBSecret
 
         # @see Command::Abstract#run!
         def run!
-          src_sess = Session[cli.args[:src_sess]]
-          dst_sess = Session[cli.args[:dst_sess]]
+          src_sess = KBSecret::Session[cli.args[:src_sess]]
+          dst_sess = KBSecret::Session[cli.args[:dst_sess]]
 
           selected_records = src_sess.records.select { |r| cli.args[:labels].include?(r.label) }
           cli.die "No such record(s)." if selected_records.empty?
@@ -43,7 +43,7 @@ module KBSecret
 
           selected_records.each do |record|
             dst_sess.import_record(record, overwrite: cli.opts.force?)
-            src_sess.delete_record(label) if cli.opts.move?
+            src_sess.delete_record(record.label) if cli.opts.move?
           end
         end
       end
