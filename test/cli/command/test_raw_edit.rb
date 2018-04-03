@@ -41,9 +41,11 @@ class KBSecretCommandRawEditTest < Minitest::Test
   end
 
   def test_raw_edit_no_such_record
-    _, stderr = kbsecret "raw-edit", "this_record_really_should_not_exist"
+    with_env("EDITOR" => "cat") do
+      _, stderr = kbsecret "raw-edit", "this_record_really_should_not_exist"
 
-    assert_match(/No such record/, stderr)
+      assert_match(/No such record/, stderr)
+    end
   end
 
   def test_raw_edit_opens_record
