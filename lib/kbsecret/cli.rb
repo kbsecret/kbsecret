@@ -151,7 +151,7 @@ module KBSecret
     def guard
       yield
     rescue => e
-      self.stderr.puts e.backtrace if @opts&.debug?
+      self.class.stderr.puts e.backtrace if @opts&.debug?
       die "#{e.to_s.capitalize}."
     end
 
@@ -159,7 +159,7 @@ module KBSecret
     # @param msg [String] the message to print
     # @return [void]
     def info(msg)
-      self.stderr.puts "#{GREEN["Info"]}: #{msg}"
+      self.class.stderr.puts "#{GREEN["Info"]}: #{msg}"
     end
 
     # Print an information message, but only if verbose output has been enabled.
@@ -184,7 +184,7 @@ module KBSecret
     # @return [void]
     def warn(msg)
       return if @opts.no_warn?
-      self.stderr.puts "#{YELLOW["Warning"]}: #{msg}"
+      self.class.stderr.puts "#{YELLOW["Warning"]}: #{msg}"
     end
 
     # Print an error message and terminate.
