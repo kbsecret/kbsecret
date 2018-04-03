@@ -64,13 +64,16 @@ module KBSecret
       # @param command_name [String] the CLI-friendly name of the internal command to run
       # @param args [Array<String>] the arguments, if any, to pass to the command
       # @note This method only takes **internal** command names.
+      # @note This method *may* not return!
       # @return [void]
       def run!(command_name, *args)
         klass = internal_command_for command_name
         cmd = klass.new(args)
-        cmd.setup!
-        cmd.validate!
-        cmd.run!
+        cmd.cli.guard do
+          cmd.setup!
+          cmd.validate!
+          cmd.run!
+        end
       end
     end
   end
