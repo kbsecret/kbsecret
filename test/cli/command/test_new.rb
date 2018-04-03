@@ -103,10 +103,6 @@ class KBSecretCommandNewTest < Minitest::Test
     # create a custom generator, and use it
     kbsecret "generator", "new", "test-generator", "-F", "hex", "-l", "16"
 
-    # N.B. we need to call this because the prior `generator` call only updates `Config`
-    # in its copy of the process.
-    KBSecret::Config.load!
-
     kbsecret "new", "login", "test-new-generate2", "-Gg", "test-generator", input: "baz\n"
 
     login2 = KBSecret::Session[:default]["test-new-generate2"]
@@ -115,6 +111,7 @@ class KBSecretCommandNewTest < Minitest::Test
     assert_match(/\h{32}/, login2.password) # 32 hex chars = 16 bytes randomness
   ensure
     kbsecret "rm", "test-new-generate1", "test-new-generate2"
+    # KBSecret::Config.deconfigure_generator "test-generator"
     kbsecret "generator", "rm", "test-generator"
   end
 
@@ -122,10 +119,6 @@ class KBSecretCommandNewTest < Minitest::Test
     session_label = "new-test-session"
 
     kbsecret "session", "new", session_label, "-r", session_label
-
-    # N.B. we need to call this because the prior `session` call only updates `Config`
-    # in its copy of the process.
-    KBSecret::Config.load!
 
     kbsecret "new", "login", "-s", session_label, "test-new-session", input: "foo\nbar\n"
 

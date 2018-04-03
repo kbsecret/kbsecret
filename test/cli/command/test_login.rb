@@ -156,10 +156,6 @@ class KBSecretCommandLoginTest < Minitest::Test
 
     kbsecret "session", "new", session_label, "-r", session_label
 
-    # N.B. we need to call this because the prior `session` call only updates `Config`
-    # in its copy of the process.
-    KBSecret::Config.load!
-
     kbsecret "new", "-s", session_label, "login", "test-login-session", input: "foo\nbar\n"
 
     stdout, = kbsecret "login", "-s", session_label, "test-login-session"

@@ -101,10 +101,6 @@ class KBSecretCommandEnvTest < Minitest::Test
 
     kbsecret "session", "new", session_label, "-r", session_label
 
-    # N.B. we need to call this because the prior `session` call only updates `Config`
-    # in its copy of the process.
-    KBSecret::Config.load!
-
     kbsecret "new", "-s", session_label, "environment", "test-env-session", input: "var\nval\n"
 
     stdout, = kbsecret "env", "-s", session_label, "test-env-session"

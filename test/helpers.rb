@@ -34,7 +34,7 @@ module Helpers
 
       pipes[:stdin][1].puts input
 
-      fork do
+      pid = fork do
         if ENV["COVERAGE"]
           SimpleCov.command_name SecureRandom.uuid
           SimpleCov.start
@@ -49,6 +49,7 @@ module Helpers
         $stdout = pipes[:stdout][1]
         $stderr = pipes[:stderr][1]
 
+        KBSecret::Config.load!
         KBSecret::CLI::Command.run!(cmd, *args)
       end
 
@@ -58,8 +59,9 @@ module Helpers
       pipes[:stdout][1].close
       pipes[:stderr][1].close
 
-      Process.wait
+      Process.wait pid
 
+      KBSecret::Config.load!
       [pipes[:stdout][0].read, pipes[:stderr][0].read]
     end
 
