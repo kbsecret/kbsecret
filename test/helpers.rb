@@ -12,8 +12,10 @@ if ENV["COVERAGE"]
   SimpleCov.start
 end
 
+require "base64"
 require "yaml"
 require "tmpdir"
+require "tempfile"
 require "fileutils"
 require "securerandom"
 require "minitest/autorun"
