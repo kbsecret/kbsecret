@@ -12,17 +12,18 @@ module KBSecret
             cli.slop do |o|
               o.banner = <<~HELP
                 Usage:
-                  kbsecret stash-file <record> [file]
+                  kbsecret stash-file <record> [filename]
               HELP
 
               o.string "-s", "--session", "the session to add to", default: :default
               o.bool "-f", "--force", "force creation (ignore overwrites, etc.)"
               o.bool "-b", "--base64", "encode the file as base64"
+              o.bool "-", "--stdin", "read from stdin instead of a filename"
             end
 
             cli.dreck do
               string :label
-              string :filename
+              string :filename unless cli.opts.stdin?
             end
 
             cli.ensure_session!
@@ -41,20 +42,22 @@ module KBSecret
             cli.die "Refusing to overwrite a record without --force."
           end
 
-          cli.die "No such file." unless File.file?(@filename) || @filename == "-"
+          if @filename
+            cli.die "No such file." unless File.file?(@filename)
+          end
         end
 
         # @see Command::Abstract#run!
         def run!
-          contents = if @filename == "-"
+          contents = if cli.opts.stdin?
                        KBSecret::CLI.stdin.read
-                     elsif File.file?(@filename)
+                     else
                        File.read(@filename)
                      end
 
           contents = Base64.encode64(contents) if cli.opts.base64?
 
-          cli.guard { cli.session.add_record(:unstructured, @label, contents) }
+          cli.session.add_record(:unstructured, @label, contents, overwrite: cli.opts.force?)
         end
       end
     end
