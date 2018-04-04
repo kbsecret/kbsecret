@@ -28,7 +28,7 @@ $ bundle exec ./bin/kbsecret help
 ### Manual Pages
 
 KBSecret's manual pages can be found online
-[here](https://yossarian.net/docs/kbsecret-man/kbsecret.1).
+[here](https://kbsecret.github.io/man/kbsecret.1.html).
 
 If you'd like to generate the roff versions for `man(1)`, you'll need `ronn(1)`:
 
