@@ -46,7 +46,7 @@ module KBSecret
           tty = TTY::Prompt.new
 
           confirm = if cli.opts.interactive?
-                      tty.yes?("Delete '#{selected_records.join(", ")}'?")
+                      tty.yes?("Delete '#{@selected_records.join(", ")}'?")
                     else true
                     end
 
