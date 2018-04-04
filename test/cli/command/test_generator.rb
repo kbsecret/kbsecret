@@ -46,6 +46,7 @@ class KBSecretCommandGeneratorTest < Minitest::Test
     assert KBSecret::Config.generator?("test-generator-new-flags")
   ensure
     kbsecret "generator", "rm", "test-generator-new"
+    kbsecret "generator", "rm", "test-generator-new-flags"
   end
 
   def test_generator_rm
@@ -87,5 +88,7 @@ class KBSecretCommandGeneratorTest < Minitest::Test
 
     assert_equal :hex, gen.format
     assert_equal 16, gen.length
+  ensure
+    kbsecret "generator", "rm", "test-generator-overwrite"
   end
 end
