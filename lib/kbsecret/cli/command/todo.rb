@@ -36,7 +36,7 @@ module KBSecret
 
         # @see Command::Abstract#validate!
         def validate!
-          cli.die "No such todo record:." unless @todo && @todo.type == :todo
+          cli.die "No such todo record: #{@todo}." unless @todo && @todo.type == :todo
           cli.die "Unknown subcommand: #{@subcmd}." unless SUBCOMMANDS.include?(@subcmd)
         end
 
