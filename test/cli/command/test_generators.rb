@@ -30,14 +30,12 @@ class KBSecretCommandGeneratorsTest < Minitest::Test
   end
 
   def test_generators_output_all
-    # XXX: fixme
-    skip
     stdout, = kbsecret "generators", "-a"
 
     format_lines = stdout.lines.count { |line| line =~ /Format:/ }
     length_lines = stdout.lines.count { |line| line =~ /Length:/ }
 
-    assert_equal KBSecret::Config.generator_labels.size, format_lines.size
-    assert_equal KBSecret::Config.generator_labels.size, length_lines.size
+    assert_equal KBSecret::Config.generator_labels.size, format_lines
+    assert_equal KBSecret::Config.generator_labels.size, length_lines
   end
 end
