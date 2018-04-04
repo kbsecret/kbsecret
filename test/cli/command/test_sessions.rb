@@ -30,15 +30,12 @@ class KBSecretCommandSessionsTest < Minitest::Test
   end
 
   def test_sessions_outputs_all
-    # XXX: this is flaky due to something bad about the way i'm removing sessions in other
-    # tests.
-    skip
     stdout, = kbsecret "sessions", "-a"
 
     user_team_count = stdout.lines.count { |line| line =~ /(Team|Users):/ }
     secrets_root_count = stdout.lines.count { |lines| lines =~ /Secrets root:/ }
 
-    assert_equal KBSecret::Config.session_labels.size, user_team_count.size
-    assert_equal KBSecret::Config.session_labels.size, secrets_root_count.size
+    assert_equal KBSecret::Config.session_labels.size, user_team_count
+    assert_equal KBSecret::Config.session_labels.size, secrets_root_count
   end
 end
