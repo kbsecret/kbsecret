@@ -51,6 +51,7 @@ module KBSecret
 
         # Starts the todo associated with the current invocation, unless already started.
         # @return [void]
+        # @api private
         def start_todo
           cli.die "That task is already started!" if @todo.started?
           @todo.start!
@@ -59,6 +60,7 @@ module KBSecret
 
         # Suspends the todo associated with the current invocation, unless already suspended.
         # @return [void]
+        # @api private
         def suspend_todo
           cli.die "That task is already suspended!" if @todo.suspended?
           @todo.suspend!
@@ -67,6 +69,7 @@ module KBSecret
 
         # Completes the todo associated with the current invocation, unless already completed.
         # @return [void]
+        # @api private
         def complete_todo
           cli.die "That task is already completed!" if @todo.completed?
           @todo.complete!
