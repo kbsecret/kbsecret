@@ -59,8 +59,6 @@ class KBSecretCommandConfTest < Minitest::Test
 
       assert_match(/\[foo\]\nargs = --bar/, stdout)
     end
-  ensure
-    FileUtils.rm_rf KBSecret::Config::COMMAND_CONFIG_FILE
   end
 
   def test_conf_emits_conf_dir
