@@ -119,24 +119,21 @@ class KBSecretCommandLoginTest < Minitest::Test
   end
 
   def test_login_terse_custom_ifs
-    # XXX: use with_env here
-    old_ifs = ENV["IFS"]
-    expected1 = "test-login-ifs+foo+bar\n"
-    expected2 = "test-login-ifs@foo@bar\n"
+    with_env("IFS" => "@") do
+      expected1 = "test-login-ifs+foo+bar\n"
+      expected2 = "test-login-ifs@foo@bar\n"
 
-    kbsecret "new", "login", "test-login-ifs", input: "foo\nbar\n"
+      kbsecret "new", "login", "test-login-ifs", input: "foo\nbar\n"
 
-    stdout, = kbsecret "login", "test-login-ifs", "-xi", "+"
+      stdout, = kbsecret "login", "test-login-ifs", "-xi", "+"
 
-    assert_equal expected1, stdout
+      assert_equal expected1, stdout
 
-    ENV["IFS"] = "@"
+      stdout, = kbsecret "login", "test-login-ifs", "-x"
 
-    stdout, = kbsecret "login", "test-login-ifs", "-x"
-
-    assert_equal expected2, stdout
+      assert_equal expected2, stdout
+    end
   ensure
-    ENV["IFS"] = old_ifs
     kbsecret "rm", "test-login-ifs"
   end
 
