@@ -159,7 +159,8 @@ module KBSecret
     # @param msg [String] the message to print
     # @return [void]
     def info(msg)
-      self.class.stderr.puts "#{GREEN["Info"]}: #{msg}"
+      info = ENV["NO_COLOR"] ? "Info" : GREEN["Info"]
+      self.class.stderr.puts "#{info}: #{msg}"
     end
 
     # Print an information message, but only if verbose output has been enabled.
@@ -184,7 +185,8 @@ module KBSecret
     # @return [void]
     def warn(msg)
       return if @opts.no_warn?
-      self.class.stderr.puts "#{YELLOW["Warning"]}: #{msg}"
+      warning = ENV["NO_COLOR"] ? "Warning" : YELLOW["Warning"]
+      self.class.stderr.puts "#{warning}: #{msg}"
     end
 
     # Print an error message and terminate.
@@ -192,8 +194,8 @@ module KBSecret
     # @return [void]
     # @note This method does not return!
     def die(msg)
-      pretty = "#{RED["Fatal"]}: #{msg}"
-      abort pretty
+      fatal = ENV["NO_COLOR"] ? "Fatal" : RED["Fatal"]
+      abort "#{fatal}: #{msg}"
     end
 
     # Print an error message and terminate.
@@ -201,8 +203,8 @@ module KBSecret
     # @return [void]
     # @note This method does not return!
     def self.die(msg)
-      pretty = "#{RED["Fatal"]}: #{msg}"
-      abort pretty
+      fatal = ENV["NO_COLOR"] ? "Fatal" : RED["Fatal"]
+      abort "#{fatal}: #{msg}"
     end
 
     # Finds a reasonable default field separator by checking the environment first
