@@ -10,10 +10,11 @@ Gem::Specification.new do |s|
   s.authors               = ["William Woodruff"]
   s.email                 = "william@tuffbizz.com"
   s.files                 = Dir["LICENSE", "*.md", ".yardopts", "lib/**/*"]
-  s.executables           = Dir["bin/*"].map { |p| File.basename(p) }
   s.required_ruby_version = ">= 2.3.0"
   s.homepage              = "https://kbsecret.github.io"
   s.license               = "MIT"
+
+  s.executables << "kbsecret"
 
   # these need to be installed by developers alone
   s.add_development_dependency "minitest", "~> 5.10" # make test
