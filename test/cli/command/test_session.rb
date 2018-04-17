@@ -37,7 +37,16 @@ class KBSecretCommandSessionTest < Minitest::Test
   end
 
   def test_session_new_single_user
-    skip
+    kbsecret "session", "new", "test-session-new-single", "-r", "test-session-new-single"
+
+    assert KBSecret::Config.session?("test-session-new-single")
+
+    conf = KBSecret::Config.session("test-session-new-single")
+
+    assert_equal conf[:root], "test-session-new-single"
+    assert_equal conf[:users].size, 1
+  ensure
+    kbsecret "session", "rm", "-d", "test-session-new-single"
   end
 
   def test_session_new_multi_user
@@ -49,10 +58,32 @@ class KBSecretCommandSessionTest < Minitest::Test
   end
 
   def test_session_rm
-    skip
+    kbsecret "session", "new", "test-session-rm", "-r", "test-session-rm"
+
+    assert KBSecret::Config.session?("test-session-rm")
+
+    session_path = KBSecret::Session["test-session-rm"].path
+
+    kbsecret "session", "rm", "test-session-rm"
+
+    # Without -d, the session is removed but *not* deleted from disk.
+    refute KBSecret::Config.session?("test-session-rm")
+    assert Dir.exist?(session_path)
+  ensure
+    FileUtils.rm_rf session_path if session_path
   end
 
   def test_session_rm_and_unlink
-    skip
+    kbsecret "session", "new", "test-session-rm-unlink", "-r", "test-session-rm-unlink"
+
+    assert KBSecret::Config.session?("test-session-rm-unlink")
+
+    session_path = KBSecret::Session["test-session-rm-unlink"].path
+
+    kbsecret "session", "rm", "-d", "test-session-rm-unlink"
+
+    # With -d, the session is both removed *and* deleted from disk.
+    refute KBSecret::Config.session?("test-session-rm-unlink")
+    refute Dir.exist?(session_path)
   end
 end
