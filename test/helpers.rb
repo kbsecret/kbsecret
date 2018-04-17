@@ -27,7 +27,9 @@ require "kbsecret"
 module Helpers
   # Helper methods for CLI unit tests.
   module CLI
-    def kbsecret(cmd, *args, input: "")
+    # Like `capture_io` in MiniTest, but with a forked process instead so that the child can exit
+    # whenever it needs to.
+    def fork_capture_io(input: "")
       pipes = {
         stdin: IO.pipe,
         stdout: IO.pipe,
@@ -52,7 +54,7 @@ module Helpers
         $stderr = pipes[:stderr][1]
 
         KBSecret::Config.load!
-        KBSecret::CLI::Command.run!(cmd, *args)
+        yield
       end
 
       # parent: close the stdin reader/writer, and stdout/stderr writers
@@ -65,6 +67,12 @@ module Helpers
 
       KBSecret::Config.load!
       [pipes[:stdout][0].read, pipes[:stderr][0].read]
+    end
+
+    def kbsecret(cmd, *args, input: "")
+      fork_capture_io(input: input) do
+        KBSecret::CLI::Command.run!(cmd, *args)
+      end
     end
 
     def with_env(env)

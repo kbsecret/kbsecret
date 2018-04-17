@@ -5,6 +5,7 @@ require "helpers"
 # Tests for KBSecret::CLI.
 class KBSecretCLITest < Minitest::Test
   include Helpers
+  include Helpers::CLI
 
   def test_cli_default_options
     fake_argv [] do
@@ -178,5 +179,96 @@ class KBSecretCLITest < Minitest::Test
 
   def test_cli_ensure_generator
     skip
+  end
+
+  def test_cli_io
+    assert_instance_of IO, KBSecret::CLI.stdin
+    assert_instance_of IO, KBSecret::CLI.stdout
+    assert_instance_of IO, KBSecret::CLI.stderr
+
+    stdout, stderr = fork_capture_io do
+      KBSecret::CLI.stdout.puts "some junk on stdout"
+      KBSecret::CLI.stderr.puts "some junk on stderr"
+    end
+
+    assert_match "some junk on stdout", stdout
+    assert_match "some junk on stderr", stderr
+  end
+
+  def test_cli_info_output
+    cmd = KBSecret::CLI.create [] do |c|
+      c.slop { |_o| nil }
+    end
+
+    _, stderr = fork_capture_io do
+      cmd.info "informational message"
+    end
+
+    assert_match "informational message", stderr
+  end
+
+  def test_cli_verbose_output
+    cmd = KBSecret::CLI.create [] do |c|
+      c.slop { |_o| nil }
+    end
+
+    _, stderr = fork_capture_io do
+      cmd.verbose "verbose message"
+    end
+
+    # without --verbose, the verbose message shouldn't be printed
+    assert_empty stderr
+
+    cmd = KBSecret::CLI.create %w[--verbose] do |c|
+      c.slop { |_o| nil }
+    end
+
+    _, stderr = fork_capture_io do
+      cmd.verbose "verbose message"
+    end
+
+    assert_match "verbose message", stderr
+  end
+
+  def test_cli_warn_output
+    cmd = KBSecret::CLI.create %w[--no-warn] do |c|
+      c.slop { |_o| nil }
+    end
+
+    _, stderr = fork_capture_io do
+      cmd.warn "warning message"
+    end
+
+    # with --no-warn, the warning message shouldn't be printed
+    assert_empty stderr
+
+    cmd = KBSecret::CLI.create [] do |c|
+      c.slop { |_o| nil }
+    end
+
+    _, stderr = fork_capture_io do
+      cmd.warn "warning message"
+    end
+
+    assert_match "warning message", stderr
+  end
+
+  def test_cli_die_output
+    cmd = KBSecret::CLI.create [] do |c|
+      c.slop { |_o| nil }
+    end
+
+    _, stderr = fork_capture_io do
+      cmd.die "fatal message"
+    end
+
+    assert_match "fatal message", stderr
+
+    # the class method should behave identically
+    _, stderr = fork_capture_io do
+      KBSecret::CLI.die "fatal message"
+    end
+
+    assert_match "fatal message", stderr
   end
 end
