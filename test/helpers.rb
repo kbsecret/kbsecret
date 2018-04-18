@@ -3,6 +3,7 @@
 if ENV["COVERAGE"]
   require "simplecov"
   SimpleCov.merge_timeout(3600)
+  SimpleCov.add_filter("test/")
 
   pid = Process.pid
   SimpleCov.at_exit do
