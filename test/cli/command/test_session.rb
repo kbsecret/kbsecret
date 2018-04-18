@@ -36,6 +36,25 @@ class KBSecretCommandSessionTest < Minitest::Test
     assert_match "Unknown subcommand", stderr
   end
 
+  def test_session_new_fails_on_overwrite
+    kbsecret "session", "new", "test-session-overwrite", "-r", "test-session-overwrite"
+
+    _, stderr = kbsecret "session", "new", "test-session-overwrite", "-r", "test-session-overwrite"
+
+    assert_match "Refusing to overwrite a session without --force", stderr
+  ensure
+    kbsecret "session", "rm", "-d", "test-session-overwrite"
+  end
+
+  def test_session_new_force_overwrite
+    kbsecret "session", "new", "test-session-force-overwrite", "-r", "root1"
+    kbsecret "session", "new", "test-session-force-overwrite", "-r", "root2", "-f"
+
+    assert_match "root2", KBSecret::Session["test-session-force-overwrite"].path
+  ensure
+    kbsecret "session", "rm", "-d", "test-session-force-overwrite"
+  end
+
   def test_session_new_single_user
     kbsecret "session", "new", "test-session-new-single", "-r", "test-session-new-single"
 
