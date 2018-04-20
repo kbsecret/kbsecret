@@ -15,6 +15,7 @@ module KBSecret
 
               o.string "-s", "--session", "the session to search in", default: :default
               o.bool "-a", "--all", "retrieve all login records, not just listed ones"
+              o.bool "-u", "--username-only", "print only usernames, not passwords"
               o.bool "-x", "--terse", "output in label<sep>username<sep>password format"
               o.string "-i", "--ifs", "separate terse fields with this string", default: CLI.ifs
             end
@@ -49,14 +50,18 @@ module KBSecret
         def run!
           @records.each do |record|
             if cli.opts.terse?
-              fields = %i[label username password].map { |m| record.send(m) }
+              fields = %i[label username]
+              fields << :password unless cli.opts.username_only?
+              fields.map! { |m| record.send(m) }
+
               puts fields.join(cli.opts[:ifs])
             else
               puts <<~DETAIL
                 Label: #{record.label}
                 \tUsername: #{record.username}
-                \tPassword: #{record.password}
               DETAIL
+
+              puts "\tPassword: #{record.password}" unless cli.opts.username_only?
             end
           end
         end
