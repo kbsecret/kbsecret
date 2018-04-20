@@ -143,6 +143,33 @@ class KBSecretCommandLoginTest < Minitest::Test
     assert_equal KBSecret::Session[:default].records(:login).size, stdout.lines.size
   end
 
+  def test_login_username_only
+    expected = <<~OUTPUT
+      Label: test-login-username-only
+      \tUsername: foo
+    OUTPUT
+
+    kbsecret "new", "login", "test-login-username-only", input: "foo\nbar\n"
+
+    stdout, = kbsecret "login", "-u", "test-login-username-only"
+
+    assert_equal expected, stdout
+  ensure
+    kbsecret "rm", "test-login-username-only"
+  end
+
+  def test_login_terse_username_only
+    expected = "test-login-terse-username-only:foo\n"
+
+    kbsecret "new", "login", "test-login-terse-username-only", input: "foo\nbar\n"
+
+    stdout, = kbsecret "login", "-xu", "test-login-terse-username-only"
+
+    assert_equal expected, stdout
+  ensure
+    kbsecret "rm", "test-login-terse-username-only"
+  end
+
   def test_login_accepts_session
     session_label = "login-test-session"
     expected = <<~OUTPUT
