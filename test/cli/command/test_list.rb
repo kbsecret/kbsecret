@@ -31,15 +31,27 @@ class KBSecretCommandListTest < Minitest::Test
   end
 
   def test_list_filters_by_type
-    kbsecret "new", "login", "test-list1", input: "foo\nbar\n"
-    kbsecret "new", "environment", "test-list2", input: "baz\nquux\n"
+    kbsecret "new", "login", "test-list-filter-type1", input: "foo\nbar\n"
+    kbsecret "new", "environment", "test-list-filter-type2", input: "baz\nquux\n"
 
     stdout, = kbsecret "list", "-t", "environment"
 
-    refute_includes stdout.split, "test-list1"
-    assert_includes stdout.split, "test-list2"
+    refute_includes stdout.split, "test-list-filter-type1"
+    assert_includes stdout.split, "test-list-filter-type2"
   ensure
-    kbsecret "rm", "test-list1", "test-list2"
+    kbsecret "rm", "test-list-filter-type1", "test-list-filter-type2"
+  end
+
+  def test_list_filters_by_type_alias
+    kbsecret "new", "login", "test-list-filter-type-alias1", input: "foo\nbar\n"
+    kbsecret "new", "environment", "test-list-filter-type-alias2", input: "baz\nquux\n"
+
+    stdout, = kbsecret "list", "-t", "env"
+
+    refute_includes stdout.split, "test-list-filter-type-alias1"
+    assert_includes stdout.split, "test-list-filter-type-alias2"
+  ensure
+    kbsecret "rm", "test-list-filter-type-alias1", "test-list-filter-type-alias2"
   end
 
   def test_list_shows_all

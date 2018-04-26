@@ -25,7 +25,7 @@ module KBSecret
 
         # @see Command::Abstract#setup!
         def setup!
-          @records = cli.session.records cli.opts[:type]
+          @records = cli.session.records TYPE_ALIASES[cli.opts[:type]]
         end
 
         # @see Command::Abstract#setup!

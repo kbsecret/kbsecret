@@ -74,6 +74,17 @@ class KBSecretCommandNewTest < Minitest::Test
     kbsecret "rm", "test-new-todo"
   end
 
+  def test_new_type_alias
+    kbsecret "new", "environ", "test-new-type-alias", input: "key\nvalue\n"
+
+    env = KBSecret::Session[:default]["test-new-type-alias"]
+
+    assert_equal "key", env.variable
+    assert_equal "value", env.value
+  ensure
+    kbsecret "rm", "test-new-type-alias"
+  end
+
   def test_new_terse_input
     kbsecret "new", "login", "test-new-terse1", "-x", input: "foo:bar\n"
     kbsecret "new", "login", "test-new-terse2", "-xi", "~", input: "baz~quux\n"

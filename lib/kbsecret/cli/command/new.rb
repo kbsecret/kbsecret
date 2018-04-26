@@ -41,7 +41,7 @@ module KBSecret
         # @see Command::Abstract#setup!
         def setup!
           @label = cli.args[:label]
-          @type  = CLI::TYPE_ALIASES[cli.args[:type]]
+          @type  = TYPE_ALIASES[cli.args[:type]]
         end
 
         # @see Command::Abstract#validate!
