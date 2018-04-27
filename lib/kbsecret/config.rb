@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "fileutils"
 require "inih"
 require "shellwords"
 require "yaml"
@@ -199,8 +200,8 @@ module KBSecret
       end
     end
 
-    Dir.mkdir CONFIG_DIR unless Dir.exist? CONFIG_DIR
-    Dir.mkdir CUSTOM_TYPES_DIR unless Dir.exist? CUSTOM_TYPES_DIR
+    FileUtils.mkdir_p CONFIG_DIR
+    FileUtils.mkdir_p CUSTOM_TYPES_DIR
 
     load!
     sync!
