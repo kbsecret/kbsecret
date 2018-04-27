@@ -53,11 +53,11 @@ module KBSecret
         def gen_methods(field)
           class_eval %[
             def #{field}
-              @data[self.class.type.to_sym]["#{field}".to_sym]
+              @data[self.class.type][:"#{field}"]
             end
 
             def #{field}=(val)
-              @data[self.class.type.to_sym]["#{field}".to_sym] = val
+              @data[self.class.type][:"#{field}"] = val
               @timestamp = Time.now.to_i
               sync!
             end
