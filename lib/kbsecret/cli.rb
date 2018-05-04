@@ -231,5 +231,17 @@ module KBSecret
     def self.stderr
       $stderr
     end
+
+    # Searches for an executable on the user's `$PATH`.
+    # @param util [String] the name of the executable to search for.
+    # @return [Boolean] whether or not `util` is available on the `$PATH`.
+    # @example
+    #  CLI.installed? "foo" # => false
+    #  CLI.installed? "gcc" # => true
+    def self.installed?(util)
+      ENV["PATH"].split(File::PATH_SEPARATOR).any? do |path|
+        File.executable?(File.join(path, util))
+      end
+    end
   end
 end

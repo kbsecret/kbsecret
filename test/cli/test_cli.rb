@@ -271,4 +271,9 @@ class KBSecretCLITest < Minitest::Test
 
     assert_match "fatal message", stderr
   end
+
+  def test_cli_installed
+    assert KBSecret::CLI.installed?("cat")
+    refute KBSecret::CLI.installed?("this_command_should_not_exist")
+  end
 end
