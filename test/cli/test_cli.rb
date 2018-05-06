@@ -276,4 +276,17 @@ class KBSecretCLITest < Minitest::Test
     assert KBSecret::CLI.installed?("cat")
     refute KBSecret::CLI.installed?("this_command_should_not_exist")
   end
+
+  def test_cli_prompt
+    cmd = KBSecret::CLI.create [] do |c|
+      c.slop { |_o| nil }
+    end
+
+    fork_capture_io input: "some input" do
+      resp = cmd.prompt "foo?"
+      assert_equal "some input", resp
+    end
+
+    # TODO: figure out how to test the non-echoing prompt (which requires a tty)
+  end
 end

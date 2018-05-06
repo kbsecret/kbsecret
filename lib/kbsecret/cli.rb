@@ -6,6 +6,7 @@ require "slop"
 require "dreck"
 require "abbrev"
 require "pastel"
+require "termios"
 
 module KBSecret
   # An encapsulation of useful methods for kbsecret's CLI.
@@ -153,6 +154,28 @@ module KBSecret
     rescue => e
       self.class.stderr.puts e.backtrace if @opts&.debug?
       die "#{e.to_s.capitalize}."
+    end
+
+    # Prompt the user for some input.
+    # @param question [String] the question to ask the user
+    # @param echo [Boolean] whether or not to echo the user's input
+    # @return [String] the user's response, with trailing newline removed
+    def prompt(question, echo: true)
+      if self.class.stdin.tty?
+        old_attrs = Termios.tcgetattr(self.class.stdin)
+        new_attrs = old_attrs.dup
+        new_attrs.lflag &= ~Termios::ECHO unless echo
+        Termios.tcsetattr(self.class.stdin, Termios::TCSANOW, new_attrs)
+      end
+
+      self.class.stdout.print "#{question} "
+      response = self.class.stdin.gets.chomp
+      response
+    ensure
+      if self.class.stdin.tty?
+        self.class.stdout.puts unless echo
+        Termios.tcsetattr(self.class.stdin, Termios::TCSANOW, old_attrs)
+      end
     end
 
     # Print an informational message.

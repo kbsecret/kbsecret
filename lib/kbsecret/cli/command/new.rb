@@ -60,13 +60,12 @@ module KBSecret
           fields = if cli.opts.terse?
                      CLI.stdin.read.chomp.split cli.opts[:ifs]
                    else
-                     prompt = TTY::Prompt.new
                      klass = Record.class_for(@type)
                      klass.external_fields.map do |field|
                        if cli.opts.generate? && klass.sensitive?(field)
                          generator.secret
                        else
-                         prompt.ask "#{field.capitalize}?",
+                         cli.prompt "#{field.capitalize}?",
                                     echo: !klass.sensitive?(field) || cli.opts.echo?
                        end
                      end
