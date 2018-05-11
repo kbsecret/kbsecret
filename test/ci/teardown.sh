@@ -7,4 +7,4 @@ set +e
 rm -rf /keybase/private/kbsecretci/*
 set -e
 
-expect ./test/ci/teardown.expect
+keybase logout
