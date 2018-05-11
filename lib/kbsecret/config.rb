@@ -57,7 +57,7 @@ module KBSecret
     # configuration defaults
     # @api private
     DEFAULT_CONFIG = {
-      mount: "/keybase",
+      mount: Keybase::Local::Config::KBFS_MOUNT,
       sessions: DEFAULT_SESSION.dup,
       generators: DEFAULT_GENERATOR.dup,
     }.freeze
