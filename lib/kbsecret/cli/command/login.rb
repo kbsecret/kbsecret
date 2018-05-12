@@ -17,7 +17,7 @@ module KBSecret
               o.bool "-a", "--all", "retrieve all login records, not just listed ones"
               o.bool "-u", "--username-only", "print only usernames, not passwords"
               o.bool "-x", "--terse", "output in label<sep>username<sep>password format"
-              o.string "-i", "--ifs", "separate terse fields with this string", default: CLI.ifs
+              o.string "-i", "--ifs", "separate terse fields with this string", default: cli.ifs
             end
 
             unless cli.opts.all?

@@ -7,12 +7,15 @@ require "dreck"
 require "abbrev"
 require "pastel"
 require "io/console"
+require "forwardable"
 
 module KBSecret
   # An encapsulation of useful methods for kbsecret's CLI.
   # Most methods in this class assume that they are being called from the context of
   # a command-line utility.
   class CLI
+    extend Forwardable
+
     # Abbreviations for record types (e.g., `env` for `environment`).
     TYPE_ALIASES = Hash.new { |_, k| k }.update(Abbrev.abbrev(Record.record_types)).freeze
 
@@ -30,6 +33,54 @@ module KBSecret
     # @return [Session, nil] the session associated with the command, if requested
     #   via {#ensure_session!}
     attr_reader :session
+
+    class << self
+      # Print an error message and terminate.
+      # @param msg [String] the message to print
+      # @return [void]
+      # @note This method does not return!
+      def die(msg)
+        fatal = ENV["NO_COLOR"] ? "Fatal" : RED["Fatal"]
+        abort "#{fatal}: #{msg}"
+      end
+
+      # Finds a reasonable default field separator by checking the environment first
+      #  and then falling back to ":".
+      # @return [String] the field separator
+      def ifs
+        ENV["IFS"] || ":"
+      end
+
+      # @return [IO] the IO object corresponding to the current standard input
+      # @note Internal `kbsecret` commands should use this, and not `STDIN`.
+      def stdin
+        $stdin
+      end
+
+      # @return [IO] the IO object corresponding to the current standard output
+      # @note Internal `kbsecret` commands should use this, and not `STDOUT`.
+      def stdout
+        $stdout
+      end
+
+      # @return [IO] the IO object corresponding to the current standard error
+      # @note Internal `kbsecret` commands should use this, and not `STDERR`.
+      def stderr
+        $stderr
+      end
+
+      # Searches for an executable on the user's `$PATH`.
+      # @param util [String] the name of the executable to search for.
+      # @return [Boolean] whether or not `util` is available on the `$PATH`.
+      # @example
+      #  CLI.installed? "foo" # => false
+      #  CLI.installed? "gcc" # => true
+      def installed?(util)
+        ENV["PATH"].split(File::PATH_SEPARATOR).any? do |path|
+          File.executable?(File.join(path, util))
+        end
+      end
+    end
 
     # Encapsulate both the options and trailing arguments passed to a `kbsecret` command.
     # @yield [CLI] the {CLI} instance to specify
@@ -60,6 +111,8 @@ module KBSecret
       @argv = argv.dup
       guard { yield self }
     end
+
+    def_delegators :"self.class", :die, :ifs, :stdin, :stdout, :stderr, :installed?
 
     # Parse options for a `kbsecret` command, adding some default options for
     #  introspection, verbosity, and help output.
@@ -152,7 +205,7 @@ module KBSecret
     def guard
       yield
     rescue => e
-      self.class.stderr.puts e.backtrace if @opts&.debug?
+      stderr.puts e.backtrace if @opts&.debug?
       die "#{e.to_s.capitalize}."
     end
 
@@ -161,11 +214,11 @@ module KBSecret
     # @param echo [Boolean] whether or not to echo the user's input
     # @return [String] the user's response, with trailing newline removed
     def prompt(question, echo: true)
-      if !echo && self.class.stdin.tty?
-        self.class.stdin.getpass("#{question} ")
+      if !echo && stdin.tty?
+        stdin.getpass("#{question} ")
       else
-        self.class.stdout.print "#{question} "
-        self.class.stdin.gets.chomp
+        stdout.print "#{question} "
+        stdin.gets.chomp
       end
     end
 
@@ -174,7 +227,7 @@ module KBSecret
     # @return [void]
     def info(msg)
       info = ENV["NO_COLOR"] ? "Info" : GREEN["Info"]
-      self.class.stderr.puts "#{info}: #{msg}"
+      stderr.puts "#{info}: #{msg}"
     end
 
     # Print an information message, but only if verbose output has been enabled.
@@ -200,62 +253,7 @@ module KBSecret
     def warn(msg)
       return if @opts.no_warn?
       warning = ENV["NO_COLOR"] ? "Warning" : YELLOW["Warning"]
-      self.class.stderr.puts "#{warning}: #{msg}"
-    end
-
-    # Print an error message and terminate.
-    # @param msg [String] the message to print
-    # @return [void]
-    # @note This method does not return!
-    def die(msg)
-      fatal = ENV["NO_COLOR"] ? "Fatal" : RED["Fatal"]
-      abort "#{fatal}: #{msg}"
-    end
-
-    # Print an error message and terminate.
-    # @param msg [String] the message to print
-    # @return [void]
-    # @note This method does not return!
-    def self.die(msg)
-      fatal = ENV["NO_COLOR"] ? "Fatal" : RED["Fatal"]
-      abort "#{fatal}: #{msg}"
-    end
-
-    # Finds a reasonable default field separator by checking the environment first
-    #  and then falling back to ":".
-    # @return [String] the field separator
-    def self.ifs
-      ENV["IFS"] || ":"
-    end
-
-    # @return [IO] the IO object corresponding to the current standard input
-    # @note Internal `kbsecret` commands should use this, and not `STDIN`.
-    def self.stdin
-      $stdin
-    end
-
-    # @return [IO] the IO object corresponding to the current standard output
-    # @note Internal `kbsecret` commands should use this, and not `STDOUT`.
-    def self.stdout
-      $stdout
-    end
-
-    # @return [IO] the IO object corresponding to the current standard error
-    # @note Internal `kbsecret` commands should use this, and not `STDERR`.
-    def self.stderr
-      $stderr
-    end
-
-    # Searches for an executable on the user's `$PATH`.
-    # @param util [String] the name of the executable to search for.
-    # @return [Boolean] whether or not `util` is available on the `$PATH`.
-    # @example
-    #  CLI.installed? "foo" # => false
-    #  CLI.installed? "gcc" # => true
-    def self.installed?(util)
-      ENV["PATH"].split(File::PATH_SEPARATOR).any? do |path|
-        File.executable?(File.join(path, util))
-      end
+      stderr.puts "#{warning}: #{msg}"
     end
   end
 end

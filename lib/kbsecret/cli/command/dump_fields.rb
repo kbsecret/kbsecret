@@ -15,7 +15,7 @@ module KBSecret
 
               o.string "-s", "--session", "the session to search in", default: :default
               o.bool "-x", "--terse", "output in field<sep>value format"
-              o.string "-i", "--ifs", "separate terse pairs with this string", default: CLI.ifs
+              o.string "-i", "--ifs", "separate terse pairs with this string", default: cli.ifs
             end
 
             cli.dreck do

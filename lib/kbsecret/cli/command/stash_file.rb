@@ -50,7 +50,7 @@ module KBSecret
         # @see Command::Abstract#run!
         def run!
           contents = if cli.opts.stdin?
-                       KBSecret::CLI.stdin.read
+                       cli.stdin.read
                      else
                        File.read(@filename)
                      end

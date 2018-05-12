@@ -193,6 +193,22 @@ class KBSecretCLITest < Minitest::Test
 
     assert_match "some junk on stdout", stdout
     assert_match "some junk on stderr", stderr
+
+    cmd = KBSecret::CLI.create [] do |c|
+      c.slop { |_o| nil }
+    end
+
+    assert_instance_of IO, cmd.stdin
+    assert_instance_of IO, cmd.stdout
+    assert_instance_of IO, cmd.stderr
+
+    stdout, stderr = fork_capture_io do
+      cmd.stdout.puts "some junk on stdout"
+      cmd.stderr.puts "some junk on stderr"
+    end
+
+    assert_match "some junk on stdout", stdout
+    assert_match "some junk on stderr", stderr
   end
 
   def test_cli_info_output
@@ -275,6 +291,13 @@ class KBSecretCLITest < Minitest::Test
   def test_cli_installed
     assert KBSecret::CLI.installed?("cat")
     refute KBSecret::CLI.installed?("this_command_should_not_exist")
+
+    cmd = KBSecret::CLI.create [] do |c|
+      c.slop { |_o| nil }
+    end
+
+    assert cmd.installed?("cat")
+    refute cmd.installed?("this_command_should_not_exist")
   end
 
   def test_cli_prompt
@@ -288,5 +311,27 @@ class KBSecretCLITest < Minitest::Test
     end
 
     # TODO: figure out how to test the non-echoing prompt (which requires a tty)
+  end
+
+  def test_cli_ifs
+    with_env("IFS" => nil) do
+      assert_equal ":", KBSecret::CLI.ifs
+    end
+
+    with_env("IFS" => "foo") do
+      assert_equal "foo", KBSecret::CLI.ifs
+    end
+
+    cmd = KBSecret::CLI.create [] do |c|
+      c.slop { |_o| nil }
+    end
+
+    with_env("IFS" => nil) do
+      assert_equal ":", cmd.ifs
+    end
+
+    with_env("IFS" => "foo") do
+      assert_equal "foo", cmd.ifs
+    end
   end
 end

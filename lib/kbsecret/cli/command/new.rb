@@ -24,7 +24,7 @@ module KBSecret
               o.string "-g", "--generator", "the generator to use for secret fields",
                        default: :default
               o.bool "-x", "--terse", "read fields from input in a terse format"
-              o.string "-i", "--ifs", "separate terse fields with this string", default: CLI.ifs
+              o.string "-i", "--ifs", "separate terse fields with this string", default: cli.ifs
             end
 
             cli.dreck do
@@ -58,7 +58,7 @@ module KBSecret
           generator = KBSecret::Generator.new(cli.opts[:generator]) if cli.opts.generate?
 
           fields = if cli.opts.terse?
-                     CLI.stdin.read.chomp.split cli.opts[:ifs]
+                     cli.stdin.read.chomp.split cli.opts[:ifs]
                    else
                      klass = Record.class_for(@type)
                      klass.external_fields.map do |field|
