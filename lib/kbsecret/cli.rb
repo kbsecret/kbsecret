@@ -17,7 +17,7 @@ module KBSecret
     extend Forwardable
 
     # Abbreviations for record types (e.g., `env` for `environment`).
-    TYPE_ALIASES = Hash.new { |_, k| k }.update(Abbrev.abbrev(Record.record_types)).freeze
+    TYPE_ALIASES = Abbrev.abbrev Record.record_types
 
     # ANSI color objects for prettifying output.
     GREEN, YELLOW, RED = ->(p) { [p.green, p.yellow, p.red].map(&:detach) }.call(Pastel.new)
