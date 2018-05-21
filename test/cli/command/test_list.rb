@@ -75,4 +75,37 @@ class KBSecretCommandListTest < Minitest::Test
   ensure
     kbsecret "session", "rm", "-d", session_label
   end
+
+  def test_list_fails_on_multiple_sort_flags
+    _, stderr = kbsecret "list", "-A", "-D"
+    assert_match "Only one sort flag may be used at once", stderr
+  end
+
+  def test_list_sorts_date
+    kbsecret "new", "login", "test-list-date1", input: "foo\nbar\n"
+    # sleep a bit, to make sure we get different timestamps
+    sleep 2
+    kbsecret "new", "login", "test-list-date2", input: "baz\nquux\n"
+
+    stdout, = kbsecret "list", "-D"
+    lines = stdout.split
+
+    assert_operator lines.index("test-list-date1"), :<, lines.index("test-list-date2")
+  ensure
+    kbsecret "rm", "test-list-date1"
+    kbsecret "rm", "test-list-date2"
+  end
+
+  def test_list_sorts_alphabetically
+    kbsecret "new", "login", "test-list-aardvark", input: "foo\nbar\n"
+    kbsecret "new", "login", "test-list-zebra", input: "baz\nquux\n"
+
+    stdout, = kbsecret "list", "-A"
+    lines = stdout.split
+
+    assert_operator lines.index("test-list-aardvark"), :<, lines.index("test-list-zebra")
+  ensure
+    kbsecret "rm", "test-list-aardvark"
+    kbsecret "rm", "test-list-zebra"
+  end
 end
