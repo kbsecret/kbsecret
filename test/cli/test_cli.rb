@@ -27,7 +27,7 @@ class KBSecretCLITest < Minitest::Test
     flag_map = {
       verbose?: %w[-V --verbose],
       no_warn?: %w[-w --no-warn],
-      # XXX: figure out how to test these, since they produce output
+      # TODO: figure out how to test these, since they produce output
       # help?: ["-h", "--help"],
       # introspect_flags?: ["--introspect-flags"],
     }

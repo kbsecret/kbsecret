@@ -92,7 +92,7 @@ class KBSecretCommandEnvTest < Minitest::Test
   end
 
   def test_env_unescape_plus
-    # XXX: test this
+    # TODO: test this
     skip
   end
 

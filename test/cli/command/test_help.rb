@@ -34,7 +34,7 @@ class KBSecretCommandHelpTest < Minitest::Test
   end
 
   def test_help_external_command
-    # XXX: not sure how to do this yet.
+    # TODO: not sure how to do this yet.
     skip
   end
 

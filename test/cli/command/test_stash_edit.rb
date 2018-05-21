@@ -49,17 +49,17 @@ class KBSecretCommandStashEditTest < Minitest::Test
   end
 
   def test_stash_edit_base64
-    # XXX: not sure how to implement this yet, given the fork/spawn issue
+    # TODO: not sure how to implement this yet, given the fork/spawn issue
     skip
   end
 
   def test_stash_edit_opens_record
-    # XXX: not sure how to implement this yet, given the fork/spawn issue
+    # TODO: not sure how to implement this yet, given the fork/spawn issue
     skip
   end
 
   def test_stash_edit_accepts_session
-    # XXX: not sure how to implement this yet, given the fork/spawn issue
+    # TODO: not sure how to implement this yet, given the fork/spawn issue
     skip
   end
 end

@@ -51,7 +51,7 @@ class KBSecretCommandPassTest < Minitest::Test
   end
 
   def test_pass_clips_password
-    # XXX: figure out how to mock the clipboard in unit tests
+    # TODO: figure out how to mock the clipboard in unit tests
     skip
   end
 
