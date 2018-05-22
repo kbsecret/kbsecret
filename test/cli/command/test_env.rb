@@ -92,8 +92,13 @@ class KBSecretCommandEnvTest < Minitest::Test
   end
 
   def test_env_unescape_plus
-    # TODO: test this
-    skip
+    kbsecret "new", "environment", "test-env-unescape-plus", input: "foo\nbar+baz"
+
+    stdout, = kbsecret "env", "-u", "test-env-unescape-plus"
+
+    assert_match "export foo=bar+baz", stdout
+  ensure
+    kbsecret "rm", "test-env-unescape-plus"
   end
 
   def test_env_accepts_session
