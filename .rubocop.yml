@@ -24,6 +24,9 @@ Style/DoubleNegation:
 Style/RescueModifier:
   Enabled: false
 
+Style/TrailingUnderscoreVariable:
+  Enabled: false
+
 Metrics/LineLength:
   Max: 100
 
