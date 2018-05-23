@@ -2,5 +2,5 @@
 
 module KBSecret
   # kbsecret's current version
-  VERSION = "1.7.3"
+  VERSION = "1.8.0.pre.1"
 end
