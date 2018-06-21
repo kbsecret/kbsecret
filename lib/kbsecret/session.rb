@@ -71,12 +71,14 @@ module KBSecret
     # @param args [Array<String>] the record-type specific arguments
     # @param overwrite [Boolean] whether or not to overwrite an existing record if necessary
     # @return [void]
-    # @raise [Exceptions::UnknownRecordTypeError] if the requested type does not exist
+    # @raise [Exceptions::RecordTypeUnknownError] if the requested type does not exist
     #  in {Record.record_types}
     # @raise [Exceptions::RecordCreationArityError] if the number of specified record
     #  arguments does not match the record type's constructor
     # @raise [Exceptions::RecordOverwriteError] if the record addition would cause an
     #  unchecked overwrite
+    # @example
+    #  session.add_record :login, "gmail", "bob@gmail.com", "hunter2"
     def add_record(type, label, *args, overwrite: false)
       klass = Record.class_for(type.to_sym)
       arity = klass.external_fields.length
@@ -101,6 +103,8 @@ module KBSecret
     # @return [void]
     # @raise [Exceptions::SessionImportError] if the record's source session is our session
     # @raise [Exceptions::RecordOverwriteError] if record import would cause an unchecked overwrite
+    # @example
+    #  session.import_record other_session["gmail"], overwrite: true
     def import_record(record, overwrite: false)
       raise Exceptions::SessionImportError, self if self == record.session
 
@@ -119,6 +123,8 @@ module KBSecret
     # no such record can be found.
     # @param label [String, Symbol] the label of the record to delete
     # @return [void]
+    # @example
+    #  session.delete_record "gmail"
     def delete_record(label)
       record = records.find { |r| r.label == label.to_s }
       return unless record
