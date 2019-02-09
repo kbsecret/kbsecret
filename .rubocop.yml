@@ -1,7 +1,7 @@
 # KBSecret style enforcement.
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes

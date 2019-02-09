@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors               = ["William Woodruff"]
   s.email                 = "william@tuffbizz.com"
   s.files                 = Dir["LICENSE", "*.md", ".yardopts", "lib/**/*"]
-  s.required_ruby_version = ">= 2.3.0"
+  s.required_ruby_version = ">= 2.4.0"
   s.homepage              = "https://kbsecret.github.io"
   s.license               = "MIT"
 
