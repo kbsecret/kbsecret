@@ -13,15 +13,19 @@ VERSION:=$(shell git describe --tags --abbrev=0 2>/dev/null \
 			|| echo "unknown-version")
 
 .PHONY: all
-all: completions doc man test
+all: bundle completions doc man
+
+.PHONY: bundle
+bundle:
+	bundle check || bundle install
 
 .PHONY: completions
 completions: bash
 
 .PHONY: doc
 doc:
-	yardoc
-	yard stats --list-undoc
+	bundle exec yardoc
+	bundle exec yard stats --list-undoc
 
 .PHONY: man-www
 man-www: man
@@ -30,7 +34,7 @@ man-www: man
 
 .PHONY: man
 man: ronnpp
-	ronn --organization="$(VERSION)" --manual="KBSecret Manual" \
+	bundle exec ronn --organization="$(VERSION)" --manual="KBSecret Manual" \
 	--html --roff --style toc,80c \
 	man/man{1,5}/*.ronn
 
