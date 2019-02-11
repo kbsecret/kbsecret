@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "ronn", "~> 0.7.3" # make man
   s.add_development_dependency "rubocop", "~> 0.51" # make lint
   s.add_development_dependency "simplecov", "~> 0.16" # make coverage
+  s.add_development_dependency "redcarpet", "~> 3.4" # make doc
   s.add_development_dependency "yard", "~> 0.9.9" # make doc
 
   # these need to be installed by users and developers alike
