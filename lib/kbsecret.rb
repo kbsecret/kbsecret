@@ -2,6 +2,9 @@
 
 require "keybase"
 
+# fail very early if the user's KBFS installation isn't fully functional
+raise Keybase::Local::Exceptions::KBFSNotRunningError unless Keybase::Local::KBFS.functional?
+
 require_relative "kbsecret/version"
 require_relative "kbsecret/exceptions"
 require_relative "kbsecret/config"
@@ -12,6 +15,4 @@ require_relative "kbsecret/cli"
 
 # The primary namespace for {KBSecret}.
 module KBSecret
-  # fail very early if the user's KBFS installation isn't fully functional
-  raise Keybase::Local::Exceptions::KBFSNotRunningError unless Keybase::Local::KBFS.functional?
 end
