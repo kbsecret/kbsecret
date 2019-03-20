@@ -17,6 +17,7 @@ module KBSecret
 
               o.string "-s", "--session", "the session to search in", default: :default
               o.bool "-c", "--clipboard", "dump the password in the clipboard"
+              o.bool "-C", "--no-clear", "don't clear the password from the clipboard"
             end
 
             cli.dreck do
@@ -41,6 +42,14 @@ module KBSecret
         def run!
           if cli.opts.clipboard?
             Clipboard.copy @record.password
+
+            unless cli.opts.no_clear?
+              fork do
+                Process.daemon
+                sleep 10
+                Clipboard.clear
+              end
+            end
           else
             puts @record.password
           end
