@@ -177,11 +177,12 @@ module KBSecret
     # @api private
     def rel_path(mkdir: false)
       path = if @config[:team]
-               File.join(Config[:mount], "team", @config[:team], "kbsecret", @config[:root])
+               File.join(Keybase::Local::Config::KBFS_MOUNT, "team", @config[:team], "kbsecret",
+                         @config[:root])
              else
                # /keybase/private/[u1,u2,...,uN]/kbsecret/[session]
-               File.join(Config[:mount], "private", Keybase::Core::U[@config[:users]], "kbsecret",
-                         @config[:root])
+               File.join(Keybase::Local::Config::KBFS_MOUNT, "private",
+                         Keybase::Core::U[@config[:users]], "kbsecret", @config[:root])
              end
 
       FileUtils.mkdir_p path if mkdir
