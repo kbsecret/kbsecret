@@ -5,6 +5,9 @@
 [![Build Status](https://travis-ci.org/kbsecret/kbsecret.svg?branch=master)](https://travis-ci.org/kbsecret/kbsecret)
 [![Coverage Status](https://codecov.io/gh/kbsecret/kbsecret/branch/master/graph/badge.svg)](https://codecov.io/gh/kbsecret/kbsecret)
 
+**Warning**: KBSecret is currently maintained on a best-effort basis. PRs are **strongly**
+preferred over new issues.
+
 KBSecret is a command line utility and library for managing *secrets*.
 
 Quick links:
