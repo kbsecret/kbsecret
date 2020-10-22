@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "minitest", "~> 5.10" # make test
   s.add_development_dependency "rake", "~> 13.0" # make test
   s.add_development_dependency "ronn", "~> 0.7.3" # make man
-  s.add_development_dependency "rubocop", "~> 0.51" # make lint
+  s.add_development_dependency "rubocop", "~> 1.0" # make lint
   s.add_development_dependency "simplecov", "~> 0.16" # make coverage
   s.add_development_dependency "redcarpet", "~> 3.4" # make doc
   s.add_development_dependency "yard", "~> 0.9.9" # make doc
